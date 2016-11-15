@@ -1,0 +1,31 @@
+<?php
+
+class SetupCommand extends Command
+{
+    public function getName()
+    {
+        return 'setup';
+    }
+
+    public function getDescription()
+    {
+        return array('Setup the catkin workspace');
+    }
+
+    public function run(array $arguments)
+    {
+        Terminal::info("* Runing setup of the workspace\n");
+        if (!is_dir('src')) {
+            mkdir('src');
+        }
+        if (!is_dir('src/catkin')) {
+            Terminal::info("* Cloning catkin\n");
+            OS::run('cd src; git clone https://github.com/ros/catkin.git');
+        }
+        Terminal::info("* Runnin catkin init\n");
+        OS::run('catkin init --force-color --workspace .');
+        Terminal::info("* Setup of profile debug and release");
+        OS::run('catkin config --force-color --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug');
+        OS::run('catkin config --force-color --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release');
+    }
+}
