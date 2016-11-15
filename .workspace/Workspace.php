@@ -18,6 +18,7 @@ class Workspace
         $this->addCommand(new InstallCommand);
         $this->addCommand(new BuildCommand);
         $this->addCommand(new PackagesCommand);
+        $this->addCommand(new StatusCommand);
 
         $this->updatePackages();
     }
