@@ -25,6 +25,7 @@ class BuildCommand extends Command
             $profile = $this->flags[0];
         }
 
+        Terminal::success("* Running a build for profile $profile\n");
         OS::run('catkin build --force-color --profile '.$profile.' '.$args);
     }
 }

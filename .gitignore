@@ -1,0 +1,5 @@
+**.swp
+*_release
+*_debug
+src
+.catkin_tools
