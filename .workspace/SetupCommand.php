@@ -23,9 +23,9 @@ class SetupCommand extends Command
             OS::run('cd src; git clone https://github.com/ros/catkin.git');
         }
         Terminal::info("* Runnin catkin init\n");
-        OS::run('catkin init --force-color --workspace .');
+        OS::run('catkin init --workspace .');
         Terminal::info("* Setup of profile debug and release");
-        OS::run('catkin config --force-color --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug');
-        OS::run('catkin config --force-color --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release');
+        OS::run('catkin config --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug');
+        OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release');
     }
 }
