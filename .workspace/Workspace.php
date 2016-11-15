@@ -8,6 +8,10 @@ class Workspace
 
     public function __construct($directory)
     {
+        if (!is_dir('src')) {
+            mkdir('src');
+        }
+
         $this->directory = $directory;
 
         $this->addCommand(new SetupCommand);
