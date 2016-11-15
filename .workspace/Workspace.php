@@ -86,7 +86,7 @@ class Workspace
             Terminal::success("* Installing $repository in $directory\n");
             OS::run('cd src/; git clone '.$repository.' '.$directory.';');
             // XXX: To remove later
-            OS::run('cd '.$directory.'; git checkout -b catkin origin/catkin');
+            OS::run('cd src/'.$directory.'; git checkout -b catkin origin/catkin');
             $this->updatePackages();
         } else {
             Terminal::info("* Repository $directory already installed\n");
