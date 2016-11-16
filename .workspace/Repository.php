@@ -92,7 +92,9 @@ class Repository
 
     public function install()
     {
-        OS::run("cd src/; git clone ".$this->getOrigin()." ".$this->getTarget());
+        OS::run("cd src/; git clone --depth=1 ".$this->getOrigin()." ".$this->getTarget());
+        OS::run("cd $this->directory; git remote set-branches origin '*'");
+        OS::run("cd $this->directory; git fetch");
         OS::run("cd $this->directory; git checkout -b catkin origin/catkin");
         $this->updateRemotes();
         $this->setUpstream('origin');
@@ -116,5 +118,10 @@ class Repository
         $branch = $this->getBranch();
         OS::run("cd $this->directory; git fetch --depth=1 $name");
         OS::run("cd $this->directory; git branch -u $name/$branch");
+    }
+
+    public function unshallow()
+    {
+        OS::run("cd $this->directory; git fetch --unshallow");
     }
 }

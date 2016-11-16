@@ -24,6 +24,7 @@ class Workspace
         $this->addCommand(new UpdateRemotesCommand);
         $this->addCommand(new UpstreamCommand);
         $this->addCommand(new CleanCommand);
+        $this->addCommand(new UnshallowCommand);
 
         $this->updatePackages();
         $this->updateRepositories();
