@@ -73,6 +73,13 @@ class Workspace
 
     public function install($address)
     {
+        $parts = explode(' ', $address);
+        $prefix = null;
+        if (count($parts) > 1) {
+            $address = $parts[count($parts)-1];
+            $prefix = $parts[0];
+        }
+
         // Getting repository data
         $repository = new Repository();
         $repository->setRemote($address);
@@ -83,6 +90,21 @@ class Workspace
             return;
         }
         $this->installed[$name] = false;
+
+        // Asking for install
+        $install = true;
+        $ask = "Do you want to install the optional $name package ?";
+        if ($prefix == 'optional') {
+            $install = Prompt::ask($ask, false);
+        }
+        if ($prefix == 'recommend') {
+            $install = Prompt::ask($ask, true);
+        }
+
+        if (!$install) {
+            Terminal::error("* Not installing $name\n");
+            return;
+        }
 
         if (!is_dir($repository->getDirectory())) {
             Terminal::success("* Installing $name in $directory\n");

@@ -6,8 +6,8 @@ class Prompt
     {
         while (true) {
             $default = $default ? 'y' : 'n';
-            Terminal::info($question.' (y/n) ');
-            Terminal::warning('['.$default.']: ');
+            Terminal::warning($question.' (y/n) ');
+            Terminal::success('['.$default.']: ');
 
             $result = trim(readline());
             if (!$result) {

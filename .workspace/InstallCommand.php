@@ -24,7 +24,9 @@ class InstallCommand extends Command
                 $this->workspace->install($arg);
             }
         } else {
-            Terminal::error('Bad usage, you should do: '.$this->getUsage()."\n");
+            foreach ($this->workspace->getRepositories() as $repository) {
+                $this->workspace->install($repository->getName());
+            }
         }
     }
 }
