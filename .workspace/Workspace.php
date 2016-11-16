@@ -5,6 +5,7 @@ class Workspace
     protected $directory;
     protected $commands = array();
     protected $packages = array();
+    protected $repositories = array();
 
     public function __construct($directory)
     {
@@ -20,8 +21,11 @@ class Workspace
         $this->addCommand(new PackagesCommand);
         $this->addCommand(new StatusCommand);
         $this->addCommand(new PullCommand);
+        $this->addCommand(new UpdateRemotesCommand);
+        $this->addCommand(new UpstreamCommand);
 
         $this->updatePackages();
+        $this->updateRepositories();
     }
 
     protected function addCommand(Command $command)
@@ -67,35 +71,31 @@ class Workspace
 
     protected $installed = array();
 
-    public function install($repository)
+    public function install($address)
     {
-        // Retrieving the directory name
-        $parts = explode('/', $repository);
-        $directory = $parts[count($parts)-1];
+        // Getting repository data
+        $repository = new Repository();
+        $repository->setRemote($address);
+        $name = $repository->getName();
+        $directory = $repository->getDirectory();
 
-        if (isset($this->installed[$directory])) {
+        if (isset($this->installed[$name])) {
             return;
         }
-        $this->installed[$directory] = false;
+        $this->installed[$name] = false;
 
-        if (substr($directory, -4) == '.git') {
-            $directory = substr($directory, 0, -4);
-        }
-
-        if (!is_dir('src/'.$directory)) {
-            Terminal::success("* Installing $repository in $directory\n");
-            OS::run('cd src/; git clone '.$repository.' '.$directory.';');
-            // XXX: To remove later
-            OS::run('cd src/'.$directory.'; git checkout -b catkin origin/catkin');
+        if (!is_dir($repository->getDirectory())) {
+            Terminal::success("* Installing $name in $directory\n");
+            $repository->install();
             $this->updatePackages();
         } else {
-            Terminal::info("* Repository $directory already installed\n");
+            Terminal::info("* Repository $name already installed\n");
         }
 
-        Terminal::info("* Scanning dependencies for $directory...\n");
+        Terminal::info("* Scanning dependencies for $name...\n");
         $toInstall = array();
         foreach ($this->packages as $package) {
-            if ($package->getRepository() == $directory) {
+            if ($package->getRepository() == basename($directory)) {
                 foreach ($package->getDependencies() as $dependency) {
                     $toInstall[] = $dependency;
                 }
@@ -132,5 +132,20 @@ class Workspace
     public function getPackages()
     {
         return $this->packages;
+    }
+
+    public function updateRepositories()
+    {
+        $this->repositories = array();
+        foreach (scandir('src') as $dir) {
+            if ($dir != '.' && $dir != '..' && $dir != 'catkin') {
+                $this->repositories[] = new Repository('src/'.$dir);
+            }
+        }
+    }
+
+    public function getRepositories()
+    {
+        return $this->repositories;
     }
 }

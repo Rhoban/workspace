@@ -12,10 +12,10 @@ class StatusCommand extends Command
         return array('Getting the status of each package');
     }
 
-    public function printStatus($repository)
+    public function printStatus(Repository $repository)
     {
-        $dir = 'src/'.$repository;
-        $name = $dir;
+        $dir = $repository->getDirectory();
+        $name = $repository->getName();
         $result = `cd $dir; LANG=en_US.UTF-8 git status`;
         $errors = array();
         $warnings = array();
@@ -37,7 +37,7 @@ class StatusCommand extends Command
         }
         $messages = implode(', ', array_merge($errors, $warnings, $messages));
         if ($messages) $messages = '('.$messages.')';
-        $branch = trim(`cd $dir; git name-rev --name-only HEAD`);
+        $branch = $repository->getBranch();
         if (count($errors)) {
             Terminal::error("* [$branch] $name: ERROR $messages\n");
         } else if (count($warnings)) {
@@ -50,11 +50,7 @@ class StatusCommand extends Command
     public function run(array $arguments)
     {
         Terminal::info("Repositories:\n");
-        $repositories = array();
-        foreach ($this->workspace->getPackages() as $package) {
-            $repositories[$package->getRepository()] = true;
-        }
-        foreach ($repositories as $repository => $true) {
+        foreach ($this->workspace->getRepositories() as $repository) {
             $this->printStatus($repository);
         }
     }
