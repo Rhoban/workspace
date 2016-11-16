@@ -119,7 +119,7 @@ class Workspace
         Terminal::info("* Scanning dependencies for $name...\n");
         $toInstall = array();
         foreach ($this->packages as $package) {
-            if ($package->getRepository() == basename($directory)) {
+            if ($package->getRepository() == substr($directory, 4)) {
                 foreach ($package->getDependencies() as $dependency) {
                     $toInstall[] = $dependency;
                 }
@@ -130,17 +130,25 @@ class Workspace
         }
     }
 
-    protected function scanPackages($dir, $repository = null)
+    protected function scanPackages($dir, $repository = null, $over = false)
     {
         if (file_exists($dir . '/package.xml')) {
             $this->packages[] = new Package($repository, $dir);
         } else {
+            if (is_dir("$dir/.git")) {
+                $over = true;
+            }
             foreach (scandir($dir) as $subdir) {
                 if ($subdir != '.' && $subdir != '..' && $subdir != 'catkin') {
                     $rep = $subdir;
                     $subdir = $dir . '/' . $subdir;
                     if (is_dir($subdir)) {
-                        $this->scanPackages($subdir, $repository ?: $rep);
+                        $tmp = $repository;
+                        if (!$over) {
+                            if (!$tmp) $tmp = $rep;
+                            else $tmp .= "/$rep";
+                        }
+                        $this->scanPackages($subdir, $tmp, $over);
                     }
                 }
             }

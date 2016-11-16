@@ -57,7 +57,7 @@ class Repository
 
     public function getTarget()
     {
-        return str_replace('/', '_', $this->name);
+        return $this->name;
     }
 
     public function getRemotes()
