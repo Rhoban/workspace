@@ -20,7 +20,7 @@ class SetupCommand extends Command
         }
         if (!is_dir('src/catkin')) {
             Terminal::info("* Cloning catkin\n");
-            OS::run('cd src; git clone https://github.com/ros/catkin.git');
+            OS::run('cd src; git clone --depth=1 https://github.com/ros/catkin.git');
         }
         Terminal::info("* Runnin catkin init\n");
         OS::run('catkin init --workspace .');
