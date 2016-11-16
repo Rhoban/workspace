@@ -52,7 +52,12 @@ class Repository
         }
 
         // Directory
-        $this->directory = 'src/'.basename($this->name);
+        $this->directory = 'src/'.$this->getTarget();
+    }
+
+    public function getTarget()
+    {
+        return str_replace('/', '_', $this->name);
     }
 
     public function getRemotes()
@@ -87,7 +92,7 @@ class Repository
 
     public function install()
     {
-        OS::run("cd src/; git clone ".$this->getOrigin());
+        OS::run("cd src/; git clone ".$this->getOrigin()." ".$this->getTarget());
         OS::run("cd $this->directory; git checkout -b catkin origin/catkin");
         $this->updateRemotes();
         $this->setUpstream('origin');
