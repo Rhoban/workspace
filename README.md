@@ -22,3 +22,19 @@ You can now install a repository:
 To pull all the repositories:
 
     ./workspace pull
+
+To build:
+
+    ./workspace build
+
+To build (debug):
+
+    ./workspace build
+
+Listing packages:
+
+    ./workspace packages
+
+To build just a specific package:
+
+    ./workspace build RhIOShell
