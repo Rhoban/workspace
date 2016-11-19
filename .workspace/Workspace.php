@@ -27,6 +27,7 @@ class Workspace
         $this->addCommand(new UnshallowCommand);
 
         $this->updatePackages();
+        $this->repositories = array();
         $this->updateRepositories();
     }
 
@@ -166,12 +167,18 @@ class Workspace
         return $this->packages;
     }
 
-    public function updateRepositories()
+    public function updateRepositories($sdir = 'src')
     {
-        $this->repositories = array();
-        foreach (scandir('src') as $dir) {
+        foreach (scandir($sdir) as $dir) {
             if ($dir != '.' && $dir != '..' && $dir != 'catkin') {
-                $this->repositories[] = new Repository('src/'.$dir);
+                $tmp = "$sdir/$dir";
+                if (is_dir("$tmp")) {
+                    if (is_dir("$tmp/.git")) {
+                        $this->repositories[] = new Repository($tmp);
+                    } else {
+                        $this->updateRepositories("$tmp");
+                    }
+                }
             }
         }
     }
