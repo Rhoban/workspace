@@ -2,7 +2,11 @@
 
 ## Usage
 
-First, you'll need to install `catkin`
+First, you'll need to install `catkin`, the most convenient method is the following
+
+    sudo apt-get install python-pip python-empy
+    sudo pip install -U catkin_tools
+
 
 Then, clone this repository and enter it:
 
@@ -53,4 +57,7 @@ By default, this will use GitHub, you can also use complete repo names
     <build_depend>csa_mdp_experiments</build_depend> <!-- optional git@bitbucket.org:rhoban/csa_mdp_experiments.git -->
 ```
 
-Here, a full repository name is used, and the dependency is tagged optional
+Here, a full repository name is used, and the dependency is tagged `optional`. This mean that
+the user will be asked if he wants to install the dependency. You can also use `recommend`, that
+would do the same, except that the default choice will be yes instead of no.
+
