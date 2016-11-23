@@ -2,7 +2,11 @@
 
 ## Usage
 
-First, you'll need to install `catkin`
+First, you'll need to install `catkin`, the most convenient method is the following
+
+    sudo apt-get install python-pip python-empy
+    sudo pip install -U catkin_tools
+
 
 Then, clone this repository and enter it:
 
