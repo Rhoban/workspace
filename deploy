@@ -1,0 +1,61 @@
+#!/usr/bin/php
+<?php
+//TO PLACE in workspace root
+
+// Remote host
+$remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
+
+// Parameters
+$binary = 'devel_release/lib/RhobanServer/RhobanServer';
+$targetHost = 'rhoban@'.$remote;
+$targetDir = '/home/rhoban/catkin_rel/';
+
+// Fetching ldd
+echo "Preparing our libraries...\n";
+`mkdir -p .deploy`;
+$out = `ldd $binary|grep -iv "Not found"`;
+$lines = explode("\n", trim($out));
+foreach ($lines as $line) {
+    $parts = explode(' ', trim($line));
+    if (count($parts) > 3) {
+        $lib = $parts[2];
+        if (trim($lib)) {
+            if (strstr($lib, 'deps') || strstr($lib, 'home')) {
+                `cp $lib .deploy/`;
+            }
+        }
+    }
+}
+
+// Libraries
+echo "Preparing system libraries...\n";
+`cp /usr/lib/x86_64-linux-gnu/libopencv*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libjpeg*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/*ffmpeg*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/oxide-qt/*ffmpeg*.so* .deploy/`;//Weird configuration on medrimonia-hp
+`cp /usr/lib/x86_64-linux-gnu/libavcodec*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libavformat*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libavutil*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libswscale*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libopenjpeg*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/librtmp*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libgnutls*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libsodium*.so* .deploy/`;
+`cp /lib/x86_64-linux-gnu/libncurses*.so* .deploy/`;
+`cp /lib/x86_64-linux-gnu/libtinfo*.so* .deploy/`;
+`cp /lib/x86_64-linux-gnu/libgcrypt*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/*x264*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libvpx*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libtinyxml*.so* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libvo-amrwbenc.so.0* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libvo-aacenc.so.0* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libopencore-amrwb.so.0* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libopencore-amrnb.so.0* .deploy/`;
+`cp /usr/lib/libflycapture*.so* .deploy/`;
+
+// Deploying
+echo "Sending files...\n";
+`cp $binary .deploy/`;
+$binaryName = basename($binary);
+`chrpath --replace $targetDir .deploy/$binaryName`;
+`rsync --info=flist2,name,progress .deploy/* $targetHost:$targetDir`;
