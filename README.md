@@ -57,7 +57,13 @@ By default, this will use GitHub, you can also use complete repo names
     <build_depend>csa_mdp_experiments</build_depend> <!-- optional git@bitbucket.org:rhoban/csa_mdp_experiments.git -->
 ```
 
-Here, a full repository name is used, and the dependency is tagged `optional`. This mean that
+Here, a full repository name is used, and the dependency is tagged `optional`. This means that
 the user will be asked if he wants to install the dependency. You can also use `recommend`, that
 would do the same, except that the default choice will be yes instead of no.
+
+## Note when installing Rhoban's infamous Code repository
+Try installing random stuff until it works, under ubuntu 16.04 the following were needed:
+
+    sudo apt-get install liburdfdom-dev libboost-thread1.58-dev lib64ncurses5-dev g++ libopencv-dev libv4l-dev php7.0-xml
+
 
