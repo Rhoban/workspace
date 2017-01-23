@@ -1,6 +1,10 @@
 #!/usr/bin/php
 <?php
-//TO PLACE in workspace root
+// Checking for chrpath
+system('which chrpath > /dev/null', $ret);
+if ($ret != 0) {
+    die("Error: you should have chrpath installed (apt-get install chrpath)\n");
+}
 
 // Remote host
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
