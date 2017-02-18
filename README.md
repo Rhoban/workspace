@@ -2,6 +2,11 @@
 
 ## Usage
 
+First of all, you will need 'php' and some libraries: make sure to install
+necessary packages:
+
+    sudo apt-get install php-xml
+
 First, you'll need to install `catkin`, the most convenient method is the following
 
     sudo apt-get install python-pip python-empy
