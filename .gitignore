@@ -1,5 +1,9 @@
 **.swp
 *_release
 *_debug
+build*
+devel*
+logs*
 src
 .catkin_tools
+.deploy
