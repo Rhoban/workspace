@@ -92,7 +92,11 @@ class Repository
 
     public function install()
     {
-        OS::run("cd src/; git clone --depth=1 ".$this->getOrigin()." ".$this->getTarget());
+        $r = OS::run("cd src/; git clone --depth=1 ".$this->getOrigin()." ".$this->getTarget());
+        if ($r != 0) {
+            Terminal::error('Unable to clone '.$this->getOrigin()."\n");
+            die();
+        }
         OS::run("cd $this->directory; git remote set-branches origin '*'");
         OS::run("cd $this->directory; git fetch");
         OS::run("cd $this->directory; git checkout -b catkin origin/catkin");
