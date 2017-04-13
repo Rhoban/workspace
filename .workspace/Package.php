@@ -15,6 +15,10 @@ class Package
 
         $package = file_get_contents($this->directory . '/package.xml');
         $xml = simplexml_load_string($package);
+        if (!$xml) {
+            Terminal::error('Malformed XML: '.$this->directory.'/package.xml'."\n");
+            die();
+        }
         $data = json_decode(json_encode($xml), true);
         $this->name = isset($data['name']) ? $data['name'] : 'Unknown';
         $this->description = isset($data['description']) ? $data['description'] : 'Unknown';
