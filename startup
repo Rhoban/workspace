@@ -1,0 +1,185 @@
+#!/usr/bin/php
+<?php
+
+$host = '10.0.0.1';
+if (count($argv) >= 2) {
+    $host = 'localhost';
+}
+
+function msg($phase, $msg) {
+    echo "\n\e[1m$phase: $msg\e[m\n";
+}
+function question($phase, $msg) {
+    while (true) {
+        echo "\n\e[1m$phase: $msg\e[m (y/n)\n";
+        echo "> ";
+        flush();
+        $m = trim(readline());
+        if ($m == 'y') return true;
+        if ($m == 'n') return false;
+        echo "You should answer 'y' or 'n'\n";
+    }
+}
+function cmd($cmd) {
+    global $host;
+    $result = trim(`rhio $host $cmd`);
+    echo "$result\n";
+    return $result;
+}
+
+while (true) {
+    msg('CHECK', 'Checking that all devices are present');
+    $r = cmd('rhalCheck');
+    if (strpos($r, 'All devices are present') === false) {
+        if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+}
+
+while (true) {
+    msg('CHECK', 'Checking that there is info from the referee');
+    $r = cmd('playing');
+    preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
+    if ($match && (float)($match[1]) > 5) {
+        if (question("\e[31mERROR", 'No info from the referee (Did you wifi.sh?), continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+}
+
+msg('INIT', 'Press enter to run init');
+readline();
+cmd('init');
+
+msg('INIT', 'Press enter to run the walk');
+readline();
+cmd('walk');
+
+msg('ATTACKHERE', 'Put me on the field, facing the opponent goals and press enter');
+readline();
+cmd('attackHere');
+
+while (true) {
+    msg('CHECK', 'Checking the pressure');
+    $r = cmd('checkPressure');
+    if ($r != 'OK') {
+        if (question("\e[31mERROR", 'The pressure seems not normal, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+}
+
+msg('CONFIG', 'What player am I ? (B: free kicker, D: goal, A & C: others)');
+echo "
+    .------A-------------.-------------------.
+    |                    |                   |
+    |                    |                   |
+    |      A'            |                   |
+    -                    |                   -
+      D    +        B'  ( )  OPPONENT FIELD
+    -                    |                   -
+    |                    |                   |
+    |      C'            |                   |
+    |                    |                   |
+    .------C---------B---.-------------------.
+
+";
+
+$positions = array(
+    'A' => [
+        -250, 300, -90,  // Start pos
+        -250, 100,       // Init pos
+        250, 100, 0,     // Patrol1
+        -150, 100, 180,  // Patrol2
+        150
+    ],
+    'B' => [
+        -75, -300, 90,
+        -125, 0,
+        250, -100, 0,
+        -150, -100, 180,
+        100
+    ],
+    'C' => [
+        -250, -300, 90,
+        -250, -100,
+        -250, 150, 90,
+        -250, -150, -90,
+        200
+    ],
+    'D' => [
+        -400, 300, 90,
+        -400, 0,
+        0, 0, 0,
+        0, 0, 0,
+        250
+    ],
+);
+
+$position = '';
+while (!$position) {
+    $position = trim(readline());
+    if (!isset($positions[$position])) {
+        $position='';
+        echo "You should type 'A', 'B', 'C' or 'D'\n";
+    }
+}
+
+if ($position == 'D') {
+    cmd('/moves/robocup/goalKeeper=1');
+    cmd('/moves/robocup/autoKickOff=0');
+} else {
+    cmd('/moves/robocup/goalKeeper=0');
+    cmd('/moves/robocup/autoKickOff=1');
+}
+
+if ($position == 'B') {
+    cmd('/moves/robocup/freeKicker=1');
+} else {
+    cmd('/moves/robocup/freeKicker=0');
+}
+
+$c = $positions[$position];
+cmd('/moves/robocup/autoStartX='.$c[0]);
+cmd('/moves/robocup/autoStartY='.$c[1]);
+cmd('/moves/robocup/autoStartAzimuth='.$c[2]);
+cmd('/moves/robocup/autoTargetX='.$c[3]);
+cmd('/moves/robocup/autoTargetY='.$c[4]);
+if ($position == 'D') {
+    // Margins for placer
+    cmd('/moves/placer/marginX=15');
+    cmd('/moves/placer/marginY=15');
+    cmd('/moves/placer/hysteresis=2');
+} else {
+    // Patrol
+    cmd('/moves/search/P1X='.$c[5]);
+    cmd('/moves/search/P1Y='.$c[6]);
+    cmd('/moves/search/P1Azimuth='.$c[7]);
+    cmd('/moves/search/P2X='.$c[8]);
+    cmd('/moves/search/P2Y='.$c[9]);
+    cmd('/moves/search/P2Azimuth='.$c[10]);
+    // Begin Y target
+    if ($position == 'A') cmd('/moves/search/beginY=150');
+    if ($position == 'C') cmd('/moves/search/beginY=-150');
+}
+cmd('/moves/approach/teamRadius='.$c[11]);
+cmd('/moves/robocup/freeKickX=-100');
+cmd('/moves/robocup/freeKickY=0');
+cmd('/moves/placer/directMode=true');
+
+msg('INFO', 'Checking team radius');
+cmd('/moves/approach/teamRadius');
+
+msg('GO', 'Press enter to run robocup');
+readline();
+cmd('robocup');
+
+msg("\e[32mYODA", 'May the force be with you');
+echo "\n";
