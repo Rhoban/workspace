@@ -60,6 +60,10 @@ msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
 
+msg('TARE', 'Hold me for the tare and press enter');
+readline();
+cmd('tare');
+
 msg('ATTACKHERE', 'Put me on the field, facing the opponent goals and press enter');
 readline();
 cmd('attackHere');
