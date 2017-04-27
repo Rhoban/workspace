@@ -55,7 +55,30 @@ echo "Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libvo-aacenc.so.0* .deploy/`;
 `cp /usr/lib/x86_64-linux-gnu/libopencore-amrwb.so.0* .deploy/`;
 `cp /usr/lib/x86_64-linux-gnu/libopencore-amrnb.so.0* .deploy/`;
+`cp /usr/lib/x86_64-linux-gnu/libIlmImf-2_2.so.22* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libHalf.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libIex-2_2.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+
+`cp /usr/lib/x86_64-linux-gnu/libIlmThread-2_2.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libzvbi.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libx265.so.79* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libwavpack.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libtwolame.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libsnappy.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libshine.so.3* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libcrystalhd.so.3* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libssh-gcrypt.so.4* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libmodplug.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libgme.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libbluray.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libsoxr.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libhogweed.so.4* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libnettle.so.6* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libnettle.so.6* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libhogweed.so.4* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+
 `cp /usr/lib/libflycapture*.so* .deploy/`;
+
 
 // Deploying
 echo "Sending files...\n";
