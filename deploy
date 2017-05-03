@@ -59,9 +59,8 @@ echo "Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libHalf.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libIex-2_2.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 
-`cp /usr/lib/x86_64-linux-gnu/libIlmThread-2_2.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libzvbi.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
-`cp /usr/lib/x86_64-linux-gnu/libx265.so.79* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libx265.so.* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libwavpack.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libtwolame.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libsnappy.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
@@ -77,6 +76,19 @@ echo "Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libnettle.so.6* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libhogweed.so.4* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libconsole_bridge* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libpng* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libswresample* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libweb* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libopenjp* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libopenmpt* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libbluray* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libchromaprint* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libva-* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libmpg123* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libvorbisfile* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libgnutls* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libtasn1* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
+`cp /usr/lib/x86_64-linux-gnu/libp11* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
 
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 
