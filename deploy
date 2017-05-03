@@ -76,6 +76,7 @@ echo "Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libnettle.so.6* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libnettle.so.6* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libhogweed.so.4* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
+`cp /usr/lib/x86_64-linux-gnu/libconsole_bridge* .deploy/`; // Needed for Gregwar (Ubuntu 17.04)
 
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 
