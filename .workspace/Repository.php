@@ -92,7 +92,7 @@ class Repository
 
     public function install()
     {
-        $r = OS::run("cd src/; git clone --depth=1 ".$this->getOrigin()." ".$this->getTarget());
+        $r = OS::run("cd src/; git clone ".$this->getOrigin()." ".$this->getTarget());
         if ($r != 0) {
             Terminal::error('Unable to clone '.$this->getOrigin()."\n");
             die();
@@ -120,7 +120,7 @@ class Repository
     public function setUpstream($name)
     {
         $branch = $this->getBranch();
-        OS::run("cd $this->directory; git fetch --depth=1 $name");
+        OS::run("cd $this->directory; git fetch $name");
         OS::run("cd $this->directory; git branch -u $name/$branch");
     }
 
