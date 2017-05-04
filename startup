@@ -41,7 +41,7 @@ while (true) {
 
 while (true) {
     msg('CHECK', 'Checking that there is info from the referee');
-    $r = cmd('playing');
+    $r = cmd('infoPlaying');
     preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
     if ($match && (float)($match[1]) > 5) {
         if (question("\e[31mERROR", 'No info from the referee (Did you wifi.sh?), continue anyway?')) {
@@ -64,10 +64,9 @@ msg('TARE', 'Hold me for the tare and press enter');
 readline();
 cmd('tare');
 
-// XXX: No longer required
-// msg('ATTACKHERE', 'Put me on the field, facing the opponent goals and press enter');
-// readline();
-// cmd('attackHere');
+msg('GYROTARE', 'OK, put me on the floor now');
+readline();
+cmd('rhalGyroTare');
 
 while (true) {
     msg('CHECK', 'Checking the pressure');
