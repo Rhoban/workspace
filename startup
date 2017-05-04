@@ -64,9 +64,10 @@ msg('TARE', 'Hold me for the tare and press enter');
 readline();
 cmd('tare');
 
-msg('ATTACKHERE', 'Put me on the field, facing the opponent goals and press enter');
-readline();
-cmd('attackHere');
+// XXX: No longer required
+// msg('ATTACKHERE', 'Put me on the field, facing the opponent goals and press enter');
+// readline();
+// cmd('attackHere');
 
 while (true) {
     msg('CHECK', 'Checking the pressure');
