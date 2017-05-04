@@ -67,6 +67,7 @@ cmd('tare');
 msg('GYROTARE', 'OK, put me on the floor now');
 readline();
 cmd('rhalGyroTare');
+cmd('rhalSaveConf rhal.json');
 
 while (true) {
     msg('CHECK', 'Checking the pressure');
