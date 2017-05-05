@@ -2,29 +2,43 @@
 <?php
 
 $checkup = [
+    // Strategy
+    '/teamplay/enable' => 'false',
+    '/decision/enableShare' => 'false',
+
+    // Team ID
     '/referee/teamId' => 16,
+
+    // Behavior
     '/moves/robocup/delayStart' => 0,
     '/moves/placer/directMode' => 'true',
+    '/moves/playing/localizeWalkDuration' => 10,
+
+    // Pressure
     '/decision/lowPressureThreshold' => 60000,
     '/pressure/normalWeight' => 150000,
+
+    // Locmotion
     '/moves/walk/warmup' => 0.6,
     '/moves/walk/shootAfterPhase' => 0,
     '/moves/walk/shootSpeed' => 4,
-    '/moves/approach_potential/stepP' => 1,
+    '/moves/approach_potential/stepP' => 0.9,
     '/moves/approach_potential/targetX' => 0.1,
     '/moves/approach_potential/targetY' => 0.08,
+
+    // Filters
     '/Localisation/Field/RobotController/angleExploration' => 5,
     '/Localisation/Field/RobotController/posExploration' => 25,
-    '/moves/playing/localizeWalkDuration' => 10,
     '/Localisation/Field/FieldPF/fallNoiseTheta' => 20,
     '/Localisation/Field/FieldPF/fallNoise' => 25,
-    // XXX: Head and Head2
-    // Mintilt: 30 maxTilt: 90
-    // maxPan: 90
-    // scanTiltNbPos: 3
-    // scanPanNbPos: 7
-    // GoalObservation Max tilt allowed?
-    // GoalObservation maxAngle ErroR?
+    '/Localisation/Field/GoalObservation/maxAngleError' => 10,
+    '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
+
+    // Head tilts
+    '/moves/head/minTilt' => 10,
+    '/moves/head/maxTilt' => 70,
+    '/moves/head/scanTiltNbPos' => 3,
+    '/moves/head/scanPanNbPos' => 8,
 ];
 
 function question($msg) {
@@ -80,17 +94,13 @@ foreach ($checkup as $node => $value) {
             if (question('Fix it?')) {
                 cmd("$node=$value");
                 $changes = true;
-                success("-> Fixing it");
+                success("-> Fixing it and saving");
+                cmd("save ".dirname($node));
             }
         }
     } else {
         error("Can't find value $node");
     }
-}
-
-if ($changes) {
-//    cmd('save');
-//    success('-> Saving changes');
 }
 
 echo "\e[m\n";
