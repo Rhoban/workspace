@@ -16,11 +16,15 @@ $checkup = [
     '/Localisation/Field/RobotController/angleExploration' => 5,
     '/Localisation/Field/RobotController/posExploration' => 25,
     '/moves/playing/localizeWalkDuration' => 10,
+    '/Localisation/Field/FieldPF/fallNoiseTheta' => 20,
+    '/Localisation/Field/FieldPF/fallNoise' => 25,
     // XXX: Head and Head2
     // Mintilt: 30 maxTilt: 90
     // maxPan: 90
     // scanTiltNbPos: 3
     // scanPanNbPos: 7
+    // GoalObservation Max tilt allowed?
+    // GoalObservation maxAngle ErroR?
 ];
 
 function question($msg) {
