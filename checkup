@@ -11,10 +11,14 @@ $checkup = [
     '/moves/walk/shootAfterPhase' => 0,
     '/moves/walk/shootSpeed' => 4,
     '/moves/approach_potential/stepP' => 1,
-    '/moves/approach_potential/distanceThreshold' => 0.065,
     '/moves/approach_potential/targetX' => 0.1,
     '/moves/approach_potential/targetY' => 0.08,
+    '/moves/playing/localizeWalkDuration' => 10,
     // XXX: Head and Head2
+    // Mintilt: 30 maxTilt: 90
+    // maxPan: 90
+    // scanTiltNbPos: 3
+    // scanPanNbPos: 7
 ];
 
 function question($msg) {
@@ -79,8 +83,8 @@ foreach ($checkup as $node => $value) {
 }
 
 if ($changes) {
-    cmd('save');
-    success('-> Saving changes');
+//    cmd('save');
+//    success('-> Saving changes');
 }
 
 echo "\e[m\n";

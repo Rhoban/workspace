@@ -174,13 +174,13 @@ if ($position == 'D') {
     if ($position == 'A') cmd('/moves/search/beginY=150');
     if ($position == 'C') cmd('/moves/search/beginY=-150');
 }
-cmd('/moves/approach/teamRadius='.$c[11]);
+cmd('/teamplay/teamRadius='.$c[11]);
 cmd('/moves/robocup/freeKickX=-100');
 cmd('/moves/robocup/freeKickY=0');
 cmd('/moves/placer/directMode=true');
 
 msg('INFO', 'Checking team radius');
-cmd('/moves/approach/teamRadius');
+cmd('/teamplay/teamRadius');
 
 msg('GO', 'Press enter to run robocup');
 readline();
