@@ -9,6 +9,7 @@ $checkup = [
     '/moves/robocup/headMove' => 'head',
     '/moves/playing/approachMove' => 'approach_potential',
     '/moves/playing/useKickController' => 'false',
+    '/moves/approach_potential/enableLateral' => 'true',
 
     // Team ID
     '/referee/teamId' => 16,
