@@ -1,0 +1,58 @@
+#!/usr/bin/php
+<?php
+
+//Configuration
+$ESSID = 'HL_KID_A';
+$teamId = 16;
+
+// Remote host
+$remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
+
+//Retrieve robot hostname
+$hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
+
+//Set ip address
+$ip = null;
+if ($hostname == 'chewbacca') {
+    $ip = '192.168.'.$teamId.'.131';
+} else if ($hostname == 'mowgly') {
+    $ip = '192.168.'.$teamId.'.132';
+} else if ($hostname == 'django') {
+    $ip = '192.168.'.$teamId.'.133';
+} else {
+    echo "\e[31mUnknown hostname:\e[m $hostname\n";
+    die;
+}
+
+echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m (TeamId: \e[1m$teamId\e[m)\n";
+
+//Wifi magic
+`ssh rhoban@$remote sudo killall -2 ping 2> /dev/null`;
+`ssh rhoban@$remote sudo killall wpa_supplicant 2> /dev/null`;
+`ssh rhoban@$remote sudo ifconfig wlan0 down`;
+`ssh rhoban@$remote sudo ifconfig wlan0 up`;
+`ssh rhoban@$remote sudo iwlist wlan0 scan | grep $ESSID`;
+`ssh rhoban@$remote sudo iwconfig wlan0 mode managed essid $ESSID`;
+`ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.0.0`;
+
+//Check to ping to router twice
+echo "Check wifi by pinging router:\n";
+$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.0.1`;
+if (strpos($checkPing, '2 received, 0% packet loss')) {
+    echo "\e[1mOK. Network is ready.\e[m\n";
+} else {
+    echo "\e[31mNetwork configuration failed:\e[m\n$checkPing\n";
+    die;
+}
+
+//Check if RhobanServer listen to the referee
+$isServerRunning = `ssh rhoban@$remote ps aux | grep -v "grep" | grep "RhobanServer"`;
+if (strpos($isServerRunning, 'RhobanServer')) {
+    echo "RhobanServer is running. Check referee state:\n";
+    $result = trim(`rhio $remote /referee/state`);
+    echo "$result\n";
+} else {
+    echo "RhobanServer is not running.\n";
+    die;
+}
+
