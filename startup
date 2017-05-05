@@ -52,8 +52,8 @@ while (true) {
     }
 }
 
-if (question("Is it a drop-in game?")) {
-    if (question("Is the team ID 100?")) {
+if (question('DROPIN', 'Is it a drop-in game?')) {
+    if (question('DROPIN', 'Is the team ID 100?')) {
         cmd('/referee/teamId=100');
     } else {
         cmd('/referee/teamId=101');
