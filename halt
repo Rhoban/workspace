@@ -1,0 +1,8 @@
+#!/usr/bin/php
+<?php
+
+// Remote host
+$remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
+
+system("ssh rhoban@$remote sudo poweroff");
+
