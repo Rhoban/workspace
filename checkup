@@ -6,6 +6,9 @@ $checkup = [
     '/teamplay/enable' => 'true',
     '/decision/cooperation' => 'false',
     '/decision/enableShare' => 'false',
+    '/moves/robocup/headMove' => 'head',
+    '/moves/playing/approachMove' => 'approach_potential',
+    '/moves/playing/useKickController' => 'false',
 
     // Team ID
     '/referee/teamId' => 16,
