@@ -14,6 +14,8 @@ $checkup = [
     '/moves/approach_potential/distanceThreshold' => 0.065,
     '/moves/approach_potential/targetX' => 0.1,
     '/moves/approach_potential/targetY' => 0.08,
+    '/Localisation/Field/RobotController/angleExploration' => 5,
+    '/Localisation/Field/RobotController/posExploration' => 25,
     // XXX: Head and Head2
 ];
 
