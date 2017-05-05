@@ -15,6 +15,8 @@ class PullCommand extends Command
     public function run(array $arguments)
     {
         $repositories = array();
+        Terminal::success("* Self updating\n");
+        OS::run('git pull');
         foreach ($this->workspace->getPackages() as $package) {
             $repositories[$package->getRepository()] = true;
         }
