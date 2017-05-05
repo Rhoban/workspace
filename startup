@@ -52,6 +52,16 @@ while (true) {
     }
 }
 
+if (question("Is it a drop-in game?")) {
+    if (question("Is the team ID 100?")) {
+        cmd('/referee/teamId=100');
+    } else {
+        cmd('/referee/teamId=101');
+    }
+} else {
+    cmd('/referee/teamId=16');
+}
+
 msg('INIT', 'Press enter to run init');
 readline();
 cmd('init');
