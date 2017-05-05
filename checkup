@@ -4,6 +4,7 @@
 $checkup = [
     // Strategy
     '/teamplay/enable' => 'true',
+    '/decision/cooperation' => 'false',
     '/decision/enableShare' => 'false',
 
     // Team ID
