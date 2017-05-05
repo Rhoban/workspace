@@ -1,12 +1,20 @@
 #!/usr/bin/php
 <?php
 
-//Configuration
-$ESSID = 'HL_KID_A';
-$teamId = 16;
-
 // Remote host
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
+
+function cmd($cmd) {
+    global $remote;
+    $result = trim(`rhio $remote $cmd`);
+    return $result;
+}
+
+$result = explode('=', cmd('/referee/teamId'));
+
+//Configuration
+$ESSID = 'HL_KID_A';
+$teamId = $result[1];
 
 //Retrieve robot hostname
 $hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
