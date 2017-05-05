@@ -1,0 +1,10 @@
+
+echo -e "\e[1m"
+echo "A game will start, what to do???"
+echo "0) Deploy?                ./deploy"
+echo "1) Run RhobanServer:      ./run"
+echo "2) Check the values:      ./checkup"
+echo "3) Join the wifi:         ./wifi"
+echo "4) Run the startup:       ./startup"
+echo -e "\e[m"
+
