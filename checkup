@@ -3,7 +3,7 @@
 
 $checkup = [
     // Strategy
-    '/teamplay/enable' => 'false',
+    '/teamplay/enable' => 'true',
     '/decision/enableShare' => 'false',
 
     // Team ID
@@ -22,9 +22,6 @@ $checkup = [
     '/moves/walk/warmup' => 0.6,
     '/moves/walk/shootAfterPhase' => 0,
     '/moves/walk/shootSpeed' => 4,
-    '/moves/approach_potential/stepP' => 0.9,
-    '/moves/approach_potential/targetX' => 0.1,
-    '/moves/approach_potential/targetY' => 0.08,
 
     // Filters
     '/Localisation/Field/RobotController/angleExploration' => 5,
