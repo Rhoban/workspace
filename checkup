@@ -11,9 +11,6 @@ $checkup = [
     '/moves/playing/useKickController' => 'true',
     '/moves/approach_potential/enableLateral' => 'true',
 
-    // Team ID
-    '/referee/teamId' => 16,
-
     // Behavior
     '/moves/robocup/delayStart' => 0,
     '/moves/placer/directMode' => 'true',
@@ -59,7 +56,7 @@ function question($msg) {
 
 $host = '10.0.0.1';
 if (count($argv) >= 2) {
-    $host = 'localhost';
+    $host = $argv[1];
 }
 
 function error($msg)

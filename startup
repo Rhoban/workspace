@@ -27,24 +27,15 @@ function cmd($cmd) {
     return $result;
 }
 
+if (question('CHECKUP', 'Do you want to run the checkup?')) {
+    passthru("./checkup $host");
+}
+
 while (true) {
     msg('CHECK', 'Checking that all devices are present');
     $r = cmd('rhalCheck');
     if (strpos($r, 'All devices are present') === false) {
         if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
-            break;
-        }
-    } else {
-        break;
-    }
-}
-
-while (true) {
-    msg('CHECK', 'Checking that there is info from the referee');
-    $r = cmd('infoPlaying');
-    preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
-    if ($match && (float)($match[1]) > 5) {
-        if (question("\e[31mERROR", 'No info from the referee (Did you wifi.sh?), continue anyway?')) {
             break;
         }
     } else {
@@ -60,6 +51,23 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
     }
 } else {
     cmd('/referee/teamId=16');
+}
+
+while (true) {
+    if (question('WIFI', 'Do you want to run the wifi script?')) {
+        passthru("./wifi $host");
+    }
+
+    msg('CHECK', 'Checking that there is info from the referee');
+    $r = cmd('infoPlaying');
+    preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
+    if ($match && (float)($match[1]) > 5) {
+        if (question("\e[31mERROR", 'No info from the referee, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
 }
 
 msg('INIT', 'Press enter to run init');
