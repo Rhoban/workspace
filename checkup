@@ -4,11 +4,11 @@
 $checkup = [
     // Strategy
     '/teamplay/enable' => 'true',
-    '/decision/cooperation' => 'false',
-    '/decision/enableShare' => 'false',
+    '/decision/cooperation' => 'true',
+    '/decision/enableShare' => 'true',
     '/moves/robocup/headMove' => 'head',
     '/moves/playing/approachMove' => 'approach_potential',
-    '/moves/playing/useKickController' => 'false',
+    '/moves/playing/useKickController' => 'true',
     '/moves/approach_potential/enableLateral' => 'true',
 
     // Team ID
