@@ -36,6 +36,7 @@ $checkup = [
     '/Localisation/Field/FieldPF/fallNoise' => 25,
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
+    '/ballStack/farBall' => 4,
 
     // Head tilts
     '/moves/head/minTilt' => 10,
