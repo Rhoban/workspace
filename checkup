@@ -42,7 +42,10 @@ $checkup = [
     '/moves/head/maxTilt' => 70,
     '/moves/head/scanTiltNbPos' => 3,
     '/moves/head/scanPanNbPos' => 8,
-    '/moves/Head2/maxSpeed' => 180
+    '/moves/Head2/maxSpeed' => 180,
+
+    // I hope we won't neet that
+    '/moves/penalty/startX' => 200,
 ];
 
 function question($msg) {
