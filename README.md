@@ -5,7 +5,7 @@
 First of all, you will need 'php' and some libraries: make sure to install
 necessary packages:
 
-    sudo apt-get install php-xml
+    sudo apt-get install php php-xml
 
 First, you'll need to install `catkin`, the most convenient method is the following
 
