@@ -25,7 +25,7 @@ class SetupCommand extends Command
         Terminal::info("* Runnin catkin init\n");
         OS::run('catkin init --workspace .');
         Terminal::info("* Setup of profile debug and release");
-        OS::run('catkin config --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug');
-        OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release');
+        OS::run('catkin config --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
+        OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
     }
 }
