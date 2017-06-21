@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php
 
+include ('rhio.php');
+
 $checkup = [
     // Strategy
     '/teamplay/enable' => 'true',
@@ -12,7 +14,7 @@ $checkup = [
     '/moves/approach_potential/enableLateral' => 'true',
 
     // Behavior
-    '/moves/robocup/delayStart' => 0,
+    '/moves/robocup/delayStart' => '0',
     '/moves/placer/directMode' => 'true',
     '/moves/playing/localizeWalkDuration' => 10,
     '/moves/search/rotateAfter' => 3,
@@ -61,9 +63,10 @@ function question($msg) {
     }
 }
 
-$host = '10.0.0.1';
 if (count($argv) >= 2) {
-    $host = $argv[1];
+    $robot = $argv[1];
+} else {
+    die('Usage: ./checkup [robot]'."\n");
 }
 
 function error($msg)
@@ -81,29 +84,26 @@ function success($msg)
     echo "\e[32;1m$msg\n";
 }
 
-function cmd($cmd) {
-    global $host;
-    $result = trim(`rhio $host $cmd`);
-    return $result;
-}
+$rhio = new RhIO('env/'.$robot.'/rhio/');
 
-echo "\n\e[1mChecking up RhIO values [$host]\n";
+echo "\n\e[1mChecking up RhIO values [$robot]\n";
 $changes = false;
 
 foreach ($checkup as $node => $value) {
-    $return = cmd($node);
-    $parts = explode('=', $return, 2);
-    if (count($parts) == 2) {
-        $v = $parts[1];
+    $value = (string)$value;
+    if ($value === 'true') $value = '1';
+    if ($value === 'false') $value = '0';
+
+    $v = $rhio->readValue($node);
+    if ($v !== null) {
         if ($v == $value) {
             success("* $node=$value");
         } else {
             error("* $node=$v, should be $value");
             if (question('Fix it?')) {
-                cmd("$node=$value");
+                $rhio->setValue($node, $value);
                 $changes = true;
-                success("-> Fixing it and saving");
-                cmd("save ".dirname($node));
+                success("-> Fixing it (don't forget to git)");
             }
         }
     } else {

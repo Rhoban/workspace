@@ -27,9 +27,10 @@ function cmd($cmd) {
     return $result;
 }
 
-if (question('CHECKUP', 'Do you want to run the checkup?')) {
-    passthru("./checkup $host");
-}
+// XXX: Checkup is now done offline 
+// if (question('CHECKUP', 'Do you want to run the checkup?')) {
+//     passthru("./checkup $host");
+// }
 
 while (true) {
     msg('CHECK', 'Checking that all devices are present');
