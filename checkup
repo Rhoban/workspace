@@ -24,8 +24,9 @@ $checkup = [
     // Locmotion
     '/moves/walk/maxStep' => 40,
     '/moves/walk/warmup' => 0.6,
-    '/moves/walk/shootAfterPhase' => 0,
-    '/moves/walk/shootSpeed' => 4,
+    '/moves/walk/maxDStepByCycle' => 10,
+    '/moves/walk/maxDLatByCycle' => 5,
+    '/moves/walk/maxDTurnByCycle' => 2.5,
     '/moves/approach_potential/stepP' => 1,
 
     // Filters

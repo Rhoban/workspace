@@ -4,7 +4,7 @@
 // Remote host
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
 
-`ssh rhoban@$remote ./stop.sh`;
-`ssh rhoban@$remote ./boot.sh`;
+`ssh rhoban@$remote ./env/stop.sh`;
+`ssh rhoban@$remote ./env/boot.sh`;
 
-system("ssh rhoban@$remote ./out.sh");
+system("ssh rhoban@$remote ./env/output.sh");

@@ -1,0 +1,37 @@
+#!/bin/bash
+
+DIR="src/rhobanproject/environments"
+if [ ! -d $DIR ]; then
+    echo "! Environments is not installed"
+else
+    cd $DIR
+
+    # Cleaning old environents
+    ENVS=`ssh rhoban@10.0.0.1 ls -Ahdc ./env*`
+    K=0
+
+    for E in $ENVS; do
+        K=$[$K+1]
+        if [ $K -gt 250 ]; then
+            echo "* Removing old environment $E"
+            ssh rhoban@10.0.0.1 rm -rf $E
+        fi
+    done
+
+    # Archiving current environment
+    echo "* Retrieving current env date"
+    CHG=`ssh rhoban@10.0.0.1 stat -c %y ./env/`
+
+    if [ "$CHG" != "" ]; then
+        FMT="+%d_%m_%Y__%H_%M_%S"
+        DATE=`date -d "$CHG" "+%d_%m_%Y__%H_%m_%S"`
+        OLDNAME="env_$DATE"
+        echo "* Backuping old env to $OLDNAME"
+        `ssh rhoban@10.0.0.1 mv env $OLDNAME`
+    fi
+
+    # Sending current environment
+    echo "* Sending environment files"
+    ssh rhoban@10.0.0.1 mkdir env
+    rsync -l -r --exclude fake ./* rhoban@10.0.0.1:env/
+fi
