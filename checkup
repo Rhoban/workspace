@@ -34,7 +34,7 @@ $checkup = [
     // Filters
     '/Localisation/period' => 3,
     '/Localisation/Field/nbParticles' => 3000,	
-    '/Localisation/Field/RobotController/angleExploration' => 2.5,
+    '/Localisation/Field/RobotController/angleExploration' => 1,
     '/Localisation/Field/RobotController/posExploration' => 5,
     '/Localisation/Field/FieldPF/fallNoiseTheta' => 20,
     '/Localisation/Field/FieldPF/fallNoise' => 25,
