@@ -21,7 +21,7 @@ $checkup = [
     '/decision/lowPressureThreshold' => 60000,
     '/pressure/normalWeight' => 150000,
 
-    // Locmotion
+    // Locomotion
     '/moves/walk/maxStep' => 40,
     '/moves/walk/warmup' => 0.6,
     '/moves/walk/maxDStepByCycle' => 10,
@@ -30,8 +30,10 @@ $checkup = [
     '/moves/approach_potential/stepP' => 1,
 
     // Filters
-    '/Localisation/Field/RobotController/angleExploration' => 5,
-    '/Localisation/Field/RobotController/posExploration' => 25,
+    '/Localisation/period' => 3,
+    '/Localisation/Field/nbParticles' => 3000,	
+    '/Localisation/Field/RobotController/angleExploration' => 2.5,
+    '/Localisation/Field/RobotController/posExploration' => 5,
     '/Localisation/Field/FieldPF/fallNoiseTheta' => 20,
     '/Localisation/Field/FieldPF/fallNoise' => 25,
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
