@@ -5,7 +5,9 @@ if [ ! -d $DIR ]; then
     echo "! Environments is not installed"
 else
     # Convenient symlink
-    ln -sf $DIR env
+    if [ ! -d env ]; then
+      ln -sf $DIR env
+    fi
     cd env
 
     # Cleaning old environents
