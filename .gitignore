@@ -7,4 +7,3 @@ logs*
 src
 .catkin_tools
 .deploy
-env
