@@ -4,7 +4,9 @@ DIR="src/rhobanproject/environments"
 if [ ! -d $DIR ]; then
     echo "! Environments is not installed"
 else
-    cd $DIR
+    # Convenient symlink
+    ln -sf $DIR env
+    cd env
 
     # Cleaning old environents
     ENVS=`ssh rhoban@10.0.0.1 ls -Ahdc ./env*`
