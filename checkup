@@ -30,6 +30,7 @@ $checkup = [
     '/moves/walk/maxDLatByCycle' => 5,
     '/moves/walk/maxDTurnByCycle' => 2.5,
     '/moves/approach_potential/stepP' => 1,
+    '/moves/Head2/forceTrackDist' => 0.75,
 
     // Filters
     '/Localisation/period' => 3,
@@ -41,6 +42,7 @@ $checkup = [
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
     '/ballStack/farBall' => 4,
+    '/ballStack/scoreReduction' => 0.05,
 
     // Head tilts
     '/moves/head/minTilt' => 10,
