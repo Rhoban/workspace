@@ -42,7 +42,7 @@ $checkup = [
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
     '/ballStack/farBall' => 4,
-    '/ballStack/scoreReduction' => 0.05,
+    '/ballStack/scoreReduction' => 0.04,
 
     // Head tilts
     '/moves/head/minTilt' => 10,
