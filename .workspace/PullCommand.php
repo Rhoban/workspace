@@ -12,17 +12,29 @@ class PullCommand extends Command
         return array('Pull all the repositories');
     }
 
+    protected function retryCmd($title, $cmd)
+    {
+        $retry = false;
+        do {
+            Terminal::success("* $title\n");
+            $return = OS::run($cmd);
+            if ($return) {
+                if (!Prompt::ask('It appear that the operation was not successful, continue anyway (n=retry) ?', false)) {
+                    $retry = true;
+                }
+            }
+        } while ($retry);
+    }
+
     public function run(array $arguments)
     {
         $repositories = array();
-        Terminal::success("* Self updating\n");
-        OS::run('git pull');
+        $this->retryCmd("Self updating", 'git pull');
         foreach ($this->workspace->getPackages() as $package) {
             $repositories[$package->getRepository()] = true;
         }
         foreach ($repositories as $repository => $true) {
-            Terminal::success("* Updating $repository...\n");
-            OS::run('cd src/'.$repository.'; git pull');
+            $this->retryCmd("Updating $repository", 'cd src/'.$repository.'; git pull');
         }
     }
 }
