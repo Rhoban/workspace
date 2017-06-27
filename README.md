@@ -22,6 +22,9 @@ Run the setup:
 
     ./workspace setup
 
+If you are a power rhoban team developper, use following command to perform a full install:
+    ./workspace install rhobanproject/code
+
 You can now install a repository:
 
     ./workspace install rhoban/rhio
