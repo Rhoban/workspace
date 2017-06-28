@@ -3,7 +3,7 @@
 
 $host = '10.0.0.1';
 if (count($argv) >= 2) {
-    $host = 'localhost';
+    $host = $argv[1];
 }
 
 function msg($phase, $msg) {
