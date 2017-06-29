@@ -17,7 +17,7 @@ $checkup = [
     '/moves/robocup/delayStart' => '0',
     '/moves/placer/directMode' => 'true',
     '/moves/playing/localizeWalkDuration' => 10,
-    '/moves/search/rotateAfter' => 3,
+    '/moves/search/rotateAfter' => 2,
 
     // Pressure
     '/decision/lowPressureThreshold' => 60000,
