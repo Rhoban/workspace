@@ -24,6 +24,7 @@ $checkup = [
     '/pressure/normalWeight' => 150000,
 
     // Locomotion
+    '/moves/walk/startPhase' => 0,
     '/moves/walk/warmup' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
