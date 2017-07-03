@@ -34,7 +34,7 @@ $checkup = [
     '/moves/approach_potential/stepP' => 1,
     '/moves/Head2/forceTrackDist' => 0.75,
 
-    // Filters
+    // Filters and Localisation
     '/Localisation/period' => 3,
     '/Localisation/Field/nbParticles' => 3000,	
     '/Localisation/Field/RobotController/angleExploration' => 1,
@@ -44,6 +44,7 @@ $checkup = [
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
     '/Localisation/Field/maxNoiseBoost' => 10,
+    '/Localisation/Consistency/enabled' => 'true',
     '/ballStack/farBall' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
