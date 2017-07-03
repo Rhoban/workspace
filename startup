@@ -3,7 +3,7 @@
 
 $host = '10.0.0.1';
 if (count($argv) >= 2) {
-    $host = 'localhost';
+    $host = $argv[1];
 }
 
 function msg($phase, $msg) {
@@ -102,15 +102,15 @@ while (true) {
 
 msg('CONFIG', 'What player am I ? (B: free kicker, D: goal, A & C: others)');
 echo "
-    .------A-------------.-------------------.
+    .----------------A---.-------------------.
     |                    |                   |
+    |                A'  |                   |
     |                    |                   |
-    |      A'            |                   |
     -                    |                   -
-      D    +        B'  ( )  OPPONENT FIELD
+      D     +        B' ( )  OPPONENT FIELD
     -                    |                   -
     |                    |                   |
-    |      C'            |                   |
+    |          C'        |                   |
     |                    |                   |
     .------C---------B---.-------------------.
 
@@ -118,8 +118,8 @@ echo "
 
 $positions = array(
     'A' => [
-        -250, 300, -90,  // Start pos
-        -250, 100,       // Init pos
+        -75, 300, -90,  // Start pos
+        -75, 150,       // Init pos
         250, 100, 0,     // Patrol1
         -150, 100, 180,  // Patrol2
         150
@@ -133,7 +133,7 @@ $positions = array(
     ],
     'C' => [
         -250, -300, 90,
-        -250, -100,
+        -150, -150,
         -250, 150, 90,
         -250, -150, -90,
         200
@@ -197,6 +197,7 @@ cmd('/teamplay/teamRadius='.$c[11]);
 cmd('/moves/robocup/freeKickX=-100');
 cmd('/moves/robocup/freeKickY=0');
 cmd('/moves/placer/directMode=true');
+cmd('/teamplay/aggressivity=0.5');
 
 msg('INFO', 'Checking team radius');
 cmd('/teamplay/teamRadius');

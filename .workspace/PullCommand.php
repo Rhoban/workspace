@@ -18,6 +18,7 @@ class PullCommand extends Command
         do {
             Terminal::success("* $title\n");
             $return = OS::run($cmd);
+            $retry = false;
             if ($return) {
                 if (!Prompt::ask('It appear that the operation was not successful, continue anyway (n=retry) ?', false)) {
                     $retry = true;

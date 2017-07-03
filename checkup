@@ -17,18 +17,20 @@ $checkup = [
     '/moves/robocup/delayStart' => '0',
     '/moves/placer/directMode' => 'true',
     '/moves/playing/localizeWalkDuration' => 10,
-    '/moves/search/rotateAfter' => 3,
+    '/moves/search/rotateAfter' => 2,
 
     // Pressure
     '/decision/lowPressureThreshold' => 60000,
     '/pressure/normalWeight' => 150000,
 
     // Locomotion
-    '/moves/walk/maxStep' => 40,
-    '/moves/walk/warmup' => 0.6,
+    '/moves/walk/startPhase' => 0,
+    '/moves/walk/warmup' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
     '/moves/walk/maxDTurnByCycle' => 2.5,
+    '/moves/walk/shootPhase' => 0,
+    '/moves/walk/shootAfterPhase' => 0.25,
     '/moves/approach_potential/stepP' => 1,
     '/moves/Head2/forceTrackDist' => 0.75,
 
@@ -41,6 +43,7 @@ $checkup = [
     '/Localisation/Field/FieldPF/fallNoise' => 25,
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
+    '/Localisation/Field/maxNoiseBoost' => 10,
     '/ballStack/farBall' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
@@ -53,6 +56,22 @@ $checkup = [
 
     // I hope we won't neet that
     '/moves/penalty/startX' => 200,
+];
+
+$checkup_sigmaban = [
+    '/moves/walk/maxStep' => 55,
+];
+
+$checkup_sigmaban2 = [
+    '/moves/walk/maxStep' => 70,
+];
+
+$robots = [
+    'chewbacca' => 'sigmaban',
+    'mowgly' => 'sigmaban',
+    'django' => 'sigmaban',
+    'tom' => 'sigmaban2',
+    'olive' => 'sigmaban'
 ];
 
 function question($msg) {
@@ -71,6 +90,13 @@ if (count($argv) >= 2) {
     $robot = $argv[1];
 } else {
     die('Usage: ./checkup [robot]'."\n");
+}
+
+if (isset($robots[$robot])) {
+    $vname = 'checkup_'.$robots[$robot];
+    if (isset($$vname)) {
+        $checkup = array_merge($checkup, $$vname);
+    }
 }
 
 function error($msg)
