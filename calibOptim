@@ -1,0 +1,39 @@
+#!/bin/bash
+
+echo "A new day dawns"
+host=$(ssh rhoban@10.0.0.1 hostname)
+robot_home=$(ssh rhoban@10.0.0.1 pwd)
+echo "Robot home is "$robot_home
+echo "Going to perform a calibration for $host"
+
+DIR="$robot_home/env/$host/arucoCalibration.csv"
+MODEL_DIR="$HOME/workspace/devel_release/lib/model"
+
+
+echo "*** Retrieving the calibration data from the robot"
+if scp rhoban@10.0.0.1:$DIR $MODEL_DIR
+then
+    echo "scp succeeded..."
+else
+    echo "scp failed, find the closest monkey and blame him"
+    exit
+fi
+echo "*** Deleting the calibration data on the robot"
+#ssh rhoban@10.0.0.1 rm -rf $DIR
+
+echo "*** Starting the optimization"
+cd $MODEL_DIR
+./appCameraModelLearning ./arucoCalibration.csv .
+
+echo "*** Sending the result to the robot..."
+if scp ./cameraModel.params rhoban@10.0.0.1:~/env/$host/
+then
+    echo "scp succeeded..."
+else
+    echo "scp failed, find the closest monkey and blame him"
+    exit
+fi
+
+echo "*** All set. Good luck buddy, dont go full ape for once"
+
+echo ""
