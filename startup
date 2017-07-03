@@ -107,10 +107,10 @@ echo "
     |                A'  |                   |
     |                    |                   |
     -                    |                   -
-      D    C'        B' ( )  OPPONENT FIELD
+      D     +        B' ( )  OPPONENT FIELD
     -                    |                   -
     |                    |                   |
-    |                    |                   |
+    |          C'        |                   |
     |                    |                   |
     .------C---------B---.-------------------.
 
@@ -133,7 +133,7 @@ $positions = array(
     ],
     'C' => [
         -250, -300, 90,
-        -250, 0,
+        -150, -150,
         -250, 150, 90,
         -250, -150, -90,
         200
@@ -197,6 +197,7 @@ cmd('/teamplay/teamRadius='.$c[11]);
 cmd('/moves/robocup/freeKickX=-100');
 cmd('/moves/robocup/freeKickY=0');
 cmd('/moves/placer/directMode=true');
+cmd('/teamplay/aggressivity=0.5');
 
 msg('INFO', 'Checking team radius');
 cmd('/teamplay/teamRadius');
