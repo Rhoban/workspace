@@ -8,25 +8,35 @@ echo "Going to perform a calibration for $host"
 
 DIR="$robot_home/env/$host/arucoCalibration.csv"
 MODEL_DIR="$HOME/workspace/devel_release/lib/model"
-
+ENV_DIR="$HOME/workspace/env/$host"
 
 echo "*** Retrieving the calibration data from the robot"
 if scp rhoban@10.0.0.1:$DIR $MODEL_DIR
 then
-    echo "scp succeeded..."
+    echo "scp succeeded."
 else
     echo "scp failed, find the closest monkey and blame him"
     exit
 fi
-echo "*** Deleting the calibration data on the robot"
+#echo "*** Deleting the calibration data on the robot"
 #ssh rhoban@10.0.0.1 rm -rf $DIR
+
+echo "*** Copying the urdf for $host..."
+rm $MODEL_DIR/sigmaban.urdf
+if cp $ENV_DIR/sigmaban.urdf $MODEL_DIR
+then
+    echo "urdf copied."
+else
+    echo "cp failed, check that $ENV_DIR/sigmaban.urdf exists"
+    exit
+fi
 
 echo "*** Starting the optimization"
 cd $MODEL_DIR
 ./appCameraModelLearning ./arucoCalibration.csv .
 
-echo "*** Sending the result to the robot..."
-if scp ./cameraModel.params rhoban@10.0.0.1:~/env/$host/
+echo "*** Moving the result to the robot's environment (on your pc)..."
+if mv ./cameraModel.params ENV_DIR
 then
     echo "scp succeeded..."
 else
@@ -34,6 +44,9 @@ else
     exit
 fi
 
-echo "*** All set. Good luck buddy, dont go full ape for once"
+echo "*** deploy-enving..."
+./deploy-env
+
+echo "*** All set. Good luck buddy"
 
 echo ""
