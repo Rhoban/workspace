@@ -17,13 +17,14 @@ $checkup = [
     '/moves/robocup/delayStart' => '0',
     '/moves/placer/directMode' => 'true',
     '/moves/playing/localizeWalkDuration' => 10,
-    '/moves/search/rotateAfter' => 2,
+    '/moves/search/rotateAfter' => 2.5,
 
     // Pressure
     '/decision/lowPressureThreshold' => 60000,
     '/pressure/normalWeight' => 150000,
 
     // Locomotion
+    '/moves/walk/smoothTransition' => 0.5,
     '/moves/walk/warmup' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
