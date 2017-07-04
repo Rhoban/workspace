@@ -33,7 +33,7 @@ $checkup = [
     '/moves/walk/shootAfterPhase' => 0.25,
     '/moves/approach_potential/stepP' => 1,
     '/moves/Head2/forceTrackDist' => 0.75,
-    '/moves/Head2/trackingTime' => 1.5,
+    '/moves/Head2/trackingPeriod' => 1.5,
 
     // Filters and Localisation
     '/Localisation/period' => 3,
