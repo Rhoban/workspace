@@ -44,7 +44,7 @@ $checkup = [
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
     '/Localisation/Field/maxNoiseBoost' => 10,
-    '/Localisation/Consistency/enabled' => 'true',
+    '/Localisation/Consistency/enabled' => 'false',
     '/ballStack/farBall' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
