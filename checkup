@@ -24,7 +24,6 @@ $checkup = [
     '/pressure/normalWeight' => 150000,
 
     // Locomotion
-    '/moves/walk/startPhase' => 0,
     '/moves/walk/warmup' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
@@ -60,10 +59,12 @@ $checkup = [
 
 $checkup_sigmaban = [
     '/moves/walk/maxStep' => 55,
+    '/moves/walk/startPhase' => 0,
 ];
 
 $checkup_sigmaban2 = [
-    '/moves/walk/maxStep' => 70,
+    '/moves/walk/maxStep' => 60,
+    '/moves/walk/startPhase' => 0.1,
 ];
 
 $robots = [
