@@ -17,14 +17,14 @@ $checkup = [
     '/moves/robocup/delayStart' => '0',
     '/moves/placer/directMode' => 'true',
     '/moves/playing/localizeWalkDuration' => 10,
-    '/moves/search/rotateAfter' => 2,
+    '/moves/search/rotateAfter' => 2.5,
 
     // Pressure
     '/decision/lowPressureThreshold' => 60000,
     '/pressure/normalWeight' => 150000,
 
     // Locomotion
-    '/moves/walk/startPhase' => 0,
+    '/moves/walk/smoothTransition' => 0.5,
     '/moves/walk/warmup' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
@@ -33,8 +33,9 @@ $checkup = [
     '/moves/walk/shootAfterPhase' => 0.25,
     '/moves/approach_potential/stepP' => 1,
     '/moves/Head2/forceTrackDist' => 0.75,
+    '/moves/Head2/trackingPeriod' => 1.5,
 
-    // Filters
+    // Filters and Localisation
     '/Localisation/period' => 3,
     '/Localisation/Field/nbParticles' => 3000,	
     '/Localisation/Field/RobotController/angleExploration' => 1,
@@ -44,6 +45,7 @@ $checkup = [
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
     '/Localisation/Field/maxNoiseBoost' => 10,
+    '/Localisation/Consistency/enabled' => 'false',
     '/ballStack/farBall' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
@@ -59,11 +61,13 @@ $checkup = [
 ];
 
 $checkup_sigmaban = [
-    '/moves/walk/maxStep' => 55,
+//    '/moves/walk/maxStep' => 55,
+    '/moves/walk/startPhase' => 0,
 ];
 
 $checkup_sigmaban2 = [
-    '/moves/walk/maxStep' => 70,
+    '/moves/walk/maxStep' => 60,
+    '/moves/walk/startPhase' => 0.1,
 ];
 
 $robots = [
