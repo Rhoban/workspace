@@ -26,6 +26,11 @@ function cmd($cmd) {
     echo "$result\n";
     return $result;
 }
+function isHandled() {
+    $r = cmd('/decision/handled');
+
+    return $r == '/decision/handled=true';
+}
 
 // XXX: Checkup is now done offline 
 // if (question('CHECKUP', 'Do you want to run the checkup?')) {
@@ -79,20 +84,30 @@ msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
 
-msg('TARE', 'Hold me for the tare and press enter');
-readline();
-cmd('tare');
+while (true) {
+    msg('TARE', 'Hold me in the air for the tare and press enter');
+    readline();
+    cmd('tare');
 
-msg('GYROTARE', 'OK, put me on the floor now');
-readline();
-cmd('rhalGyroTare');
-cmd('rhalSaveConf rhal.json');
+    msg('CHECK', 'Checking the pressure');
+    if (!isHandled()) {
+        if (question("\e[31mERROR", 'Decision said I am not handled when I should be in the air, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+}
 
 while (true) {
+    msg('GYROTARE', 'Put me on the floor now');
+    readline();
+    cmd('rhalGyroTare');
+    cmd('rhalSaveConf rhal.json');
+
     msg('CHECK', 'Checking the pressure');
-    $r = cmd('checkPressure');
-    if ($r != 'OK') {
-        if (question("\e[31mERROR", 'The pressure seems not normal, continue anyway?')) {
+    if (isHandled()) {
+        if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
             break;
         }
     } else {
