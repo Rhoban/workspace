@@ -12,7 +12,7 @@ else
 
     for E in $ENVS; do
         K=$[$K+1]
-        if [ $K -gt 250 ]; then
+        if [ $K -gt 25 ]; then
             echo "* Removing old environment $E"
             ssh rhoban@10.0.0.1 rm -rf $E
         fi
