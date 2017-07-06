@@ -1,17 +1,20 @@
 #!/bin/bash
-
+## To calibrate, init the robot, start walk and start arucoCalibration on rhio.
+## After the set number of frames, the file arucoCalibration.csv will be available on the robot's env
+## This scripts copies that file, starts the calibration and sends the results to the robot.
 echo "A new day dawns"
 host=$(ssh rhoban@10.0.0.1 hostname)
 robot_home=$(ssh rhoban@10.0.0.1 pwd)
 echo "Robot home is "$robot_home
 echo "Going to perform a calibration for $host"
 
-DIR="$robot_home/env/$host/arucoCalibration.csv"
-MODEL_DIR="$HOME/workspace/devel_release/lib/model"
+ARUCO_DIR="$robot_home/env/$host/arucoCalibration.csv"
+MODEL_DIR="$HOME/workspace/devel_release/lib/model/"
 ENV_DIR="$HOME/workspace/env/$host"
 
+
 echo "*** Retrieving the calibration data from the robot"
-if scp rhoban@10.0.0.1:$DIR $MODEL_DIR
+if scp rhoban@10.0.0.1:$ARUCO_DIR $MODEL_DIR
 then
     echo "scp succeeded."
 else
@@ -19,7 +22,7 @@ else
     exit
 fi
 #echo "*** Deleting the calibration data on the robot"
-#ssh rhoban@10.0.0.1 rm -rf $DIR
+#ssh rhoban@10.0.0.1 rm -rf $ARUCO_DIR
 
 echo "*** Copying the urdf for $host..."
 rm $MODEL_DIR/sigmaban.urdf
@@ -33,19 +36,19 @@ fi
 
 echo "*** Starting the optimization"
 cd $MODEL_DIR
-./appCameraModelLearning ./arucoCalibration.csv .
+./appCameraModelLearning ./arucoCalibration.csv $host
 
 echo "*** Moving the result to the robot's environment (on your pc)..."
-if mv ./cameraModel.params ENV_DIR
+if mv ./cameraModel.params $ENV_DIR
 then
-    echo "scp succeeded..."
+    echo "mv succeeded..."
 else
-    echo "scp failed, find the closest monkey and blame him"
+    echo "mv failed, find the closest monkey and blame him"
     exit
 fi
 
 echo "*** deploy-enving..."
-./deploy-env
+cp workspace/ ./deploy-env
 
 echo "*** All set. Good luck buddy"
 
