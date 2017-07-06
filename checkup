@@ -62,7 +62,7 @@ $checkup = [
 ];
 
 $checkup_sigmaban = [
-//    '/moves/walk/maxStep' => 55,
+    '/moves/walk/maxStep' => 47,
     '/moves/walk/startPhase' => 0,
     '/moves/standup/speed' => 1.25,
 ];
