@@ -38,8 +38,8 @@ echo "*** Starting the optimization"
 cd $MODEL_DIR
 ./appCameraModelLearning ./arucoCalibration.csv $host
 
-echo "*** Moving the result to the robot's environment (on your pc)..."
-if mv ./cameraModel.params $ENV_DIR
+echo "*** Moving the result to the local robot's environment (on your pc: $ENV_DIR)..."
+if cp ./cameraModel.params $ENV_DIR
 then
     echo "mv succeeded..."
 else
@@ -47,8 +47,14 @@ else
     exit
 fi
 
-echo "*** deploy-enving..."
-cp workspace/ ./deploy-env
+echo "*** Moving the result to the distant robot's environment (on the robot: $robot_home/env/$host/)..."
+if scp ./cameraModel.params rhoban@10.0.0.1:$robot_home/env/$host/
+then
+    echo "mv succeeded..."
+else
+    echo "mv failed, find the closest monkey and blame him"
+    exit
+fi
 
 echo "*** All set. Good luck buddy"
 
