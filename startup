@@ -84,20 +84,9 @@ msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
 
-while (true) {
-    msg('TARE', 'Hold me in the air for the tare and press enter');
-    readline();
-    cmd('tare');
-
-    msg('CHECK', 'Checking the pressure');
-    if (!isHandled()) {
-        if (question("\e[31mERROR", 'Decision said I am not handled when I should be in the air, continue anyway?')) {
-            break;
-        }
-    } else {
-        break;
-    }
-}
+msg('TARE', 'Hold me in the air for the tare and press enter');
+readline();
+cmd('tare');
 
 while (true) {
     msg('GYROTARE', 'Put me on the floor now');
