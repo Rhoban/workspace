@@ -12,6 +12,7 @@ $checkup = [
     '/moves/playing/approachMove' => 'approach_potential',
     '/moves/playing/useKickController' => 'true',
     '/moves/approach_potential/enableLateral' => 'true',
+    '/teamplay/aggressivity' => 0.75,
 
     // Behavior
     '/moves/robocup/delayStart' => '0',
@@ -56,13 +57,14 @@ $checkup = [
     '/moves/head/scanPanNbPos' => 8,
     '/moves/Head2/maxSpeed' => 180,
 
-    // I hope we won't neet that
+    // I hope we won't need that
     '/moves/penalty/startX' => 200,
 ];
 
 $checkup_sigmaban = [
 //    '/moves/walk/maxStep' => 55,
     '/moves/walk/startPhase' => 0,
+    '/moves/standup/speed' => 1.25,
 ];
 
 $checkup_sigmaban2 = [
