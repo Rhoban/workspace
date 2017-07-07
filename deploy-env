@@ -34,7 +34,5 @@ else
     # Sending current environment
     echo "* Sending environment files"
     ssh rhoban@10.0.0.1 mkdir env
-    rsync -l -r ./$ROBOT rhoban@10.0.0.1:env/
-    rsync -l -r ./common rhoban@10.0.0.1:env/
-    rsync -l -r ./*.sh rhoban@10.0.0.1:env/
+    rsync -l -r ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@10.0.0.1:env/
 fi
