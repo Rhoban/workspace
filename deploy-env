@@ -7,6 +7,7 @@ else
     cd env
 
     # Cleaning old environents
+    ROBOT=`ssh rhoban@10.0.0.1 hostname`
     ENVS=`ssh rhoban@10.0.0.1 ls -Ahdc ./env*`
     K=0
 
@@ -33,5 +34,7 @@ else
     # Sending current environment
     echo "* Sending environment files"
     ssh rhoban@10.0.0.1 mkdir env
-    rsync -l -r --exclude fake ./* rhoban@10.0.0.1:env/
+    rsync -l -r ./$ROBOT rhoban@10.0.0.1:env/
+    rsync -l -r ./common rhoban@10.0.0.1:env/
+    rsync -l -r ./*.sh rhoban@10.0.0.1:env/
 fi
