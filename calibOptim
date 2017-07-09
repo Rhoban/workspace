@@ -2,6 +2,7 @@
 ## To calibrate, init the robot, start walk and start arucoCalibration on rhio.
 ## After the set number of frames, the file arucoCalibration.csv will be available on the robot's env
 ## This scripts copies that file, starts the calibration and sends the results to the robot.
+
 echo "A new day dawns"
 host=$(ssh rhoban@10.0.0.1 hostname)
 robot_home=$(ssh rhoban@10.0.0.1 pwd)
@@ -12,6 +13,36 @@ ARUCO_DIR="$robot_home/env/$host/arucoCalibration.csv"
 MODEL_DIR="$HOME/workspace/devel_release/lib/model/"
 ENV_DIR="$HOME/workspace/env/$host"
 
+echo "Setting the calibration pipeline on the robot..."
+ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
+ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml 
+
+echo ""
+echo "Restart RhobanServer on the robot (if it's already runing, you need to restart it because we just changed the pipeline). Press enter once this is done..."
+read input
+
+echo "Starting the gyroTare. Make sure the robot is in init state and perfectly idle, then press enter..."
+read input
+rhio 10.0.0.1 gyroTare
+
+echo "Once the gyroTare is over, press enter to start walk"
+read input
+rhio 10.0.0.1 walk
+
+echo "Set the robot on the calibration arena and press enter to start recording frames..."
+read input
+rhio 10.0.0.1 arucoCalibration
+
+#result=""
+#while true ; do
+#    nbFrames=$(rhio 10.0.0.1 /moves/arucoCalibration/currentNbFrames)
+#    echo -ne "Wait until the robot stops moving and press enter ($nbFrames)"\\r
+#    if $(read -t 0.1); then
+#        break
+#    fi
+#done
+echo "Wait until the robot stops moving and press enter..."
+read input
 
 echo "*** Retrieving the calibration data from the robot"
 if scp rhoban@10.0.0.1:$ARUCO_DIR $MODEL_DIR
@@ -43,18 +74,20 @@ if cp ./cameraModel.params $ENV_DIR
 then
     echo "mv succeeded..."
 else
-    echo "mv failed, find the closest monkey and blame him"
+    echo "mv failed, find the closest ape and blame him"
     exit
 fi
 
-echo "*** Moving the result to the distant robot's environment (on the robot: $robot_home/env/$host/)..."
-if scp ./cameraModel.params rhoban@10.0.0.1:$robot_home/env/$host/
-then
-    echo "mv succeeded..."
-else
-    echo "mv failed, find the closest monkey and blame him"
-    exit
-fi
+echo "*** deploy-enving..."
+bash $HOME/workspace/deploy-env
+#echo "*** Moving the result to the distant robot's environment (on the robot: $robot_home/env/$host/)..."
+#if scp ./cameraModel.params rhoban@10.0.0.1:$robot_home/env/$host/
+#then
+#    echo "mv succeeded..."
+#else
+#    echo "mv failed, find the closest monkey and blame him"
+#    exit
+#fi
 
 echo "*** All set. Good luck buddy"
 
