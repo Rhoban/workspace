@@ -1,0 +1,2 @@
+# Maybe I'll stop shutdowning my own machine with this
+ssh rhoban@10.0.0.1 sudo shutdown 0
