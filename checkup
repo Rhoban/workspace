@@ -50,7 +50,8 @@ $checkup = [
     '/Localisation/Field/maxNoiseBoost' => 10,
     '/Localisation/Consistency/minGoalQ' => 0.6,
     '/Localisation/Consistency/resetInterval' => 25,
-    '/Localisation/Consistency/convergenceDelay' => 30,
+    '/Localisation/Consistency/convergenceDelay' => 45,
+    '/Localisation/Consistency/threshold' => 0.25,
     '/ballStack/farBall' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
