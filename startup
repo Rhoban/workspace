@@ -203,6 +203,12 @@ cmd('/moves/robocup/freeKickY=0');
 cmd('/moves/placer/directMode=true');
 cmd('/teamplay/aggressivity=0.5');
 
+
+//Fix it later
+echo "What is the compassOffset?\n";
+$compassOffset = trim(readline());
+cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
+
 msg('INFO', 'Checking team radius');
 cmd('/teamplay/teamRadius');
 
