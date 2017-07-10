@@ -38,7 +38,9 @@ $checkup = [
 
     // Filters and Localisation
     '/Localisation/period' => 3,
-    '/Localisation/Field/nbParticles' => 3000,	
+    '/Localisation/Field/nbParticles' => 3000,
+    '/Localisation/Field/noiseBoostBoost' => 10,
+    '/Localisation/Field/noiseBoostDuration' => 20,
     '/Localisation/Field/RobotController/angleExploration' => 1,
     '/Localisation/Field/RobotController/posExploration' => 5,
     '/Localisation/Field/FieldPF/fallNoiseTheta' => 20,
@@ -46,7 +48,9 @@ $checkup = [
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
     '/Localisation/Field/maxNoiseBoost' => 10,
-    '/Localisation/Consistency/enabled' => 'false',
+    '/Localisation/Consistency/minGoalQ' => 0.6,
+    '/Localisation/Consistency/resetInterval' => 25,
+    '/Localisation/Consistency/convergenceDelay' => 30,
     '/ballStack/farBall' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
