@@ -79,7 +79,8 @@ else
 fi
 
 echo "*** deploy-enving..."
-bash $HOME/workspace/deploy-env
+cd $HOME/workspace/
+bash deploy-env
 #echo "*** Moving the result to the distant robot's environment (on the robot: $robot_home/env/$host/)..."
 #if scp ./cameraModel.params rhoban@10.0.0.1:$robot_home/env/$host/
 #then
