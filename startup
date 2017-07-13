@@ -130,7 +130,7 @@ $positions = array(
     ],
     'B' => [
         -75, -300, 90,
-        -125, 0,
+        -150, 0,
         250, -100, 0,
         -150, -100, 180,
         100
@@ -198,11 +198,10 @@ if ($position == 'D') {
     if ($position == 'C') cmd('/moves/search/beginY=-150');
 }
 cmd('/teamplay/teamRadius='.$c[11]);
-cmd('/moves/robocup/freeKickX=-100');
+cmd('/moves/robocup/freeKickX=-50');
 cmd('/moves/robocup/freeKickY=0');
 cmd('/moves/placer/directMode=true');
-cmd('/teamplay/aggressivity=0.5');
-
+cmd('/teamplay/aggressivity=0.75');
 
 //Fix it later
 echo "What is the compassOffset?\n";
