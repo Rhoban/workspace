@@ -212,9 +212,14 @@ cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
 msg('INFO', 'Checking team radius');
 cmd('/teamplay/teamRadius');
 
+msg('INFO', 'Enabling recording of patches');
+cmd('/Vision/ballPatchRecorder/period=1');
+cmd('/Vision/goalPatchRecorder/period=1');
+
 msg('GO', 'Press enter to run robocup');
 readline();
 cmd('robocup');
+
 
 msg("\e[32mYODA", 'May the force be with you');
 echo "\n";
