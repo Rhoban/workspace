@@ -7,9 +7,14 @@ $checkup = [
     // Strategy
     '/teamplay/enable' => 'true',
     '/decision/cooperation' => 'true',
+    '/moves/playing/teamConfidence' => 'true',
     '/decision/enableShare' => 'true',
+    '/moves/placer/avoidOpponents' => 'true',
+    '/moves/q_kick_controler/avoidOpponents' => 'true',
+
     '/strategy/defaultApproach' => 'approach_potential',
     '/strategy/defaultKickControler' => 'q_kick_controler',
+
     '/moves/playing/useKickController' => 'true',
     '/moves/approach_potential/enableLateral' => 'true',
     '/teamplay/aggressivity' => 0.75,
@@ -29,34 +34,39 @@ $checkup = [
     '/moves/walk/warmup' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
-    '/moves/walk/maxDTurnByCycle' => 2.5,
+    '/moves/walk/maxDTurnByCycle' => 4,
     '/moves/walk/shootPhase' => 0,
     '/moves/walk/shootAfterPhase' => 0.25,
     '/moves/approach_potential/stepP' => 1,
-    '/moves/head/forceTrackDist' => 0.75,
-    '/moves/head/trackingPeriod' => 1.5,
+    '/moves/head/forceTrackDist' => 0.35,
+    '/moves/head/nearTrackDist' => 0.7,
+    '/moves/head/nearTrackingPeriod' => 2,
+    '/moves/head/trackingPeriod' => 1.0,
 
     // Filters and Localisation
     '/Localisation/period' => 3,
     '/Localisation/Field/nbParticles' => 3000,
-    '/Localisation/Field/noiseBoostBoost' => 10,
+
+    '/Localisation/Field/maxNoiseBoost' => 10,
     '/Localisation/Field/noiseBoostDuration' => 20,
     '/Localisation/Field/RobotController/angleExploration' => 1,
     '/Localisation/Field/RobotController/posExploration' => 5,
     '/Localisation/Field/FieldPF/fallNoiseTheta' => 20,
     '/Localisation/Field/FieldPF/fallNoise' => 25,
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
-    '/Localisation/Field/GoalObservation/maxTiltAllowed' => 80,
-    '/Localisation/Field/maxNoiseBoost' => 10,
-    '/Localisation/Consistency/minGoalQ' => 0.6,
-    '/Localisation/Consistency/resetInterval' => 25,
-    '/Localisation/Consistency/convergenceDelay' => 45,
-    '/Localisation/Consistency/threshold' => 0.25,
-    '/ballStack/farBall' => 4,
+    '/Localisation/Field/GoalObservation/maxCartError' => 1,
+    '/Localisation/Consistency/enabled' => 'true',
+    '/Localisation/Consistency/resetInterval' => 45,
+    '/Localisation/Consistency/badObsCost' => 0.02,
+    '/Localisation/Consistency/goodObsGain' => 0.03,
+    '/Localisation/Consistency/stepCost' => 0.01,
+
+    '/ballStack/far' => 4,
     '/ballStack/scoreReduction' => 0.04,
 
-    // Head tilts
-    '/moves/head/maxSpeed' => 180,
+    // Head limits
+    '/moves/head/maxSpeed' => 150,
+    '/moves/head/maxTilt' => 105,
 
     // I hope we won't need that
     '/moves/penalty/startX' => 200,
@@ -64,13 +74,19 @@ $checkup = [
 
 $checkup_sigmaban = [
     '/moves/walk/maxStep' => 47,
+    '/moves/walk/maxLateral' => 20,
+    '/moves/walk/maxRotation' => 20,
     '/moves/walk/startPhase' => 0,
     '/moves/standup/speed' => 1.25,
+    '/moves/placer/turnP' => 0.5,
 ];
 
 $checkup_sigmaban2 = [
     '/moves/walk/maxStep' => 60,
+    '/moves/walk/maxLateral' => 30,
+    '/moves/walk/maxRotation' => 20,
     '/moves/walk/startPhase' => 0.1,
+    '/moves/placer/turnP' => 0.25,
 ];
 
 $robots = [
