@@ -66,7 +66,8 @@ $checkup = [
 
     // Head limits
     '/moves/head/maxSpeed' => 150,
-    '/moves/head/maxTilt' => 105,
+    '/moves/head/maxTilt' => 90,
+    '/moves/head/maxTiltTrack' => 85,
 
     // I hope we won't need that
     '/moves/penalty/startX' => 200,

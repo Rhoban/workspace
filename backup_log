@@ -1,0 +1,19 @@
+#!/bin/bash
+
+HOST="rhoban@10.0.0.1"
+
+# Retrieving robot hostname
+ROBOT=$(ssh $HOST hostname)
+
+FILE="env/${ROBOT}/out.log"
+
+CHG=$(ssh ${HOST} stat -c %y ${FILE})
+DATE=$(date -d "$CHG" "+%d_%m_%Y__%H_%M_%S")
+
+DIR="robot_logs/${ROBOT}_${DATE}"
+
+mkdir -p ${DIR}
+
+scp ${HOST}:${FILE} ${DIR}
+
+
