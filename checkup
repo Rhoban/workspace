@@ -27,14 +27,14 @@ $checkup = [
 
     // Pressure
     '/decision/lowPressureThreshold' => 60000,
-    '/pressure/normalWeight' => 150000,
 
     // Locomotion
     '/moves/walk/smoothTransition' => 0.5,
     '/moves/walk/warmup' => 1,
+    '/moves/walk/cooldown' => 1,
     '/moves/walk/maxDStepByCycle' => 10,
     '/moves/walk/maxDLatByCycle' => 5,
-    '/moves/walk/maxDTurnByCycle' => 4,
+    '/moves/walk/maxDTurnByCycle' => 3,
     '/moves/walk/shootPhase' => 0,
     '/moves/walk/shootAfterPhase' => 0.25,
     '/moves/approach_potential/stepP' => 1,
@@ -78,7 +78,7 @@ $checkup_sigmaban = [
     '/moves/walk/maxRotation' => 20,
     '/moves/walk/startPhase' => 0,
     '/moves/standup/speed' => 1.25,
-    '/moves/placer/turnP' => 0.5,
+    '/moves/placer/turnP' => 0.25,
 ];
 
 $checkup_sigmaban2 = [
