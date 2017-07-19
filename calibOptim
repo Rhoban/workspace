@@ -18,16 +18,16 @@ ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
 ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml 
 
 echo ""
-echo "Restart RhobanServer on the robot (if it's already runing, you need to restart it because we just changed the pipeline). Press enter once this is done..."
+echo "Restart RhobanServer on the robot (if it's already runing, you need to restart it because we just changed the pipeline). Press enter once this is done to init"
 read input
-
-echo "Starting the gyroTare. Make sure the robot is in init state and perfectly idle, then press enter..."
-read input
-rhio 10.0.0.1 gyroTare
-
-echo "Once the gyroTare is over, press enter to start walk"
+rhio 10.0.0.1 init
+echo "Press enter to walk"
 read input
 rhio 10.0.0.1 walk
+
+echo "Starting the gyroTare. Make sure the robot is perfectly idle, then press enter..."
+read input
+rhio 10.0.0.1 gyroTare
 
 echo "Set the robot on the calibration arena and press enter to start recording frames..."
 read input
