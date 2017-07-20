@@ -24,19 +24,8 @@ if (count($argv) >= 2) {
 function msg($phase, $msg) {
     echo "\n\e[1m$phase: $msg\e[m\n";
 }
-function question($phase, $msg) {
-    while (true) {
-        echo "\n\e[1m$phase: $msg\e[m (y/n)\n";
-        echo "> ";
-        flush();
-        $m = strtolower(trim(readline()));
-        if ($m == 'y') return true;
-        if ($m == 'n') return false;
-        echo "You should answer 'y' or 'n'\n";
-    }
-}
 function prompt($phase, $msg, array $possibilities) {
-    $pos = implode(', ', $possibilities);
+    $pos = implode(' or ', $possibilities);
     while (true) {
         echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
         echo "> ";
@@ -45,8 +34,11 @@ function prompt($phase, $msg, array $possibilities) {
         if (in_array($m, $possibilities)) {
             return $m;
         }
-        echo "You should answer one of the following: ".$pos."\n";
+        echo "\e[1;31mYou should answer one of the following: ".$pos."\e[m\n";
     }
+}
+function question($phrase, $msg) {
+    return prompt($phrase, $msg, ['y', 'n']) == 'y';
 }
 function cmd($cmd, $display = true) {
     global $host;
@@ -79,11 +71,8 @@ while (true) {
 }
 
 if (question('DROPIN', 'Is it a drop-in game?')) {
-    if (question('DROPIN', 'Is the team ID 100?')) {
-        cmd('/referee/teamId=100');
-    } else {
-        cmd('/referee/teamId=101');
-    }
+    $teamId = prompt('DROPIN-ID', 'What is the team ID?', ['100', '101']);
+    cmd('/referee/teamId='.$teamId);
 } else {
     cmd('/referee/teamId=16');
 }
