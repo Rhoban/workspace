@@ -13,7 +13,7 @@ $roles = [
 
 // Compass offsets and field settings
 $fields = [
-    'E' => [135, -45]
+    'e' => [135, -45]
 ];
 
 $host = '10.0.0.1';
@@ -29,10 +29,23 @@ function question($phase, $msg) {
         echo "\n\e[1m$phase: $msg\e[m (y/n)\n";
         echo "> ";
         flush();
-        $m = trim(readline());
+        $m = strtolower(trim(readline()));
         if ($m == 'y') return true;
         if ($m == 'n') return false;
         echo "You should answer 'y' or 'n'\n";
+    }
+}
+function prompt($phase, $msg, array $possibilities) {
+    $pos = implode(', ', $possibilities);
+    while (true) {
+        echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
+        echo "> ";
+        flush();
+        $m = strtolower(trim(readline()));
+        if (in_array($m, $possibilities)) {
+            return $m;
+        }
+        echo "You should answer one of the following: ".$pos."\n";
     }
 }
 function cmd($cmd, $display = true) {
@@ -75,18 +88,7 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
     cmd('/referee/teamId=16');
 }
 
-$field = '';
-while (!$field) {
-    $available = implode(', ', array_keys($fields));
-    msg('FIELD', 'What is the current field (possibilities: '.$available.')?');
-    echo '> ';
-    $field = trim(readline());
-
-    if (!isset($fields[$field])) {
-        msg("\e[31mERROR", 'Unknown field "'.$field.'"');
-        $field = '';
-    }
-}
+$field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 
 while (true) {
     if (question('WIFI', 'Do you want to run the wifi script?')) {
@@ -184,14 +186,7 @@ if (isset($roles[$hostname])) {
     $position = $roles[$hostname];
     msg('ROLE', "Automatically assigning $hostname to role $position");
 } else {
-    $position = '';
-    while (!$position) {
-        $position = trim(readline());
-        if (!isset($positions[$position])) {
-            $position='';
-            echo "You should type 'A', 'B', 'C' or 'D'\n";
-        }
-    }
+    $position = prompt('ROLE', 'What is my role ?', ['a', 'b', 'c', 'd']);
 }
 
 if ($position == 'D') {
@@ -246,17 +241,9 @@ unlink($tmp);
 //Fix it later
 $side = '';
 while (!$side) {
-    $available = implode(', ', array_keys($fields));
-    msg('FIELD', 'Are we attacking left or right (possibilities: L or R)?');
-    echo '> ';
-    $side = trim(readline());
-
-    if ($side != 'L' && $side != 'R') {
-        msg("\e[31mERROR", 'You should enter "L" or "R"');
-        $side = '';
-    }
+    $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
 }
-$compassOffset = $fields[$field][$side == 'L' ? 0 : 1];
+$compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
 echo("Setting compass offset to $compassOffset");
 cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
 
