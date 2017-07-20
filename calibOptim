@@ -12,6 +12,7 @@ echo "Going to perform a calibration for $host"
 
 ARUCO_DIR="$robot_home/env/$host/arucoCalibration.csv"
 MODEL_DIR="$HOME/workspace/devel_release/lib/model/"
+LOCAL_DIR="$HOME/workspace/devel_release/lib/model/$host"
 ENV_DIR="$HOME/workspace/env/$host"
 
 echo "Setting the calibration pipeline on the robot..."
@@ -71,8 +72,12 @@ rhio 10.0.0.1 arucoCalibration
 echo "Wait until the robot stops moving and press enter..."
 read input
 
+echo "*** Creating $LOCAL_DIR..."
+mkdir $LOCAL_DIR
+
+
 echo "*** Retrieving the calibration data from the robot"
-if scp rhoban@10.0.0.1:$ARUCO_DIR $MODEL_DIR
+if scp rhoban@10.0.0.1:$ARUCO_DIR $LOCAL_DIR
 then
     echo "scp succeeded."
 else
@@ -83,8 +88,8 @@ fi
 #ssh rhoban@10.0.0.1 rm -rf $ARUCO_DIR
 
 echo "*** Copying the urdf for $host..."
-rm $MODEL_DIR/sigmaban.urdf
-if cp $ENV_DIR/sigmaban.urdf $MODEL_DIR
+rm $LOCAL_DIR/sigmaban.urdf
+if cp $ENV_DIR/sigmaban.urdf $LOCAL_DIR
 then
     echo "urdf copied."
 else
@@ -93,8 +98,9 @@ else
 fi
 
 echo "*** Starting the optimization"
-cd $MODEL_DIR
-./appCameraModelLearning ./arucoCalibration.csv $host
+cd $LOCAL_DIR
+parent="$(dirname "$LOCAL_DIR")"
+$parent/appCameraModelLearning ./arucoCalibration.csv $host
 
 echo "*** Moving the result to the local robot's environment (on your pc: $ENV_DIR)..."
 if cp ./cameraModel.params $ENV_DIR
