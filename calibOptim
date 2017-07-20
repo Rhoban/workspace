@@ -4,6 +4,7 @@
 ## This scripts copies that file, starts the calibration and sends the results to the robot.
 
 echo "A new day dawns"
+
 host=$(ssh rhoban@10.0.0.1 hostname)
 robot_home=$(ssh rhoban@10.0.0.1 pwd)
 echo "Robot home is "$robot_home
@@ -20,10 +21,31 @@ ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_
 echo ""
 echo "Restart RhobanServer on the robot (if it's already runing, you need to restart it because we just changed the pipeline). Press enter once this is done to init"
 read input
+
 rhio 10.0.0.1 init
+echo "Press enter to Ned Stark"
+read input
+rhio 10.0.0.1 /lowlevel/head_pitch/torqueEnable=0
+
+echo "Set by hand the maximum neck angle (the robot must be looking its feet) and press enter..."
+read input
+
+IDEAL_PITCH=110.7
+value=$(rhio 10.0.0.1 /lowlevel/head_pitch/position)
+pitch=$(echo $value| cut -d'=' -f 2)
+echo "Pitch is $pitch"
+echo "Ideal pitch is $IDEAL_PITCH"
+echo "Changing the file $ENV_DIR/rhal.json"
+python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch $pitch $IDEAL_PITCH
+
 echo "Press enter to walk"
 read input
+rhio 10.0.0.1 init
 rhio 10.0.0.1 walk
+
+echo "Hold me in the air for the pressure tare..."
+read input
+rhio 10.0.0.1 tare
 
 echo "Starting the gyroTare. Make sure the robot is perfectly idle, then press enter..."
 read input
@@ -87,7 +109,7 @@ bash deploy-env
 #    echo "mv succeeded..."
 #else
 #    echo "mv failed, find the closest monkey and blame him"
-#    exit
+#    exitenvironment
 #fi
 
 echo "*** All set. Good luck buddy"
