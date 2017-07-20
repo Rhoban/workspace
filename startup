@@ -118,7 +118,7 @@ readline();
 cmd('tare');
 
 while (true) {
-    msg('GYROTARE', 'Put me on the floor now');
+    msg('GYROTARE', 'Put me on the floor now and press enter');
     readline();
     cmd('rhalGyroTare');
     cmd('rhalSaveConf rhal.json');
