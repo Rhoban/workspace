@@ -69,6 +69,8 @@ $checkup = [
     '/moves/head/maxTilt' => 90,
     '/moves/head/maxTiltTrack' => 85,
 
+    '/teamplay/refereeRadius' => 130,
+
     // I hope we won't need that
     '/moves/penalty/startX' => 200,
 ];

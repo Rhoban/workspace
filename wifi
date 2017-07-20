@@ -3,6 +3,7 @@
 
 // Remote host
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
+$field = isset($argv[2]) ? $argv[2] : 'A';
 
 function cmd($cmd) {
     global $remote;
@@ -13,7 +14,7 @@ function cmd($cmd) {
 $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
-$ESSID = 'HL_KID_A';
+$ESSID = 'HL_KID_'.$field;
 $teamId = $result[1];
 
 //Retrieve robot hostname

@@ -1,6 +1,21 @@
 #!/usr/bin/php
 <?php
 
+// Robots roles
+$roles = [
+    'olive' => 'B',
+    'mowgly' => 'D',
+    'arya' => 'A',
+    'tom' => 'C',
+    'chewbacca' => 'C',
+    'django' => 'A'
+];
+
+// Compass offsets and field settings
+$fields = [
+    'e' => [135, -45]
+];
+
 $host = '10.0.0.1';
 if (count($argv) >= 2) {
     $host = $argv[1];
@@ -9,21 +24,26 @@ if (count($argv) >= 2) {
 function msg($phase, $msg) {
     echo "\n\e[1m$phase: $msg\e[m\n";
 }
-function question($phase, $msg) {
+function prompt($phase, $msg, array $possibilities) {
+    $pos = implode(' or ', $possibilities);
     while (true) {
-        echo "\n\e[1m$phase: $msg\e[m (y/n)\n";
+        echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
         echo "> ";
         flush();
-        $m = trim(readline());
-        if ($m == 'y') return true;
-        if ($m == 'n') return false;
-        echo "You should answer 'y' or 'n'\n";
+        $m = strtolower(trim(readline()));
+        if (in_array($m, $possibilities)) {
+            return $m;
+        }
+        echo "\e[1;31mYou should answer one of the following: ".$pos."\e[m\n";
     }
 }
-function cmd($cmd) {
+function question($phrase, $msg) {
+    return prompt($phrase, $msg, ['y', 'n']) == 'y';
+}
+function cmd($cmd, $display = true) {
     global $host;
     $result = trim(`rhio $host $cmd`);
-    echo "$result\n";
+    if ($display) echo "$result\n";
     return $result;
 }
 function isHandled() {
@@ -32,10 +52,11 @@ function isHandled() {
     return $r == '/decision/handled=true';
 }
 
-// XXX: Checkup is now done offline 
-// if (question('CHECKUP', 'Do you want to run the checkup?')) {
-//     passthru("./checkup $host");
-// }
+$hostname = explode('=', cmd('/server/hostname', false));
+if (count($hostname) > 1) $hostname = $hostname[1];
+else $hostname = '?';
+
+msg('STARTUP', 'Robot is: '.$hostname);
 
 while (true) {
     msg('CHECK', 'Checking that all devices are present');
@@ -50,18 +71,17 @@ while (true) {
 }
 
 if (question('DROPIN', 'Is it a drop-in game?')) {
-    if (question('DROPIN', 'Is the team ID 100?')) {
-        cmd('/referee/teamId=100');
-    } else {
-        cmd('/referee/teamId=101');
-    }
+    $teamId = prompt('DROPIN-ID', 'What is the team ID?', ['100', '101']);
+    cmd('/referee/teamId='.$teamId);
 } else {
     cmd('/referee/teamId=16');
 }
 
+$field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
+
 while (true) {
     if (question('WIFI', 'Do you want to run the wifi script?')) {
-        passthru("./wifi $host");
+        passthru("./wifi $host $field");
     }
 
     msg('CHECK', 'Checking that there is info from the referee');
@@ -89,7 +109,7 @@ readline();
 cmd('tare');
 
 while (true) {
-    msg('GYROTARE', 'Put me on the floor now');
+    msg('GYROTARE', 'Put me on the floor now and press enter');
     readline();
     cmd('rhalGyroTare');
     cmd('rhalSaveConf rhal.json');
@@ -151,13 +171,11 @@ $positions = array(
     ],
 );
 
-$position = '';
-while (!$position) {
-    $position = trim(readline());
-    if (!isset($positions[$position])) {
-        $position='';
-        echo "You should type 'A', 'B', 'C' or 'D'\n";
-    }
+if (isset($roles[$hostname])) {
+    $position = $roles[$hostname];
+    msg('ROLE', "Automatically assigning $hostname to role $position");
+} else {
+    $position = prompt('ROLE', 'What is my role ?', ['a', 'b', 'c', 'd']);
 }
 
 if ($position == 'D') {
@@ -174,47 +192,53 @@ if ($position == 'B') {
     cmd('/moves/robocup/freeKicker=0');
 }
 
+$config = "";
 $c = $positions[$position];
-cmd('/moves/robocup/autoStartX='.$c[0]);
-cmd('/moves/robocup/autoStartY='.$c[1]);
-cmd('/moves/robocup/autoStartAzimuth='.$c[2]);
-cmd('/moves/robocup/autoTargetX='.$c[3]);
-cmd('/moves/robocup/autoTargetY='.$c[4]);
+$config .= '/moves/robocup/autoStartX='.$c[0]."\n";
+$config .= '/moves/robocup/autoStartY='.$c[1]."\n";
+$config .= '/moves/robocup/autoStartAzimuth='.$c[2]."\n";
+$config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
+$config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
 if ($position == 'D') {
     // Margins for placer
-    cmd('/moves/placer/marginX=15');
-    cmd('/moves/placer/marginY=15');
-    cmd('/moves/placer/hysteresis=2');
+    $config .= '/moves/placer/marginX=15'."\n";
+    $config .= '/moves/placer/marginY=15'."\n";
+    $config .= '/moves/placer/hysteresis=2'."\n";
 } else {
     // Patrol
-    cmd('/moves/search/P1X='.$c[5]);
-    cmd('/moves/search/P1Y='.$c[6]);
-    cmd('/moves/search/P1Azimuth='.$c[7]);
-    cmd('/moves/search/P2X='.$c[8]);
-    cmd('/moves/search/P2Y='.$c[9]);
-    cmd('/moves/search/P2Azimuth='.$c[10]);
+    $config .= '/moves/search/P1X='.$c[5]."\n";
+    $config .= '/moves/search/P1Y='.$c[6]."\n";
+    $config .= '/moves/search/P1Azimuth='.$c[7]."\n";
+    $config .= '/moves/search/P2X='.$c[8]."\n";
+    $config .= '/moves/search/P2Y='.$c[9]."\n";
+    $config .= '/moves/search/P2Azimuth='.$c[10]."\n";
     // Begin Y target
-    if ($position == 'A') cmd('/moves/search/beginY=150');
-    if ($position == 'C') cmd('/moves/search/beginY=-150');
+    $config .= '/moves/search/beginY=150'."\n";
+    $config .= '/moves/search/beginY=-150'."\n";
 }
-cmd('/teamplay/teamRadius='.$c[11]);
-cmd('/moves/robocup/freeKickX=-50');
-cmd('/moves/robocup/freeKickY=0');
-cmd('/moves/placer/directMode=true');
-cmd('/teamplay/aggressivity=0.75');
+$config .= '/teamplay/teamRadius='.$c[11]."\n";
+$config .= '/moves/robocup/freeKickX=-50'."\n";
+$config .= '/moves/robocup/freeKickY=0'."\n";
+$config .= '/moves/placer/directMode=true'."\n";
+$config .= '/teamplay/aggressivity=0.75'."\n";
+$config .= "exit\n";
+$tmp = tempnam(sys_get_temp_dir(), 'startup');
+file_put_contents($tmp, $config);
+`rhio $host < $tmp`;
+unlink($tmp);
 
 //Fix it later
-echo "What is the compassOffset?\n";
-$compassOffset = trim(readline());
+$side = '';
+while (!$side) {
+    $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
+}
+$compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
+echo("Setting compass offset to $compassOffset");
 cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
-
-msg('INFO', 'Checking team radius');
-cmd('/teamplay/teamRadius');
 
 msg('GO', 'Press enter to run robocup');
 readline();
 cmd('robocup');
-
 
 msg("\e[32mYODA", 'May the force be with you');
 echo "\n";
