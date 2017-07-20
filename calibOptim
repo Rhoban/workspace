@@ -18,8 +18,7 @@ echo "Setting the calibration pipeline on the robot..."
 ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
 ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml 
 
-echo ""
-echo "Restart RhobanServer on the robot (if it's already runing, you need to restart it because we just changed the pipeline). Press enter once this is done to init"
+echo "Press enter to init"
 read input
 
 rhio 10.0.0.1 init
@@ -37,6 +36,12 @@ echo "Pitch is $pitch"
 echo "Ideal pitch is $IDEAL_PITCH"
 echo "Changing the file $ENV_DIR/rhal.json"
 python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch $pitch $IDEAL_PITCH
+
+echo "*** Deploy-enving..."
+bash deploy-env
+
+echo "*** Restart RhobanServer, when the lowlevel is ready press enter..."
+read input
 
 echo "Press enter to walk"
 read input
