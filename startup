@@ -201,9 +201,6 @@ $config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
 $config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
 if ($position == 'D') {
     // Margins for placer
-    $config .= '/moves/placer/marginX=15'."\n";
-    $config .= '/moves/placer/marginY=15'."\n";
-    $config .= '/moves/placer/hysteresis=2'."\n";
 } else {
     // Patrol
     $config .= '/moves/search/P1X='.$c[5]."\n";
