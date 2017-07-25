@@ -14,7 +14,7 @@ function cmd($cmd) {
 $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
-$ESSID = 'HL_KID_'.$field;
+$ESSID = 'HL_FIELD_'.$field.'_a';
 $teamId = $result[1];
 
 //Retrieve robot hostname
@@ -23,11 +23,17 @@ $hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
 //Set ip address
 $ip = null;
 if ($hostname == 'chewbacca') {
-    $ip = '192.168.'.$teamId.'.131';
+    $ip = '192.168.'.$teamId.'.105';
 } else if ($hostname == 'mowgly') {
-    $ip = '192.168.'.$teamId.'.132';
+    $ip = '192.168.'.$teamId.'.102';
 } else if ($hostname == 'django') {
-    $ip = '192.168.'.$teamId.'.133';
+    $ip = '192.168.'.$teamId.'.106';
+} else if ($hostname == 'olive') {
+    $ip = '192.168.'.$teamId.'.101';
+} else if ($hostname == 'tom') {
+    $ip = '192.168.'.$teamId.'.104';
+} else if ($hostname == 'arya') {
+    $ip = '192.168.'.$teamId.'.103';
 } else {
     echo "\e[31mUnknown hostname:\e[m $hostname\n";
     die;
@@ -37,16 +43,21 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 
 //Wifi magic
 `ssh rhoban@$remote sudo killall -2 ping 2> /dev/null`;
-`ssh rhoban@$remote sudo killall wpa_supplicant 2> /dev/null`;
+`ssh rhoban@$remote sudo killall -2 wpa_supplicant 2> /dev/null`;
+`ssh rhoban@$remote sudo killall -9 wpa_supplicant 2> /dev/null`;
 `ssh rhoban@$remote sudo ifconfig wlan0 down`;
 `ssh rhoban@$remote sudo ifconfig wlan0 up`;
-`ssh rhoban@$remote sudo iwlist wlan0 scan | grep $ESSID`;
-`ssh rhoban@$remote sudo iwconfig wlan0 mode managed essid $ESSID`;
+#`ssh rhoban@$remote sudo iwlist wlan0 scan | grep $ESSID`;
+#`ssh rhoban@$remote sudo iwconfig wlan0 mode managed essid $ESSID`;
 `ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.0.0`;
+`ssh rhoban@$remote wpa_passphrase HL_FIELD_A_a humanoidrobot > /tmp/wpa.conf`;
+`ssh rhoban@$remote sudo wpa_supplicant -B -iwlan0 -c/tmp/wpa.conf -Dwext`;
+sleep(3);
 
 //Check to ping to router twice
 echo "Check wifi by pinging router:\n";
-$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.0.1`;
+//$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.0.2`;
+$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.170.170`;
 if (strpos($checkPing, '2 received, 0% packet loss')) {
     echo "\e[1mOK. Network is ready.\e[m\n";
 } else {

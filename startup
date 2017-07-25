@@ -71,7 +71,7 @@ while (true) {
 }
 
 if (question('DROPIN', 'Is it a drop-in game?')) {
-    $teamId = prompt('DROPIN-ID', 'What is the team ID?', ['100', '101']);
+    $teamId = prompt('DROPIN-ID', 'What is the team ID?', ['101', '102', '103', '104']);
     cmd('/referee/teamId='.$teamId);
 } else {
     cmd('/referee/teamId=16');
@@ -168,7 +168,7 @@ if (isset($roles[$hostname])) {
     $position = $roles[$hostname];
     msg('ROLE', "Automatically assigning $hostname to role $position");
 } else {
-    $position = prompt('ROLE', 'What is my role ?', ['a', 'b', 'c', 'd']);
+    $position = strtoupper(prompt('ROLE', 'Unknown robot ('.$hostname.'), what is my role ?', ['a', 'b', 'c', 'd']));
 }
 
 if ($position == 'D') {
