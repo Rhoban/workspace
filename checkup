@@ -55,7 +55,7 @@ $checkup = [
     '/Localisation/Field/FieldPF/fallNoise' => 25,
     '/Localisation/Field/GoalObservation/maxAngleError' => 10,
     '/Localisation/Field/GoalObservation/maxCartError' => 1,
-    '/Localisation/Consistency/enabled' => 'true',
+    '/Localisation/Consistency/enabled' => 'false',
     '/Localisation/Consistency/resetInterval' => 45,
     '/Localisation/Consistency/badObsCost' => 0.02,
     '/Localisation/Consistency/goodObsGain' => 0.03,
@@ -65,7 +65,7 @@ $checkup = [
     '/ballStack/scoreReduction' => 0.04,
 
     // Head limits
-    '/moves/head/maxSpeed' => 150,
+    '/moves/head/maxSpeed' => 120,
     '/moves/head/maxTilt' => 90,
     '/moves/head/maxTiltTrack' => 85,
 
