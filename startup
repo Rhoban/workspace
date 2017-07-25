@@ -5,10 +5,10 @@
 $roles = [
     'olive' => 'B',
     'mowgly' => 'D',
-    'arya' => 'A',
-    'tom' => 'C',
+    'arya' => 'C',
+    'tom' => 'A',
     'chewbacca' => 'C',
-    'django' => 'A'
+    'django' => 'C'
 ];
 
 // Compass offsets and field settings
