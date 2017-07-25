@@ -50,7 +50,7 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 #`ssh rhoban@$remote sudo iwlist wlan0 scan | grep $ESSID`;
 #`ssh rhoban@$remote sudo iwconfig wlan0 mode managed essid $ESSID`;
 `ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.0.0`;
-`ssh rhoban@$remote "wpa_passphrase HL_FIELD_A_a humanoidrobot > /tmp/wpa.conf"`;
+`ssh rhoban@$remote "wpa_passphrase $ESSID humanoidrobot > /tmp/wpa.conf"`;
 `ssh rhoban@$remote sudo wpa_supplicant -B -iwlan0 -c/tmp/wpa.conf -Dwext`;
 sleep(3);
 
