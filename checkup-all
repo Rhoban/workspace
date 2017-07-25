@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
 
-foreach (['chewbacca', 'mowgly', 'django', 'tom'] as $robot) {
+foreach (['chewbacca', 'mowgly', 'django', 'tom','olive'] as $robot) {
     passthru("./checkup $robot");
 }
