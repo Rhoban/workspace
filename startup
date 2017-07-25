@@ -161,14 +161,7 @@ $positions = array(
         -250, 150, 90,
         -250, -150, -90,
         200
-    ],
-    'D' => [
-        -400, 300, 90,
-        -400, 0,
-        0, 0, 0,
-        0, 0, 0,
-        250
-    ],
+    ]
 );
 
 if (isset($roles[$hostname])) {
@@ -192,19 +185,14 @@ if ($position == 'B') {
     cmd('/moves/robocup/freeKicker=0');
 }
 
-$config = "";
-$c = $positions[$position];
-$config .= '/moves/robocup/autoStartX='.$c[0]."\n";
-$config .= '/moves/robocup/autoStartY='.$c[1]."\n";
-$config .= '/moves/robocup/autoStartAzimuth='.$c[2]."\n";
-$config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
-$config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
-if ($position == 'D') {
-    // Margins for placer
-    $config .= '/moves/placer/marginX=15'."\n";
-    $config .= '/moves/placer/marginY=15'."\n";
-    $config .= '/moves/placer/hysteresis=2'."\n";
-} else {
+if ($position != 'D') {
+    $config = "";
+    $c = $positions[$position];
+    $config .= '/moves/robocup/autoStartX='.$c[0]."\n";
+    $config .= '/moves/robocup/autoStartY='.$c[1]."\n";
+    $config .= '/moves/robocup/autoStartAzimuth='.$c[2]."\n";
+    $config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
+    $config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
     // Patrol
     $config .= '/moves/search/P1X='.$c[5]."\n";
     $config .= '/moves/search/P1Y='.$c[6]."\n";
@@ -215,17 +203,17 @@ if ($position == 'D') {
     // Begin Y target
     $config .= '/moves/search/beginY=150'."\n";
     $config .= '/moves/search/beginY=-150'."\n";
+    $config .= '/teamplay/teamRadius='.$c[11]."\n";
+    $config .= '/moves/robocup/freeKickX=-50'."\n";
+    $config .= '/moves/robocup/freeKickY=0'."\n";
+    $config .= '/moves/placer/directMode=true'."\n";
+    $config .= '/teamplay/aggressivity=0.75'."\n";
+    $config .= "exit\n";
+    $tmp = tempnam(sys_get_temp_dir(), 'startup');
+    file_put_contents($tmp, $config);
+    `rhio $host < $tmp`;
+    unlink($tmp);
 }
-$config .= '/teamplay/teamRadius='.$c[11]."\n";
-$config .= '/moves/robocup/freeKickX=-50'."\n";
-$config .= '/moves/robocup/freeKickY=0'."\n";
-$config .= '/moves/placer/directMode=true'."\n";
-$config .= '/teamplay/aggressivity=0.75'."\n";
-$config .= "exit\n";
-$tmp = tempnam(sys_get_temp_dir(), 'startup');
-file_put_contents($tmp, $config);
-`rhio $host < $tmp`;
-unlink($tmp);
 
 //Fix it later
 $side = '';

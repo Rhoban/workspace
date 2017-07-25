@@ -15,11 +15,13 @@ MODEL_DIR="$HOME/workspace/devel_release/lib/model/"
 LOCAL_DIR="$HOME/workspace/devel_release/lib/model/$host"
 ENV_DIR="$HOME/workspace/env/$host"
 
-echo "Setting the calibration pipeline on the robot..."
-ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
-ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml 
+echo "Changing the file $ENV_DIR/rhal.json, setting pitch to 0"
+python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch 0 0
 
-echo "Press enter to init"
+echo "*** Deploy-enving..."
+bash deploy-env
+
+echo "Start RhobanServer now and press enter to init"
 read input
 
 rhio 10.0.0.1 init
@@ -40,6 +42,16 @@ python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch $pitch $ID
 
 echo "*** Deploy-enving..."
 bash deploy-env
+
+echo "Setting the calibration pipeline on the robot..."
+## Sad fix
+ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
+ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
+ssh rhoban@10.0.0.1 rm $robot_home/env/$host/LocalisationTest.xml
+ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml
+ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml
+ssh rhoban@10.0.0.1 ln -sf $robot_home/env/common/arucoCalibEmbedded.xml $robot_home/env/$host/LocalisationTest.xml
+
 
 echo "*** Restart RhobanServer, when the lowlevel is ready press enter..."
 read input
