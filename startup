@@ -89,7 +89,7 @@ $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 
 while (true) {
     if (question('WIFI', 'Do you want to run the wifi script?')) {
-        passthru("./wifi $host ".strtoupper($field));
+        passthru("./wifi ".strtoupper($field)." $host");
     }
 
     msg('CHECK', 'Checking that there is info from the referee');
