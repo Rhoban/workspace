@@ -13,7 +13,15 @@ $roles = [
 
 // Compass offsets and field settings
 $fields = [
-    'e' => [135, -45]
+    // Fields
+    'a' => [0, 180],
+    'b' => [0, 180],
+    'c' => [0, 180],
+    'd' => [0, 180],
+    'e' => [0, 180],
+
+    // Eirlab
+    'l' => [135, -45]
 ];
 
 $host = '10.0.0.1';
@@ -81,7 +89,7 @@ $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 
 while (true) {
     if (question('WIFI', 'Do you want to run the wifi script?')) {
-        passthru("./wifi $host $field");
+        passthru("./wifi $host ".strtoupper($field));
     }
 
     msg('CHECK', 'Checking that there is info from the referee');
