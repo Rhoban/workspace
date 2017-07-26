@@ -67,7 +67,7 @@ $checkup = [
     // Head limits
     '/moves/head/maxSpeed' => 120,
     '/moves/head/maxTilt' => 90,
-    '/moves/head/maxTiltTrack' => 85,
+    '/moves/head/maxTiltTrack' => 65,
 
     '/teamplay/refereeRadius' => 130,
 
