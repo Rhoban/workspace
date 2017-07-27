@@ -15,8 +15,8 @@ MODEL_DIR="$HOME/workspace/devel_release/lib/model/"
 LOCAL_DIR="$HOME/workspace/devel_release/lib/model/$host"
 ENV_DIR="$HOME/workspace/env/$host"
 
-echo "Changing the file $ENV_DIR/rhal.json, setting pitch to 0"
-python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch 0 0
+#echo "Changing the file $ENV_DIR/rhal.json, setting pitch to 0"
+#python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch 0 0
 
 echo "*** Deploy-enving..."
 bash deploy-env
