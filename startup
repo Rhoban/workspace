@@ -12,11 +12,12 @@ $roles = [
 ];
 
 // Compass offsets and field settings
+// left -> 0 ||| right -> 1
 $fields = [
     // Fields
-    'a' => [0, 180],
+    'a' => [-157, 23],
     'b' => [0, 180],
-    'c' => [0, 180],
+    'c' => [-149, 30],
     'd' => [0, 180],
     'e' => [0, 180],
 
