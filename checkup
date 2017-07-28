@@ -11,6 +11,7 @@ $checkup = [
     '/decision/enableShare' => 'true',
     '/moves/placer/avoidOpponents' => 'true',
     '/moves/q_kick_controler/avoidOpponents' => 'true',
+    '/moves/q_kick_controler/strategyFile' => 'kickStrategy_with_grass.json',
 
     '/strategy/defaultApproach' => 'approach_potential',
     '/strategy/defaultKickControler' => 'q_kick_controler',
@@ -20,7 +21,6 @@ $checkup = [
     '/teamplay/aggressivity' => 0.75,
 
     // Behavior
-    '/moves/robocup/delayStart' => '0',
     '/moves/placer/directMode' => 'true',
     '/moves/playing/localizeWalkDuration' => 10,
     '/moves/search/rotateAfter' => 2.5,
