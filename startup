@@ -15,11 +15,11 @@ $roles = [
 // left -> 0 ||| right -> 1
 $fields = [
     // Fields
-    'a' => [-157,  23, 'l'],
-    'b' => [   0, 180, 'l'],
-    'c' => [-149,  30, 'r'],
-    'd' => [   0, 180, 'r'],
-    'e' => [   0, 180, 'l'],
+    'a' => [-157,  23, 'l', 0],
+    'b' => [   0, 180, 'l',-1],
+    'c' => [-149,  30, 'r', 1],
+    'd' => [   0, 180, 'r',-1],
+    'e' => [-160,  20, 'l', 2],
 
     // Eirlab
     'l' => [135, -45]
@@ -232,6 +232,7 @@ while (!$side) {
 $compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
 echo("Setting compass offset to $compassOffset");
 cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
+cmd('/Vision/visualCompass/fieldNumber='.$fields[$field][3]);
 
 $grassDirection = $fields[$field][2];
 if ($grassDirection == $side) {
