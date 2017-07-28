@@ -8,9 +8,7 @@ $roles = [
     'arya' => 'C',
     'tom' => 'A',
     'chewbacca' => 'B',
-    'django' => 'B',
-
-    'hyperion' => 'D'
+    'django' => 'B'
 ];
 
 // Compass offsets and field settings
