@@ -151,8 +151,6 @@ $fieldData = "
                                                  
 ";
 
-$fieldData = "\e[42;30;1m$fieldData\e[m";
-
 $positions = array(
     'A' => [
         -75, 300, -90,  // Start pos
@@ -185,11 +183,13 @@ $positions = array(
 );
 
 if (isset($roles[$hostname])) {
+    $fieldData = "\e[42;30;1m$fieldData\e[m";
     $position = $roles[$hostname];
     $fieldData = str_replace("$position", "\e[37m$position\e[42;30;1m", $fieldData);
     echo $fieldData;
     msg('ROLE', "Automatically assigning $hostname to role $position");
 } else {
+    $fieldData = "\e[42;37;1m$fieldData\e[m";
     echo $fieldData;
     $position = strtoupper(prompt('ROLE', 'Unknown robot ('.$hostname.'), what is my role ?', ['a', 'b', 'c', 'd']));
 }
