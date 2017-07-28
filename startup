@@ -7,8 +7,10 @@ $roles = [
     'mowgly' => 'D',
     'arya' => 'C',
     'tom' => 'A',
-    'chewbacca' => 'C',
-    'django' => 'C'
+    'chewbacca' => 'B',
+    'django' => 'B',
+
+    'hyperion' => 'D'
 ];
 
 // Compass offsets and field settings
@@ -34,7 +36,7 @@ function msg($phase, $msg) {
     echo "\n\e[1m$phase: $msg\e[m\n";
 }
 function prompt($phase, $msg, array $possibilities) {
-    $pos = implode(' or ', $possibilities);
+    $pos = implode(', ', $possibilities);
     while (true) {
         echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
         echo "> ";
@@ -133,21 +135,25 @@ while (true) {
     }
 }
 
-msg('CONFIG', 'What player am I ? (B: free kicker, D: goal, A & C: others)');
-echo "
-    .----------------A---.-------------------.
-    |                    |                   |
-    |                A'  |                   |
-    |                    |                   |
-    -                    |                   -
-      D     +        B' ( )  OPPONENT FIELD
-    -                    |                   -
-    |                    |                   |
-    |          C'        |                   |
-    |                    |                   |
-    .------C---------B---.-------------------.
-
+$fieldData = "
+                                                 
+ ┌─ D ──────────── A ───┬──────────────────────┐ 
+ │                      │                      │ 
+ │                      │                      │ 
+ ├──┐              A    │                      ┤ 
+ │  │                   │                      │ 
+ │  │                  .│.                     │ 
+ │ D│      +       B (  │  )  opponent field   │ 
+ │  │                  .│.                     │ 
+ │  │                   │                      │ 
+ ├──┘                   │                      ┤ 
+ │                      │                      │ 
+ │                      │                      │ 
+ └──────── C ───── B ───┴──────────────────────┘ 
+                                                 
 ";
+
+$fieldData = "\e[42;30;1m$fieldData\e[m";
 
 $positions = array(
     'A' => [
@@ -170,23 +176,32 @@ $positions = array(
         -250, 150, 90,
         -250, -150, -90,
         200
-    ]
+    ],
+    'D' => [
+        -350, 300, 90,
+        -400, 0,
+        0, 0, 0,
+        0, 0, 0,
+        200
+    ],
 );
 
 if (isset($roles[$hostname])) {
     $position = $roles[$hostname];
+    $fieldData = str_replace("$position", "\e[37m$position\e[42;30;1m", $fieldData);
+    echo $fieldData;
     msg('ROLE', "Automatically assigning $hostname to role $position");
 } else {
+    echo $fieldData;
     $position = strtoupper(prompt('ROLE', 'Unknown robot ('.$hostname.'), what is my role ?', ['a', 'b', 'c', 'd']));
 }
 
 if ($position == 'D') {
     cmd('/moves/robocup/goalKeeper=1');
-    cmd('/moves/robocup/autoKickOff=0');
 } else {
     cmd('/moves/robocup/goalKeeper=0');
-    cmd('/moves/robocup/autoKickOff=1');
 }
+cmd('/moves/robocup/autoKickOff=1');
 
 if ($position == 'B') {
     cmd('/moves/robocup/freeKicker=1');
@@ -194,35 +209,33 @@ if ($position == 'B') {
     cmd('/moves/robocup/freeKicker=0');
 }
 
-if ($position != 'D') {
-    $config = "";
-    $c = $positions[$position];
-    $config .= '/moves/robocup/autoStartX='.$c[0]."\n";
-    $config .= '/moves/robocup/autoStartY='.$c[1]."\n";
-    $config .= '/moves/robocup/autoStartAzimuth='.$c[2]."\n";
-    $config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
-    $config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
-    // Patrol
-    $config .= '/moves/search/P1X='.$c[5]."\n";
-    $config .= '/moves/search/P1Y='.$c[6]."\n";
-    $config .= '/moves/search/P1Azimuth='.$c[7]."\n";
-    $config .= '/moves/search/P2X='.$c[8]."\n";
-    $config .= '/moves/search/P2Y='.$c[9]."\n";
-    $config .= '/moves/search/P2Azimuth='.$c[10]."\n";
-    // Begin Y target
-    $config .= '/moves/search/beginY=150'."\n";
-    $config .= '/moves/search/beginY=-150'."\n";
-    $config .= '/teamplay/teamRadius='.$c[11]."\n";
-    $config .= '/moves/robocup/freeKickX=-50'."\n";
-    $config .= '/moves/robocup/freeKickY=0'."\n";
-    $config .= '/moves/placer/directMode=true'."\n";
-    $config .= '/teamplay/aggressivity=0.75'."\n";
-    $config .= "exit\n";
-    $tmp = tempnam(sys_get_temp_dir(), 'startup');
-    file_put_contents($tmp, $config);
-    `rhio $host < $tmp`;
-    unlink($tmp);
-}
+$config = "";
+$c = $positions[$position];
+$config .= '/moves/robocup/autoStartX='.$c[0]."\n";
+$config .= '/moves/robocup/autoStartY='.$c[1]."\n";
+$config .= '/moves/robocup/autoStartAzimuth='.$c[2]."\n";
+$config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
+$config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
+// Patrol
+$config .= '/moves/search/P1X='.$c[5]."\n";
+$config .= '/moves/search/P1Y='.$c[6]."\n";
+$config .= '/moves/search/P1Azimuth='.$c[7]."\n";
+$config .= '/moves/search/P2X='.$c[8]."\n";
+$config .= '/moves/search/P2Y='.$c[9]."\n";
+$config .= '/moves/search/P2Azimuth='.$c[10]."\n";
+// Begin Y target
+$config .= '/moves/search/beginY=150'."\n";
+$config .= '/moves/search/beginY=-150'."\n";
+$config .= '/teamplay/teamRadius='.$c[11]."\n";
+$config .= '/moves/robocup/freeKickX=-50'."\n";
+$config .= '/moves/robocup/freeKickY=0'."\n";
+$config .= '/moves/placer/directMode=true'."\n";
+$config .= '/teamplay/aggressivity=0.75'."\n";
+$config .= "exit\n";
+$tmp = tempnam(sys_get_temp_dir(), 'startup');
+file_put_contents($tmp, $config);
+`rhio $host < $tmp`;
+unlink($tmp);
 
 //Fix it later
 $side = '';
