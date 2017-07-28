@@ -15,11 +15,11 @@ $roles = [
 // left -> 0 ||| right -> 1
 $fields = [
     // Fields
-    'a' => [-157, 23],
-    'b' => [0, 180],
-    'c' => [-149, 30],
-    'd' => [0, 180],
-    'e' => [0, 180],
+    'a' => [-157,  23, 'l'],
+    'b' => [   0, 180, 'l'],
+    'c' => [-149,  30, 'r'],
+    'd' => [   0, 180, 'r'],
+    'e' => [   0, 180, 'l'],
 
     // Eirlab
     'l' => [135, -45]
@@ -232,6 +232,18 @@ while (!$side) {
 $compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
 echo("Setting compass offset to $compassOffset");
 cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
+
+$grassDirection = $fields[$field][2];
+if ($grassDirection == $side) {
+    msg('GRASS', "We are playing with the grass, loading strategy");
+    cmd('/moves/q_kick_controler/strategyFile=kickStrategy_with_grass.json');
+    cmd('/strategy/grassOffset=180');
+} else {
+    msg('GRASS', "We are playing against the grass, loading strategy");
+    cmd('/moves/q_kick_controler/strategyFile=kickStrategy_counter_grass.json');
+    cmd('/strategy/grassOffset=0');
+}
+cmd('reloadStrategy');
 
 msg('GO', 'Press enter to run robocup');
 readline();
