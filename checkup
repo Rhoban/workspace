@@ -73,7 +73,7 @@ $checkup = [
     '/teamplay/refereeRadius' => 110,
 
     // I hope we won't need that
-    '/moves/penalty/startX' => 200,
+    '/moves/penalty/startX' => 150,
 ];
 
 $checkup_sigmaban = [
