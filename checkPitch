@@ -2,7 +2,7 @@
 
 host=$(ssh rhoban@10.0.0.1 hostname)
 robot_home=$(ssh rhoban@10.0.0.1 pwd)
-ENV_DIR="$HOME/workspace/env/$host"
+ENV_DIR="env/$host"
 echo "Robot home is "$robot_home
 echo "Performing a quick calibration for $host"
 
@@ -20,7 +20,7 @@ echo "Pitch is $pitch"
 echo "Ideal pitch is $IDEAL_PITCH"
 
 echo "Changing the file $ENV_DIR/rhal.json"
-python $HOME/workspace/env/setOffset.py $ENV_DIR/rhal.json head_pitch $pitch $IDEAL_PITCH
+python env/setOffset.py $ENV_DIR/rhal.json head_pitch $pitch $IDEAL_PITCH
 
 echo "*** Deploy-enving..."
 bash deploy-env
