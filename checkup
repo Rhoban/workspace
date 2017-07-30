@@ -40,8 +40,8 @@ $checkup = [
     '/moves/approach_potential/stepP' => 1,
     '/moves/head/forceTrackDist' => 0.35,
     '/moves/head/nearTrackDist' => 0.7,
-    '/moves/head/nearTrackingPeriod' => 2,
-    '/moves/head/trackingPeriod' => 1.0,
+    '/moves/head/nearTrackingPeriod' => 3,
+    '/moves/head/trackingPeriod' => 2.0,
 
     // Filters and Localisation
     '/Localisation/period' => 3,
