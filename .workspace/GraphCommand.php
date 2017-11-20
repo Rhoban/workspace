@@ -16,6 +16,7 @@ class GraphCommand extends Command
     {
         $count = 0;
         $graph = "digraph {\n";
+        $graph .= "graph [bgcolor=transparent]\n";
         foreach ($this->workspace->getPackages() as $package) {
             $name = basename($package->getName());
             $graph .= "\"$name\"";
