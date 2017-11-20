@@ -14,6 +14,12 @@ class GraphCommand extends Command
 
     public function run(array $arguments)
     {
+        system('which dot > /dev/null', $ret);
+        if ($ret != 0) {
+            Terminal::error("Can't find dot, try: apt-get install graphviz\n");
+            die();
+        }
+
         $count = 0;
         $graph = "digraph {\n";
         $graph .= "graph [bgcolor=transparent]\n";
