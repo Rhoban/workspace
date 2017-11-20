@@ -17,7 +17,7 @@ class GraphCommand extends Command
         $count = 0;
         $graph = "digraph {\n";
         foreach ($this->workspace->getPackages() as $package) {
-            $name = strtolower(basename($package->getName()));
+            $name = basename($package->getName());
             $graph .= "\"$name\"";
             if (strstr(strtolower($package->getRepository()), 'rhoban') !== false
             && strstr(strtolower($package->getRepository()), 'deps') === false) {
@@ -29,15 +29,9 @@ class GraphCommand extends Command
         }
         foreach ($this->workspace->getPackages() as $package) {
             $count++;
-            $name = strtolower(basename($package->getName()));
-            foreach ($package->getDependencies() as $k => $dep) {
-                $rep = new Repository;
-                $rep->setRemote($dep);
-                foreach ($this->workspace->getPackages() as $otherPackage) {
-                    if ($otherPackage->getRepository() == $rep->getName()) {
-                        $graph .= "\"$name\" -> \"".strtolower(basename($otherPackage->getName()))."\"\n";
-                    }
-                }
+            $name = basename($package->getName());
+            foreach ($package->getBuildDependencies() as $dep) {
+                $graph .= "\"$name\" -> \"".$dep."\"\n";
             }
         }
         $graph .= "}\n";

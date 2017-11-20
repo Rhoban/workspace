@@ -7,6 +7,7 @@ class Package
     protected $name;
     protected $description;
     protected $dependencies = array();
+    protected $buildDependencies = array();
 
     public function __construct($repository, $directory)
     {
@@ -27,6 +28,11 @@ class Package
         foreach ($matches[3] as $repository) {
             $this->dependencies[] = trim($repository);
         }
+        
+        preg_match_all('/<build_depend(.*)>(.+)<\/build_depend>/mUsi', $package, $matches);
+        foreach ($matches[2] as $buildDependency) {
+            $this->buildDependencies[] = $buildDependency;
+        }
     }
 
     public function getRepository()
@@ -37,6 +43,11 @@ class Package
     public function getDependencies()
     {
         return $this->dependencies;
+    }
+
+    public function getBuildDependencies()
+    {
+        return $this->buildDependencies;
     }
 
     public function getDirectory()
