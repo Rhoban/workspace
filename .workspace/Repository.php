@@ -113,7 +113,7 @@ class Repository
 
     public function getBranch()
     {
-        return trim(`cd $this->directory; git name-rev --name-only HEAD`);
+        return trim(`cd $this->directory; git rev-parse --abbrev-ref HEAD`);
     }
 
     public function setUpstream($name)
