@@ -10,7 +10,7 @@ if ($ret != 0) {
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
 
 // Parameters
-$binary = 'devel_release/lib/RhobanServer/RhobanServer';
+$binary = 'devel_release/lib/kid_size/KidSize';
 $targetHost = 'rhoban@'.$remote;
 $targetDir = '/home/rhoban/catkin_rel/';
 
