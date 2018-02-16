@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="src/rhobanproject/environments"
+DIR="src/rhoban/environments"
 if [ ! -d $DIR ]; then
     echo "! Environments is not installed"
 else
