@@ -1,5 +1,11 @@
 #!/bin/bash
 
+remote="10.0.0.1"
+if [ $# -gt 0 ]
+then
+    remote=$1
+fi 
+
 DIR="src/rhoban/environments"
 if [ ! -d $DIR ]; then
     echo "! Environments is not installed"
@@ -7,32 +13,32 @@ else
     cd env
 
     # Cleaning old environents
-    ROBOT=`ssh rhoban@10.0.0.1 hostname`
-    ENVS=`ssh rhoban@10.0.0.1 ls -Ahdc ./env*`
+    ROBOT=`ssh rhoban@$remote hostname`
+    ENVS=`ssh rhoban@$remote ls -Ahdc ./env*`
     K=0
 
     for E in $ENVS; do
         K=$[$K+1]
         if [ $K -gt 25 ]; then
             echo "* Removing old environment $E"
-            ssh rhoban@10.0.0.1 rm -rf $E
+            ssh rhoban@$remote rm -rf $E
         fi
     done
 
     # Archiving current environment
     echo "* Retrieving current env date"
-    CHG=`ssh rhoban@10.0.0.1 stat -c %y ./env/`
+    CHG=`ssh rhoban@$remote stat -c %y ./env/`
 
     if [ "$CHG" != "" ]; then
         FMT="+%d_%m_%Y__%H_%M_%S"
         DATE=`date -d "$CHG" "+%d_%m_%Y__%H_%M_%S"`
         OLDNAME="env_$DATE"
         echo "* Backuping old env to $OLDNAME"
-        `ssh rhoban@10.0.0.1 mv env $OLDNAME`
+        `ssh rhoban@$remote mv env $OLDNAME`
     fi
 
     # Sending current environment
     echo "* Sending environment files"
-    ssh rhoban@10.0.0.1 mkdir env
-    rsync -l -r ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@10.0.0.1:env/
+    ssh rhoban@$remote mkdir env
+    rsync -l -r ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@$remote:env/
 fi

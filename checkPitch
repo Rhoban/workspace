@@ -1,20 +1,20 @@
 #!/bin/bash
 
-host=$(ssh rhoban@10.0.0.1 hostname)
-robot_home=$(ssh rhoban@10.0.0.1 pwd)
+host=$(ssh rhoban@10.1.0.103 hostname)
+robot_home=$(ssh rhoban@10.1.0.103 pwd)
 ENV_DIR="env/$host"
 echo "Robot home is "$robot_home
 echo "Performing a quick calibration for $host"
 
 echo "Press enter to Ned Stark"
 read input
-rhio 10.0.0.1 /lowlevel/head_pitch/torqueEnable=0
+rhio 10.1.0.103 /lowlevel/head_pitch/torqueEnable=0
 
 echo "Set by hand the maximum neck angle (the robot must be looking its feet) and press enter..."
 read input
 
 IDEAL_PITCH=110.7
-value=$(rhio 10.0.0.1 /lowlevel/head_pitch/position)
+value=$(rhio 10.1.0.103 /lowlevel/head_pitch/position)
 pitch=$(echo $value| cut -d'=' -f 2)
 echo "Pitch is $pitch"
 echo "Ideal pitch is $IDEAL_PITCH"
