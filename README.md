@@ -7,10 +7,11 @@ necessary packages:
 
     sudo apt-get install php php-xml
 
-First, you'll need to install `catkin`, the most convenient method is the following
+First, you'll need to install `catkin` and a few required packages, the most
+convenient method is the following:
 
-    sudo apt-get install python-pip python-empy
-    sudo pip install -U catkin_tools
+    sudo apt-get install python-pip python-empy python-nose
+    sudo pip install -U catkin_tools mock
 
 
 Then, clone this repository and enter it:
@@ -23,7 +24,7 @@ Run the setup:
     ./workspace setup
 
 If you are a power rhoban team developper, use following command to perform a full install:
-    ./workspace install rhobanproject/code
+    ./workspace install rhoban/kid_size
 
 You can now install a repository:
 
