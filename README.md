@@ -1,4 +1,4 @@
-# catkin workspace with packages manager
+p	# catkin workspace with packages manager
 
 ## Usage
 
@@ -9,7 +9,7 @@ necessary packages:
 
 First, you'll need to install `catkin`, the most convenient method is the following
 
-    sudo apt-get install python-pip python-empy
+    sudo apt-get install python-pip python-empy python-setuptools
     sudo pip install -U catkin_tools
 
 
@@ -23,7 +23,7 @@ Run the setup:
     ./workspace setup
 
 If you are a power rhoban team developper, use following command to perform a full install:
-    ./workspace install rhobanproject/code
+    ./workspace install rhoban/kid_size.git
 
 You can now install a repository:
 
