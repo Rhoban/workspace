@@ -27,6 +27,8 @@ class Workspace
         $this->addCommand(new UnshallowCommand);
         $this->addCommand(new GraphCommand);
         $this->addCommand(new GitCommand);
+        $this->addCommand(new TestsCommand);
+        $this->addCommand(new TestCommand);
 
         $this->updatePackages();
         $this->repositories = array();

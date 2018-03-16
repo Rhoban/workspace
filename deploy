@@ -1,9 +1,16 @@
 #!/bin/bash
 
+remote="10.0.0.1"
+if [ $# -gt 0 ]
+then
+    remote=$1
+fi 
+
 echo "~~~ Deploying environment ~~~"
-./deploy-env
+./deploy-env $remote
+
 echo ""
 
 echo "~~~ Deploying code ~~~"
-./deploy-code
+./deploy-code $remote
 echo ""
