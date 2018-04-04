@@ -5,8 +5,6 @@
 
 HOST="rhoban@10.0.0.1"
 
-DIR="./robot_logs"
-
 if [ $# -gt 0 ]
 then
     DIR=$1"/robot_logs"
