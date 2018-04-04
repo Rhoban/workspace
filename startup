@@ -3,26 +3,18 @@
 
 // Robots roles
 $roles = [
-    'olive' => 'B',
-    'mowgly' => 'D',
-    'arya' => 'C',
     'tom' => 'A',
-    'chewbacca' => 'B',
-    'django' => 'B'
+    'olive' => 'B',
+    'arya' => 'C',
+    'nova' => 'D'
 ];
 
 // Compass offsets and field settings
 // left -> 0 ||| right -> 1
 $fields = [
     // Fields
-    'a' => [-157,  23, 'l', 0],
-    'b' => [   0, 180, 'l',-1],
-    'c' => [-149,  30, 'r', 1],
-    'd' => [   0, 180, 'r',-1],
-    'e' => [-160,  20, 'l', 2],
-
-    // Eirlab
-    'l' => [135, -45]
+    't' => [0, 0, 'l', 0],
+    'c' => [0, 0, 'r', -1]
 ];
 
 $host = '10.0.0.1';
@@ -257,9 +249,19 @@ if ($grassDirection == $side) {
 }
 cmd('reloadStrategy');
 
+
+msg("Checking robot space")
+echo `ssh rhoban@$host df -h /dev/sda2`
+
+if (question("LOG", "Should the robot log moving balls during the game?")) {
+  cmd('/Vision/autoLogMovingBall=true')
+}
+
 msg('GO', 'Press enter to run robocup');
 readline();
 cmd('robocup');
 
 msg("\e[32mYODA", 'May the force be with you');
 echo "\n";
+
+?>
