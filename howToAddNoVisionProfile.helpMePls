@@ -1,5 +1,0 @@
-catkin config --profile novision -x _novision --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx" -DBUILD_RHOBANSERVER_VISION=OFF
-
-then
-
-make novision
