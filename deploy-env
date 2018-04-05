@@ -40,5 +40,5 @@ else
     # Sending current environment
     echo "* Sending environment files"
     ssh rhoban@$remote mkdir env
-    rsync -l -r ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@$remote:env/
+    rsync -l -r ./strategies ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@$remote:env/
 fi
