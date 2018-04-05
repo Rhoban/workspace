@@ -11,6 +11,10 @@ $roles = [
 
 // Compass offsets and field settings
 // left -> 0 ||| right -> 1
+// 0: compassOffset with grass
+// 1: compassOffset without grass
+// 2: grass direction (left or right according to manutention table)
+// 3: ID of field (for visualCompass)
 $fields = [
     // Fields
     't' => [0, 0, 'l', 0],
