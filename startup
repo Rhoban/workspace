@@ -254,11 +254,11 @@ if ($grassDirection == $side) {
 cmd('reloadStrategy');
 
 
-msg("Checking robot space")
-echo `ssh rhoban@$host df -h /dev/sda2`
+msg("Checking robot space");
+echo `ssh rhoban@$host df -h /dev/sda2`;
 
 if (question("LOG", "Should the robot log moving balls during the game?")) {
-  cmd('/Vision/autoLogMovingBall=true')
+  cmd('/Vision/autologMovingBall=true');
 }
 
 msg('GO', 'Press enter to run robocup');
