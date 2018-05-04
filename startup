@@ -149,32 +149,32 @@ $fieldData = "
 
 $positions = array(
     'A' => [
-        -75, 300, -90,  // Start pos
-        -75, 150,       // Init pos
-        250, 100, 0,     // Patrol1
-        -150, 100, 180,  // Patrol2
-        150
+        -0.75, 3.0, -90,  // Start pos
+        -0.75, 1.5,       // Init pos
+        2.5, 1.0, 0,     // Patrol1
+        -1.50, 1.0, 180,  // Patrol2
+        1.50
     ],
     'B' => [
-        -75, -300, 90,
-        -150, 0,
-        250, -100, 0,
-        -150, -100, 180,
-        100
+        -0.75, -3.0, 90,
+        -1.5, 0.0,
+        2.5, -1.0, 0,
+        -1.5, -1.0, 180,
+        1.0
     ],
     'C' => [
-        -250, -300, 90,
-        -150, -150,
-        -250, 150, 90,
-        -250, -150, -90,
-        200
+        -2.5, -3.0, 90,
+        -1.5, -1.5,
+        -2.5,  1.5, 90,
+        -2.5, -1.5, -90,
+        2.00
     ],
     'D' => [
-        -350, 300, -90,
-        -400, 0,
+        -3.5, 3.0, -90,
+        -4.0, 0,
         0, 0, 0,
         0, 0, 0,
-        200
+        2.00
     ],
 );
 
@@ -218,8 +218,8 @@ $config .= '/moves/search/P2X='.$c[8]."\n";
 $config .= '/moves/search/P2Y='.$c[9]."\n";
 $config .= '/moves/search/P2Azimuth='.$c[10]."\n";
 // Begin Y target
-$config .= '/moves/search/beginY=150'."\n";
-$config .= '/moves/search/beginY=-150'."\n";
+$config .= '/moves/search/beginY=1.50'."\n";
+$config .= '/moves/search/beginY=-1.50'."\n";// Duplicated line with opposite signs
 $config .= '/teamplay/teamRadius='.$c[11]."\n";
 $config .= '/moves/robocup/freeKickX=-50'."\n";
 $config .= '/moves/robocup/freeKickY=0'."\n";
