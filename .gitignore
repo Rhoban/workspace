@@ -8,3 +8,4 @@ src
 .catkin_tools
 .deploy
 robot_logs
+.clang_complete
