@@ -3,10 +3,10 @@
 
 // Robots roles
 $roles = [
-    'olive' => 'A',
-    'tom' => 'B',
+    'olive' => 'B',
+    'tom' => 'A',
     'nova' => 'C',
-    'arya' => 'D'
+    'arya' => 'C'
 ];
 
 // Compass offsets and field settings
@@ -254,7 +254,7 @@ if ($grassDirection == $side) {
 cmd('reloadStrategy');
 
 
-msg("Checking robot space");
+msg('DISK', "Checking robot space");
 echo `ssh rhoban@$host df -h /dev/sda2`;
 
 if (question("LOG", "Should the robot log moving balls during the game?")) {
