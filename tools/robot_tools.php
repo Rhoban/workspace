@@ -64,7 +64,7 @@ function askDouble($message) {
 
 function positionReset($customizePosition = true,$customizeDev=false) {
   msg("POS_RESET", "Customizing the position reset");
-  $x = 0; $y = 0; $dir = 0; $posDev = 5; $dirDev = 2;
+  $x = 0; $y = 0; $dir = 0; $posDev = 0.05; $dirDev = 0.02;
   if ($customizePosition) {
     $x = askDouble("Enter value for: playerX [m]");
     $y = askDouble("Enter value for: playerY [m]");
