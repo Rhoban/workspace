@@ -221,7 +221,7 @@ $config .= '/moves/search/P2Azimuth='.$c[10]."\n";
 $config .= '/moves/search/beginY=1.50'."\n";
 $config .= '/moves/search/beginY=-1.50'."\n";// Duplicated line with opposite signs
 $config .= '/teamplay/teamRadius='.$c[11]."\n";
-$config .= '/moves/robocup/freeKickX=-50'."\n";
+$config .= '/moves/robocup/freeKickX=-0.5'."\n";
 $config .= '/moves/robocup/freeKickY=0'."\n";
 $config .= '/moves/placer/directMode=true'."\n";
 $config .= '/teamplay/aggressivity=0.75'."\n";
