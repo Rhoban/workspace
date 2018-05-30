@@ -36,6 +36,7 @@ date="%04d-%02d-%02d_%02dh%02ds%02d"%(year,month,day,hour,minute,sec)
 folder="%s/%s_model_learning_%s"%(robot,robot,date)
 aruco="%s_arucoCalibration_%s.csv"%(robot,date)
 
+make_calib="not"
 if local_file:
     cmd="mkdir -p %s"%folder
     bash_command(cmd)
@@ -69,7 +70,6 @@ else:
     if returncode== 0:
       ip="10.3.0.1"
 
-    make_calib="not"
     while not make_calib in ["","n","y"]:
         print("Do you want to lunch calibration on the robot ?[N/y]")
         make_calib=raw_input().lower()
