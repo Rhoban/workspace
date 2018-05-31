@@ -9,6 +9,10 @@ if ($ret != 0) {
 // Remote host
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
 
+// Killing server on host
+echo "Killing KidSize on " . $remote;
+`ssh rhoban@$remote ./env/stop.sh`;
+
 // Parameters
 $binary = 'devel_release/lib/kid_size/KidSize';
 $targetHost = 'rhoban@'.$remote;
