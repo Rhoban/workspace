@@ -6,6 +6,10 @@ then
     remote=$1
 fi 
 
+# Killing server on host
+echo "Killing KidSize on $remote"
+`ssh rhoban@$remote ./env/stop.sh`
+
 DIR="src/rhoban/environments"
 if [ ! -d $DIR ]; then
     echo "! Environments is not installed"

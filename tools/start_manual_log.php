@@ -29,6 +29,9 @@ cmd('/moves/head/trackingPeriod=-1');
 msg('AUTO', "Reducing framerate to 10 FPS");
 cmd('/Vision/source/FrameRate/absValue=10');
 
+msg('AUTO', "Reducing handledDelay");
+cmd('decision/handledDelay=0.01');
+
 
 msg('FINAL', 'Press enter to activate head and start logging');
 readline();
