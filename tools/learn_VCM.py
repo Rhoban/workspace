@@ -113,7 +113,9 @@ else:
     bash_command(cmd)
 
     print("Retrieving the aruco file.")
-    cmd="scp rhoban@%s:~/env/%s/arucoCalibration.csv %s/%s"%(ip,robot,folder,aruco)
+    cmd="scp rhoban@%s:~/env/%s/arucoCalibration.csv %s"%(ip,robot,aruco)
+    _,_,code=bash_command(cmd)
+    cmd="cp %s %s/%s"%(aruco)
     _,_,code=bash_command(cmd)
 
     if code!=0:
@@ -138,6 +140,7 @@ cmd="cp model_learning_analyzer \
     sigmaban.urdf \
     default_vision_correction_model.json \
     plot_vision_debug.r \
+    plot_graph.r \
     %s"%folder
 _,err,code=bash_command(cmd)
 
@@ -186,9 +189,14 @@ for model in out:
     bash_command(cmd)
 
 if make_calib=="y":
-    print("Change vision_filter back to all.json")
+    print("\n\nChange vision_filter back to all.json")
     print("Deploy env.")
     raw_input()
+
+    print("Remove the robot from the setup and press enter when ready to em")
+    raw_input()
+
+    bash_command("rhio em")
 
 os.chdir("..")
 print("Finished")
