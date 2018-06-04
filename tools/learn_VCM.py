@@ -36,6 +36,7 @@ date="%04d-%02d-%02d_%02dh%02ds%02d"%(year,month,day,hour,minute,sec)
 folder="%s/%s_model_learning_%s"%(robot,robot,date)
 aruco="%s_arucoCalibration_%s.csv"%(robot,date)
 
+make_calib="not"
 if local_file:
     cmd="mkdir -p %s"%folder
     bash_command(cmd)
@@ -69,7 +70,6 @@ else:
     if returncode== 0:
       ip="10.3.0.1"
 
-    make_calib="not"
     while not make_calib in ["","n","y"]:
         print("Do you want to lunch calibration on the robot ?[N/y]")
         make_calib=raw_input().lower()
@@ -113,7 +113,9 @@ else:
     bash_command(cmd)
 
     print("Retrieving the aruco file.")
-    cmd="scp rhoban@%s:~/env/%s/arucoCalibration.csv %s/%s"%(ip,robot,folder,aruco)
+    cmd="scp rhoban@%s:~/env/%s/arucoCalibration.csv %s"%(ip,robot,aruco)
+    _,_,code=bash_command(cmd)
+    cmd="cp %s %s/%s"%(aruco)
     _,_,code=bash_command(cmd)
 
     if code!=0:
@@ -138,6 +140,7 @@ cmd="cp model_learning_analyzer \
     sigmaban.urdf \
     default_vision_correction_model.json \
     plot_vision_debug.r \
+    plot_graph.r \
     %s"%folder
 _,err,code=bash_command(cmd)
 
@@ -186,9 +189,14 @@ for model in out:
     bash_command(cmd)
 
 if make_calib=="y":
-    print("Change vision_filter back to all.json")
+    print("\n\nChange vision_filter back to all.json")
     print("Deploy env.")
     raw_input()
+
+    print("Remove the robot from the setup and press enter when ready to em")
+    raw_input()
+
+    bash_command("rhio em")
 
 os.chdir("..")
 print("Finished")
