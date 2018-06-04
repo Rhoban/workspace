@@ -6,7 +6,7 @@ then
     remote=$1
 fi 
 
-DIR="src/rhoban/environments"
+DIR="env"
 if [ ! -d $DIR ]; then
     echo "! Environments is not installed"
 else
