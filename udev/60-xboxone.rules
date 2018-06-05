@@ -1,0 +1,2 @@
+ACTION=="add", KERNEL=="js*", ATTRS{name}=="Xbox*", RUN+="/bin/su rhoban -l -s /bin/bash -c '/home/rhoban/demo/start.sh %E{DEVNAME}'"
+ACTION=="remove", ATTRS{name}=="Xbox*", RUN+="/home/rhoban/demo/clean.sh"

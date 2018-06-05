@@ -10,7 +10,7 @@ fi
 echo "Killing KidSize on $remote"
 `ssh rhoban@$remote ./env/stop.sh`
 
-DIR="src/rhoban/environments"
+DIR="env"
 if [ ! -d $DIR ]; then
     echo "! Environments is not installed"
 else
