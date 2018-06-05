@@ -3,10 +3,10 @@
 
 // Robots roles
 $roles = [
-    'olive' => 'B',
+    'olive' => 'D',
     'tom' => 'A',
     'nova' => 'C',
-    'arya' => 'C'
+    'arya' => 'B'
 ];
 
 // Compass offsets and field settings
