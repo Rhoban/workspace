@@ -1,0 +1,1 @@
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTRS{idVendor}=="0b95", KERNEL=="eth*", NAME="usbeth"
