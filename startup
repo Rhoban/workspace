@@ -257,8 +257,8 @@ cmd('reloadStrategy');
 msg('DISK', "Checking robot space");
 echo `ssh rhoban@$host df -h /dev/sda2`;
 
-if (question("LOG", "Should the robot log moving balls during the game?")) {
-  cmd('/Vision/autologMovingBall=true');
+if (question("LOG", "Should the robot log during the game?")) {
+  cmd('/Vision/autologGames=true');
 }
 
 msg('GO', 'Press enter to run robocup');
