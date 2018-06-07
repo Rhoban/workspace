@@ -57,6 +57,18 @@ function isHandled() {
     return $r == '/decision/handled=true';
 }
 
+function isVisionOk() {
+    $r = explode('=',cmd('/Vision/lastUpdate'));
+    if (count($r) > 1) {
+      $r = $r[1];
+    } else {
+      echo "Failed to read vision last update";
+      return false;
+    }
+    // Vision is ok if last update is more recent than 200 ms
+    return floatval($r) < 200;
+}
+
 $hostname = explode('=', cmd('/server/hostname', false));
 if (count($hostname) > 1) $hostname = $hostname[1];
 else $hostname = '?';
@@ -126,6 +138,13 @@ while (true) {
         }
     } else {
         break;
+    }
+
+    msg('CHECK', 'Checking vision status');
+    if (!isVisionOk()) {
+        if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
+            break;
+        }
     }
 }
 

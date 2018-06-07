@@ -26,8 +26,8 @@ $logDuration = askDouble("What is the required duration for log? [s]");
 msg('AUTO', "Forbiding robot to track the ball");
 cmd('/moves/head/trackingPeriod=-1');
 
-msg('AUTO', "Reducing framerate to 10 FPS");
-cmd('/Vision/source/FrameRate/absValue=10');
+msg('AUTO', "Reducing framerate to 25 FPS");
+cmd('/Vision/source/FrameRate/absValue=25');
 
 msg('AUTO', "Reducing handledDelay");
 cmd('decision/handledDelay=0.01');
