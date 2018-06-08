@@ -121,14 +121,22 @@ msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
 
-msg('TARE', 'Hold me in the air for the tare and press enter');
-readline();
-cmd('tare');
+do {
+    msg('TARE', 'Hold me in the air for the tare and press enter');
+    readline();
+    $result = cmd('tare');
+    $error = (strstr(strtolower($result), 'error') !== false);
+} while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
 
 while (true) {
-    msg('GYROTARE', 'Put me on the floor now and press enter');
-    readline();
-    cmd('rhalGyroTare');
+    do {
+        msg('GYROTARE', 'Put me on the floor now and press enter');
+        readline();
+        $result = cmd('rhalGyroTare');
+        $error = (strstr(strtolower($result), 'error') !== false);
+    } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+
+
     cmd('rhalSaveConf rhal.json');
 
     msg('CHECK', 'Checking the pressure');
