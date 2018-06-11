@@ -17,8 +17,7 @@ $roles = [
 // 3: ID of field (for visualCompass)
 $fields = [
     // Fields
-    't' => [0, 0, 'l', 0],
-    'c' => [0, 0, 'r', -1]
+    'e' => [0, 0, 'l', 0],
 ];
 
 $host = '10.0.0.1';
