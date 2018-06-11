@@ -21,9 +21,9 @@ LOG_PATH="/home/rhoban/env/${ROBOT}"
 
 LOG_OUT="$LOG_PATH/out.log"
 
-if ssh cremi [ -f $LOG_OUT ]
-then 
-    scp $LOG_OUT $OUTPUT_DIR
+if ssh $HOST [ -e ${LOG_OUT} ]
+then
+    scp $HOST:$LOG_OUT $OUTPUT_DIR
 else
     echo "${LOG_OUT} not found on ${HOST}"
     exit -1
@@ -32,7 +32,7 @@ fi
 LOG_PATH="${LOG_PATH}/game_logs"
     
 # If the folder exist copy it
-if ssh cremi [ -d $LOG_PATH ]
+if ssh $HOST [ -d $LOG_PATH ]
 then
     # copy files in dir
     scp -r ${HOST}:${LOG_PATH}/* ${OUTPUT_DIR}

@@ -19,7 +19,7 @@ OUTPUT_DIR=$OUTPUT_DIR'/'${ROBOT}
 LOG_PATH="/home/rhoban/env/${ROBOT}/$manual_log"
 
 # If the folder exist copy it
-if ssh cremi [ -d $LOG_PATH ]
+if ssh $HOST [ -d $LOG_PATH ]
 then
     mkdir -p ${OUTPUT_DIR}
     # copy files in dir
