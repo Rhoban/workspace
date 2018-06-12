@@ -1,0 +1,16 @@
+- Prendre logs : ./start_visual_compass.php
+- Sélectionner environ une image sur 8 (prendre une image toutes les 8) 
+- Convertir les images en rgb (workspace/tools/yuv2rgb.py)
+- Créer panorama dans hugin
+- Faire masque à l'oeil et adapter en faisant tourner sift en fake
+  - mettre les images (pano et masque) dans common, et mettre dans workspace/src/rhoban/kid_size/Vision/Filters/Features/VisualCompass.cpp les bonnes image dans updateField()
+  - dans workspace/env/fake/ ./prepare.sh robot <path to log>
+  - ./run.sh
+
+- Pour les offsets :
+  - mettre le robot sur le terrain en face du goal adverse (droite par défaut (?)) 
+  - rhio -> resetFilters
+  - Regarder compassObservation
+  - mettre offset pour que compassObservation soit à 0 en face du goal adverse
+  - dans le startup script, mettre les bons offsets pour chaque terrain (offset autre sens = offset +180 (%360)) 
+

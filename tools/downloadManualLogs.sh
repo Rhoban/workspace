@@ -25,7 +25,7 @@ then
     # copy files in dir
     scp -r ${HOST}:${LOG_PATH}/* ${OUTPUT_DIR}
     # delete files on robot
-    ssh ${HOST} "rm -rf ${LOG_PATH}"
+    # ssh ${HOST} "rm -rf ${LOG_PATH}"
 else
     echo "${LOG_PATH} not found on ${HOST}"
     exit -1
