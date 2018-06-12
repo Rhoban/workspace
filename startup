@@ -17,7 +17,7 @@ $roles = [
 // 3: ID of field (for visualCompass)
 $fields = [
     // Fields
-    'e' => [0, 0, 'l', 0],
+    'e' => [50, -130, 'l', 0],
 ];
 
 $host = '10.0.0.1';
@@ -264,7 +264,7 @@ while (!$side) {
 }
 $compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
 echo("Setting compass offset to $compassOffset");
-cmd('/Localisation/Field/CompassObservation/offset='.$compassOffset);
+cmd('/localisation/field/CompassObservation/offset='.$compassOffset);
 cmd('/Vision/visualCompass/fieldNumber='.$fields[$field][3]);
 
 $grassDirection = $fields[$field][2];
