@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# No arguments : creates folder 'robot_logs' in current directory
+# No arguments : creates folder 'vision_logs' in current directory
 # Argument 1 : path of directory where 'logs' are downloaded
 
 HOST="rhoban@10.0.0.1"
