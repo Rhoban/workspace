@@ -1,0 +1,4 @@
+
+./workspace git remote rm fithub
+./workspace git remote add fithub git@fithub:REPOSITORY_NAME
+
