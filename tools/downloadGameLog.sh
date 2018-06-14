@@ -17,19 +17,7 @@ ROBOT=$(ssh $HOST hostname)
 OUTPUT_DIR=$OUTPUT_DIR'/'${ROBOT}
 mkdir -p ${OUTPUT_DIR}
 
-LOG_PATH="/home/rhoban/env/${ROBOT}"
-
-LOG_OUT="$LOG_PATH/out.log"
-
-if ssh $HOST [ -e ${LOG_OUT} ]
-then
-    scp $HOST:$LOG_OUT $OUTPUT_DIR
-else
-    echo "${LOG_OUT} not found on ${HOST}"
-    exit -1
-fi
-
-LOG_PATH="${LOG_PATH}/game_logs"
+LOG_PATH="/home/rhoban/env/${ROBOT}/game_logs"
     
 # If the folder exist copy it
 if ssh $HOST [ -d $LOG_PATH ]
