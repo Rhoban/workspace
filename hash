@@ -1,0 +1,25 @@
+#!/usr/bin/php
+<?php
+
+$repos = [
+    'rhoban/environments',
+    'rhoban/kid_size',
+    'rhoban/utils',
+    'rhoban/teamplay',
+    'rhoban/model',
+    'rhoban/rhal',
+    'rhoban/rhio',
+    'rhoban/robocupreferee',
+    'rhoban/geometry',
+    'rhoban/graphs',
+    'rhoban/random',
+    'rhoban/unsorted',
+];
+
+$repos = implode(" ", $repos);
+$hash = `./workspace hash $repos`;
+$global = sha1($hash);
+
+echo $hash . "-\n";
+
+echo "global: $global\n";
