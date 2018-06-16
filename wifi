@@ -8,12 +8,7 @@ if (count($argv) < 2) {
 // Remote host
 $field = $argv[1];
 $remote = isset($argv[2]) ? $argv[2] : '10.0.0.1';
-
-if ($remote == '10.0.0.1') {
-    $wiface = 'wlp58s0';
-}else{
-    $wiface = 'wlan0';
-}
+$wiface = 'wlan0';
 
 function cmd($cmd) {
     global $remote;
@@ -24,8 +19,7 @@ function cmd($cmd) {
 $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
-//$ESSID = 'HL_FIELD_'.$field.'_a';
-$ESSID = 'Humanoid-GC'; // Iran
+$ESSID = 'HL-'.strtoupper($field);
 $teamId = $result[1];
 
 //Retrieve robot hostname
@@ -34,36 +28,20 @@ $hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
 //Set ip address
 $ip = null;
 
+// XXX: To update
+// $ipPrefix = '192.168.16.';
+$ipPrefix = '10.6.100.';
 
-//if ($hostname == 'chewbacca') {
-//    $ip = '192.168.'.$teamId.'.105';
-//} else if ($hostname == 'nova') {
-//    $ip = '192.168.'.$teamId.'.102';
-//} else if ($hostname == 'django') {
-//    $ip = '192.168.'.$teamId.'.106';
-//} else if ($hostname == 'olive') {
-//    $ip = '192.168.'.$teamId.'.101';
-//} else if ($hostname == 'tom') {
-//    $ip = '192.168.'.$teamId.'.104';
-//} else if ($hostname == 'arya') {
-//    $ip = '192.168.'.$teamId.'.103';
-//} else {
-//    echo "\e[31mUnknown hostname:\e[m $hostname\n";
-//    die;
-//}
-// Open Iran 2018 configuration
-if ($hostname == 'chewbacca') {
-    $ip = '192.168.1.45';
+if ($hostname == 'olive') {
+    $ip = $ipPrefix.'41';
 } else if ($hostname == 'nova') {
-    $ip = '192.168.1.42';
-} else if ($hostname == 'django') {
-    $ip = '192.168.1.46';
-} else if ($hostname == 'olive') {
-    $ip = '192.168.1.41';
-} else if ($hostname == 'tom') {
-    $ip = '192.168.1.44';
+    $ip = $ipPrefix.'42';
 } else if ($hostname == 'arya') {
-    $ip = '192.168.1.43';
+    $ip = $ipPrefix.'43';
+} else if ($hostname == 'tom') {
+    $ip = $ipPrefix.'44';
+} else if ($hostname == 'rush') {
+    $ip = $ipPrefix.'45';
 } else {
     echo "\e[31mUnknown hostname:\e[m $hostname\n";
     die;
@@ -73,23 +51,29 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 
 //Wifi magic
 `ssh rhoban@$remote sudo killall -2 ping 2> /dev/null`;
+
+// Be sure wpa supplicant is killed
 `ssh rhoban@$remote sudo killall -2 wpa_supplicant 2> /dev/null`;
 `ssh rhoban@$remote sudo killall -9 wpa_supplicant 2> /dev/null`;
+
+// Down then upping the interface
 `ssh rhoban@$remote sudo ifconfig $wiface down`;
 `ssh rhoban@$remote sudo ifconfig $wiface up`;
-#`ssh rhoban@$remote sudo ifconfig wlan0 down`;
-#`ssh rhoban@$remote sudo ifconfig wlan0 up`;
-#`ssh rhoban@$remote sudo iwlist wlan0 scan | grep $ESSID`;
-#`ssh rhoban@$remote sudo iwconfig wlan0 mode managed essid $ESSID`;
 
-//`ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.0.0`;
+// Joining the ESSID
+//`ssh rhoban@$remote sudo iw dev $wiface scan | grep $ESSID`;
+`ssh rhoban@$remote sudo iw $wiface connect $ESSID`;
+
+// Setting IP address
+`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.0.0`;
+
 // Open Iran
-`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.255.0`;
+#`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.255.0`;
 #`ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.255.0`;
 //`ssh rhoban@$remote "wpa_passphrase $ESSID humanoidrobot > /tmp/wpa.conf"`;
 // OPen IRAN
-`ssh rhoban@$remote "wpa_passphrase $ESSID Humanoid2018 > /tmp/wpa.conf"`;
-`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
+#`ssh rhoban@$remote "wpa_passphrase $ESSID Humanoid2018 > /tmp/wpa.conf"`;
+#`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
 #`ssh rhoban@$remote sudo wpa_supplicant -B -iwlan0 -c/tmp/wpa.conf -Dwext`;
 sleep(3);
 
