@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# No arguments : creates folder 'robot_logs' in current directory
+# No arguments : creates folder 'vision_logs' in current directory
 # Argument 1 : path of directory where 'logs' are downloaded
 
 HOST="rhoban@10.0.0.1"
@@ -16,7 +16,7 @@ ROBOT=$(ssh $HOST hostname)
     
 OUTPUT_DIR=$OUTPUT_DIR'/'${ROBOT}
 
-LOG_PATH="/home/rhoban/env/${ROBOT}/$manual_log"
+LOG_PATH="/home/rhoban/env/${ROBOT}/manual_logs/"
 
 # If the folder exist copy it
 if ssh $HOST [ -d $LOG_PATH ]

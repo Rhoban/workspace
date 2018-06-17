@@ -1,0 +1,255 @@
+#!/usr/bin/php
+<?php
+
+$host = '10.0.0.1';
+if (count($argv) >= 2) {
+    $host = $argv[1];
+}
+
+
+$rhioPid = 0;
+function runProcess($cmd)
+{
+	global $rhioPid;
+	$rhioPid = pcntl_fork();
+
+	if ($rhioPid === 0) {
+		fclose(STDIN);
+		fclose(STDOUT);
+		$args = ["10.0.0.1"];
+		$args = array_merge($args, explode(" ", $cmd));
+		pcntl_exec(trim(`which rhio`), $args);
+		exit(0);
+	}
+}
+
+
+function killProcess()
+{
+	global $rhioPid;
+	if ($rhioPid) {
+		`kill -9 $rhioPid 2> /dev/null`;
+		`killall -2 gnuplot 2> /dev/null`;
+		`killall -2 ffplay 2> /dev/null`;
+	}
+}
+
+
+function isHandled() {
+    $r = cmd('/decision/handled');
+
+    return $r == '/decision/handled=true';
+}
+
+function msg($phase, $msg) {
+    echo "\n\e[1m$phase: $msg\e[m\n";
+}
+
+function prompt($phase, $msg, array $possibilities) {
+    $pos = implode(', ', $possibilities);
+    while (true) {
+        echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
+        echo "> ";
+        flush();
+        $m = strtolower(trim(readline()));
+        if (in_array($m, $possibilities)) {
+            return $m;
+        }
+        echo "\e[1;31mYou should answer one of the following: ".$pos."\e[m\n";
+    }
+}
+
+function question($phrase, $msg) {
+    return prompt($phrase, $msg, ['y', 'n']) == 'y';
+}
+
+function cmd($cmd, $display = true) {
+    global $host;
+    $result = trim(`rhio $host $cmd`);
+    if ($display) echo "$result\n";
+    return $result;
+}
+
+function isVisionOk() {
+    $r = explode('=',cmd('/Vision/lastUpdate'));
+    if (count($r) > 1) {
+      $r = $r[1];
+    } else {
+      echo "Failed to read vision last update";
+      return false;
+    }
+    // Vision is ok if last update is more recent than 200 ms
+    return floatval($r) < 200;
+}
+
+$hostname = explode('=', cmd('/server/hostname', false));
+if (count($hostname) > 1) $hostname = $hostname[1];
+else $hostname = '?';
+
+msg('CHECKLIST', 'Robot is: '.$hostname);
+
+while (true) {
+    msg('CHECK', 'Checking that all devices are present');
+    $r = cmd('rhalCheck');
+    if (strpos($r, 'All devices are present') === false) {
+        if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+}
+
+msg('INIT', 'Press enter to run init');
+readline();
+cmd('init');
+
+msg('INIT', 'Press enter to run the walk');
+readline();
+cmd('walk');
+
+do {
+    msg('TARE', 'Hold me in the air for the tare and press enter');
+    readline();
+    $result = cmd('tare');
+    $error = (strstr(strtolower($result), 'error') !== false);
+} while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+
+while (true) {
+    do {
+        msg('GYROTARE', 'Put me on the floor now and press enter');
+        readline();
+        $result = cmd('rhalGyroTare');
+        $error = (strstr(strtolower($result), 'error') !== false);
+    } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+
+
+    cmd('rhalSaveConf rhal.json');
+
+    msg('CHECK', 'Checking the pressure');
+    if (isHandled()) {
+        if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+
+    msg('CHECK', 'Checking vision status');
+    if (!isVisionOk()) {
+        if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
+            break;
+        }
+    }
+}
+
+
+
+msg('WALK_SECURITY', 'I will start walking now, check that I stop walking when I\'m stuck on one foot (left and right)');
+msg('WALK_SECURITY', 'Press enter');
+readline();
+cmd('/moves/walk/walkEnable=true');
+msg('WALK_SECURITY', 'Press enter when you are done checking');
+readline();
+msg('WALK_TRIM', 'While we\'re at it, check that I\'m not drifting. Adjust stepTrim, lateralTrim and turnTrim if needed ');
+msg('WALK_TRIM', 'Press enter if everything seems ok');
+readline();
+cmd('/moves/walk/walkEnable=false');
+
+
+
+msg('CHECK_KICKS', 'We will now check my kicks, I\'m going to perform a series of kicks, please remain ready to catch me if needed : ');
+
+msg('CHECK_KICKS', 'Press enter to perform a classic Right Kick');
+readline();
+cmd('/moves/walk/walkKickRight=true');
+cmd('/moves/walk/walkKickRight=false');
+
+msg('CHECK_KICKS', 'Press enter to perform a classic Left Kick');
+readline();
+cmd('/moves/walk/walkKickLeft=true');
+cmd('/moves/walk/walkKickLeft=false');
+
+msg('CHECK_KICKS', 'Press enter to perform a lateral Right Kick');
+readline();
+cmd('/moves/walk/walkKickName=lateral');
+cmd('/moves/walk/walkKickRight=true');
+cmd('/moves/walk/walkKickRight=false');
+
+msg('CHECK_KICKS', 'Press enter to perform a lateral Left Kick');
+readline();
+cmd('/moves/walk/walkKickLeft=true');
+cmd('/moves/walk/walkKickLeft=false');
+cmd('/moves/walk/walkKickName=classic');
+
+
+msg('CHECK_FEET', 'We will now check if I my feet\'s pressure sensors are correctly configured :');
+msg('CHECK_FEET', 'Press enter to init');
+readline();
+cmd('init');
+msg('CHECK_FEET', 'Put me on the floor, facing BACK');
+msg('CHECK_FEET', 'Press enter to continue');
+readline();
+
+msg('CHECK_FEET', 'Press on all the pressure gauges of my LEFT foot and check that everything is ok : ');
+runProcess('plot2d /lowlevel/left_pressure/x /lowlevel/left_pressure/y');
+msg('CHECK_FEET', 'Press enter when you are done');
+readline();
+killProcess();
+
+msg('CHECK_FEET', 'Press on all the pressure gauges of my RIGHT foot and check that everything is ok : ');
+runProcess('plot2d /lowlevel/right_pressure/x /lowlevel/right_pressure/y');
+msg('CHECK_FEET', 'Press enter when you are done');
+readline();
+killProcess();
+
+
+msg('CHECK_STANDUP', 'We will now check if I can stand up : ');
+msg('CHECK_STANDUP', 'Press enter to launch standup');
+readline();
+cmd('head');
+cmd('standup');
+msg('CHECK_STANDUP', 'Press enter when I\'m done standing up');
+readline();
+cmd('init');
+msg('CHECK_STANDUP', 'Now turn me so that i\'m facing FRONT, then press enter to launch standup');
+readline();
+cmd('standup');
+
+msg('CHECK_STANDUP', 'Press enter when I\'m done standing up');
+readline();
+
+cmd('init');
+cmd('walk');
+
+msg('CHECK_VISION', 'We will now check stuff about my Vision : ');
+cmd('head');
+cmd('/moves/head/disabled=false');
+cmd('customReset');
+runProcess('view /Vision/TaggedImg');
+msg('CHECK_VISION', '- Check that the image is sharp enough, adjust the lens if needed');
+msg('CHECK_VISION', '- Check that the horizon line is correct');
+msg('CHECK_VISION', '(Press enter when you are done)');
+readline();
+killProcess();
+cmd('customReset');
+runProcess('view /Vision/fieldBorder/out');
+msg('CHECK_VISION', '- Check that you can see the borders of the field');
+msg('CHECK_VISION', '(Press enter when you are done)');
+readline();
+killProcess();
+cmd('customReset');
+msg('CHECK_VISION', 'Check that I\'m correctly tracking the ball');
+msg('CHECK_VISION', '(Press enter when you are done)');
+readline();
+cmd('/moves/head/disabled=true');
+
+msg('CHECK_BUS', 'Finally, Check that there were errors :  ');
+cmd('rhalStatus');
+
+msg('CHECK_BUS', '(Press enter when you are done)');
+readline();
+
+msg('DONE', 'If I passed all the steps of the checklist, I am ready to go !');
+
+?>
