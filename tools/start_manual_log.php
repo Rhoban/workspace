@@ -37,7 +37,9 @@ msg('FINAL', 'Press enter to activate head and start logging');
 readline();
 cmd('/moves/head/disabled=false');
 
-msg("Starting manual Log for ".$logDuration." seconds");
+msg('LOG', "Starting manual Log for ".$logDuration." seconds");
+cmd('/localisation/consistency/enabled=0');
+cmd('customReset 0 0 0')
 cmd('logLocal '.$logDuration);
 
 ?>
