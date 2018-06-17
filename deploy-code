@@ -132,6 +132,7 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libatomic.so.* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
 `cp /usr/lib/x86_64-linux-gnu/libImath* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
 `cp /usr/lib/x86_64-linux-gnu/libvdpau* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
+`cp /lib/x86_64-linux-gnu/libz.so.* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
 
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 `cp /usr/lib/libptgreyvideoencoder.so* .deploy/`;
