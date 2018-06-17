@@ -19,7 +19,7 @@ function cmd($cmd) {
 $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
-$ESSID = 'HL-'.strtoupper($field);
+$ESSID = 'HL_FIELD_'.strtoupper($field).'_5G';
 $teamId = $result[1];
 
 //Retrieve robot hostname
@@ -29,8 +29,7 @@ $hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
 $ip = null;
 
 // XXX: To update
-// $ipPrefix = '192.168.16.';
-$ipPrefix = '10.6.100.';
+$ipPrefix = '192.168.9.';
 
 if ($hostname == 'olive') {
     $ip = $ipPrefix.'41';
@@ -67,6 +66,10 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 // Setting IP address
 `ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.0.0`;
 
+// Connecting to WiFi
+`ssh rhoban@$remote "wpa_passphrase $ESSID humanoid2018 > /tmp/wpa.conf"`;
+`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
+
 // Open Iran
 #`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.255.0`;
 #`ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.255.0`;
@@ -74,14 +77,11 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 // OPen IRAN
 #`ssh rhoban@$remote "wpa_passphrase $ESSID Humanoid2018 > /tmp/wpa.conf"`;
 #`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
-#`ssh rhoban@$remote sudo wpa_supplicant -B -iwlan0 -c/tmp/wpa.conf -Dwext`;
 sleep(3);
 
 //Check to ping to router twice
 echo "Check wifi by pinging router:\n";
-//$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.0.2`;
-// Open d'IRAN : We try to ping the Game Controller
-$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.1.2`;
+$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.1.100`;
 
 if (strpos($checkPing, '2 received, 0% packet loss')) {
     echo "\e[1mOK. Network is ready.\e[m\n";
