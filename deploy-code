@@ -62,7 +62,6 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libIlmImf-2_2.so.22* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libHalf.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libIex-2_2.so.12* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
-
 `cp /usr/lib/x86_64-linux-gnu/libzvbi.so.0* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libx265.so.* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
 `cp /usr/lib/x86_64-linux-gnu/libwavpack.so.1* .deploy/`; // Needed for L Kama's pc (Ubuntu 16.04)
@@ -132,6 +131,10 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libatomic.so.* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
 `cp /usr/lib/x86_64-linux-gnu/libImath* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
 `cp /usr/lib/x86_64-linux-gnu/libvdpau* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
+`cp /lib/x86_64-linux-gnu/libz.so.* .deploy/`; // Needed for medrimonia's pc (Ubuntu 14.04)
+`cp /usr/lib/x86_64-linux-gnu/libavresample.so.* .deploy/`; // Needed for leph's pc (Debian stable)
+`cp /usr/lib/x86_64-linux-gnu/libhogweed.so.* .deploy/`; // Needed for leph's pc (Debian stable)
+`cp /usr/lib/x86_64-linux-gnu/libnettle.so.* .deploy/`; // Needed for leph's pc (Debian stable)
 
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 `cp /usr/lib/libptgreyvideoencoder.so* .deploy/`;
