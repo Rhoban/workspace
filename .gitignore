@@ -11,3 +11,7 @@ src
 .deploy
 robot_logs
 .clang_complete
+.local.vimrc
+.my_make.sh
+tags
+

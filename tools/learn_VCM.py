@@ -9,6 +9,8 @@ import re
 import glob
 import time 
 
+workspace_path="~/private/recherche/robhan/workspace"
+
 def bash_command(cmd):
     proc = Popen(['/bin/bash'], stdin=PIPE)
     return proc.communicate(cmd)+(proc.returncode,)
@@ -36,7 +38,6 @@ date="%04d-%02d-%02d_%02dh%02ds%02d"%(year,month,day,hour,minute,sec)
 folder="%s/%s_model_learning_%s"%(robot,robot,date)
 aruco="%s_arucoCalibration_%s.csv"%(robot,date)
 
-make_calib="not"
 if local_file:
     cmd="mkdir -p %s"%folder
     bash_command(cmd)
@@ -45,6 +46,7 @@ if local_file:
 else:
     print("\n")
     print("== Retrieving the aruco file. ==")
+    print("== Starting the procedure to get datas. ==")
     if robot=="olive":
         ip="10.1.0.101"
     elif robot=="mowgly":
@@ -62,51 +64,56 @@ else:
     # Check if the computer is connected with usb/ethernet.
     # If it is the case, use this connection.
     print("Checking if connected to robot with ethernet")
-    _,_,returncode= bash_command("ping -c 1 -W 1 10.0.0.1")
+    _,_,returncode= bash_command("ping -c 1 -W 2 10.0.0.1")
     if returncode== 0:
       ip="10.0.0.1"
 
     _,_,returncode= bash_command("ping -c 1 -W 1 10.3.0.1")
     if returncode== 0:
       ip="10.3.0.1"
+    
+    print("Changing the vision_config.json.")
+    bash_command("cd %s/env/%s && ln -sf ../common/vision_filters/aruco_calib.json vision_config.json"%(workspace_path,robot))
+    print("Press enter to deploy-env.")
+    raw_input()
+    bash_command("xterm -e \"cd %s && ./deploy-env %s\""%(workspace_path,ip))
+    
+    print("Press enter to run the robot")
+    raw_input()
+    bash_command("xterm -e \"%s/run %s\""%(workspace_path,ip))
 
-    while not make_calib in ["","n","y"]:
-        print("Do you want to lunch calibration on the robot ?[N/y]")
-        make_calib=raw_input().lower()
 
-    if make_calib=="y":
-        print("Is the focus of the camera okay ? (Check the white point on the camera.)")
-        print("Press enter to continue.")
-        raw_input()
+    print("Is the focus of the camera okay ? (Check the white point on the camera.)")
+    print("Press enter to continue.")
+    raw_input()
 
-        print("Did you change the vision_config file and deployed ?")
-        print("Press enter to continue.")
-        raw_input()
+    
+    print("Prepare robot to be initialised+walk. (Wait for the robot to be ready.)")
+    print("Press enter when ready.")
+    raw_input()
 
-        print("Prepare robot to be initialised+walk. (The server needs to be on.)")
-        print("Press enter when ready.")
-        raw_input()
+    bash_command("rhio %s init"%(ip,))
+    bash_command("rhio %s walk"%(ip,))
 
-        bash_command("rhio %s init"%(ip,))
-        bash_command("rhio %s walk"%(ip,))
+    print("Put the robot in the aruco calibration setup.")
+    print("Press enter to continue.")
+    raw_input()
 
-        print("Put the robot in the aruco calibration setup.")
-        print("Press enter to continue.")
-        raw_input()
+    print("If needed tune the threshold/shutter/gain parameters.")
+    bash_command("rhio 10.0.0.1 moves/head/disabled=false")
+    bash_command("rhio 10.0.0.1 moves/head/maxSpeed=30")
+    bash_command("rhio 10.0.0.1 head")
+    bash_command("xterm -e \"rhio 10.0.0.1 view Vision/tagsDetector/out\"")
+    print("Press enter to continue and stop the head.")
+    resp=raw_input().lower()
+    bash_command("rhio 10.0.0.1 moves/head/disabled=true")
 
-        print("Did you tune the threshold/shutter/gain parameters ? (y/N)")
-        resp=raw_input().lower()
+    print("Press enter when ready to lunch the calibration.")
+    raw_input()
 
-        if resp=="n":
-            bash_command("rhio %s /moves/head/disabled=false")
-            bash_command("rhio %s head")
-
-        print("Press enter when ready to lunch the calibration.")
-        raw_input()
-
-        bash_command("rhio %s arucoCalibration"%(ip,))
-        print("Press enter when calibration is finished.")
-        raw_input()
+    bash_command("rhio %s arucoCalibration"%(ip,))
+    print("Press enter when calibration is finished.")
+    raw_input()
 
 
     cmd="mkdir -p %s"%folder
@@ -115,7 +122,7 @@ else:
     print("Retrieving the aruco file.")
     cmd="scp rhoban@%s:~/env/%s/arucoCalibration.csv %s"%(ip,robot,aruco)
     _,_,code=bash_command(cmd)
-    cmd="cp %s %s/%s"%(aruco)
+    cmd="cp %s %s/%s"%(aruco,folder,aruco)
     _,_,code=bash_command(cmd)
 
     if code!=0:
@@ -125,6 +132,7 @@ else:
     resp="not"
     while not resp in ["","n","y"]:
         print("Do you want to lunch the model training ?[n/Y]")
+        print("It is usefull to check if there is something wrong.")
         resp=raw_input().lower()
 
         if resp=="n":
@@ -133,7 +141,7 @@ else:
 print("\n")
 print("== Starting the training. ==")
 cmd="cp model_learning_analyzer \
-    vision_correction_analyzer.json \
+    vision_correction_analyzer_fast_test.json \
     vision_correction_debug \
     vision_correction_debug.json \
     vision_input_reader.json \
@@ -150,12 +158,13 @@ if code==1:
 
 os.chdir(folder)
 
-cmd="./model_learning_analyzer vision_correction_analyzer.json %s"%aruco
+cmd="./model_learning_analyzer vision_correction_analyzer_fast_test.json %s"%aruco
 bash_command(cmd)
 
 out=glob.glob("*average*")
 
 print("Starting the creation of debug graphics.")
+print("(Should lunch plot_graph.)")
 # Change vision_correction_debug file
 for model in out:
     # Change the path to the model which will be compared with the default model
@@ -188,15 +197,23 @@ for model in out:
     cmd="mv parameters_analysis parameters_analysis"+model[:-15]+".png"
     bash_command(cmd)
 
-if make_calib=="y":
-    print("\n\nChange vision_filter back to all.json")
-    print("Deploy env.")
-    raw_input()
-
+if local_file==False:
     print("Remove the robot from the setup and press enter when ready to em")
     raw_input()
 
-    bash_command("rhio em")
+    bash_command("rhio 10.0.0.1 em")
+
+    resp="not"
+    while not resp in ["","n","y"]:
+        print("Change vision_filter back to all.json with \"git checkout %s/env/%s/vision_config.json\" and deploy-env? [Y/n]"%(workspace_path,robot))
+        resp=raw_input().lower()
+
+    if resp=="y":
+        bash_command("git checkout %s/env/%s/vision_config.json")
+        bash_command("%s/deploy-env %s"%(workspace_path,ip))
+    raw_input()
+    print("Press enter to halt the robot")
+    bash_command("%s/halt %s"(workspace_path,ip))
 
 os.chdir("..")
 print("Finished")
