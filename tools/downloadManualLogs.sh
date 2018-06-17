@@ -16,7 +16,7 @@ ROBOT=$(ssh $HOST hostname)
     
 OUTPUT_DIR=$OUTPUT_DIR'/'${ROBOT}
 
-LOG_PATH="/home/rhoban/env/${ROBOT}/$manual_log"
+LOG_PATH="/home/rhoban/env/${ROBOT}/manual_logs/"
 
 # If the folder exist copy it
 if ssh $HOST [ -d $LOG_PATH ]
