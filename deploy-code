@@ -135,6 +135,8 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libavresample.so.* .deploy/`; // Needed for leph's pc (Debian stable)
 `cp /usr/lib/x86_64-linux-gnu/libhogweed.so.* .deploy/`; // Needed for leph's pc (Debian stable)
 `cp /usr/lib/x86_64-linux-gnu/libnettle.so.* .deploy/`; // Needed for leph's pc (Debian stable)
+`cp /usr/lib/x86_64-linux-gnu/libIlmThread-2_2.so.* .deploy/`; // Needed for leph's pc (Debian stable)
+`cp /usr/lib/x86_64-linux-gnu/libnuma.so.* .deploy/`; // Needed for leph's pc (Debian stable)
 
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 `cp /usr/lib/libptgreyvideoencoder.so* .deploy/`;
