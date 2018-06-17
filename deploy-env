@@ -1,5 +1,21 @@
 #!/bin/bash
 
+MAX_OLD_ENVS=5
+CONFIRMATION_SIZE=1000000 #Confirmation required to suppress environments larger than this
+
+confirm() {
+    # call with a prompt string or use a default
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case "$response" in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
 remote="10.0.0.1"
 if [ $# -gt 0 ]
 then
@@ -18,13 +34,23 @@ else
 
     # Cleaning old environents
     ROBOT=`ssh rhoban@$remote hostname`
-    ENVS=`ssh rhoban@$remote ls -Ahdc ./env*`
+    ENVS=`ssh rhoban@$remote ls -Ahdc ./backup_env/* | sort -r`
     K=0
 
     for E in $ENVS; do
         K=$[$K+1]
-        if [ $K -gt 25 ]; then
-            echo "* Removing old environment $E"
+        if [ $K -gt $MAX_OLD_ENVS ]; then
+            E_SIZE=( $(ssh rhoban@$remote du -s $E) )
+            E_SIZE=${E_SIZE[0]}
+            if [ $E_SIZE -gt $CONFIRMATION_SIZE ]; then
+                HUMAN_SIZE=( $(ssh rhoban@$remote du -sh $E) )
+                HUMAN_SIZE=${HUMAN_SIZE[0]}
+                echo "$E contains $HUMAN_SIZE of data, do you really want to remove it?"
+                if ! $(confirm) ; then
+                    continue
+                fi
+            fi
+            echo "* Removing old environment $E with size ${E_SIZE}"
             ssh rhoban@$remote rm -rf $E
         fi
     done
@@ -36,7 +62,7 @@ else
     if [ "$CHG" != "" ]; then
         FMT="+%d_%m_%Y__%H_%M_%S"
         DATE=`date -d "$CHG" "+%d_%m_%Y__%H_%M_%S"`
-        OLDNAME="env_$DATE"
+        OLDNAME="backup_env/$DATE"
         echo "* Backuping old env to $OLDNAME"
         `ssh rhoban@$remote mv env $OLDNAME`
     fi

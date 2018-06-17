@@ -29,6 +29,7 @@ class Workspace
         $this->addCommand(new GitCommand);
         $this->addCommand(new TestsCommand);
         $this->addCommand(new TestCommand);
+        $this->addCommand(new HashCommand);
 
         $this->updatePackages();
         $this->repositories = array();

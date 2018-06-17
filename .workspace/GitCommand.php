@@ -35,7 +35,8 @@ class GitCommand extends Command
             $repositories[$package->getRepository()] = true;
         }
         foreach ($repositories as $repository => $true) {
-            $this->retryCmd("Applying git cmd '".$args."' on $repository", 'cd src/'.$repository.'; git '.$args);
+            $repoArgs = str_replace('REPOSITORY_NAME', $repository, $args);
+            $this->retryCmd("Applying git cmd '".$repoArgs."' on $repository", 'cd src/'.$repository.'; git '.$repoArgs);
         }
     }
 }
