@@ -141,6 +141,7 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libIlmThread-2_2.so* .deploy/`; // Needed for metaone's pc (Ubuntu 16.04 LTS)
 `cp /usr/lib/x86_64-linux-gnu/libnuma.so* .deploy/`; // Needed for metaone's pc (Ubuntu 16.04 LTS)
 
+
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 `cp /usr/lib/libptgreyvideoencoder.so* .deploy/`;
 
