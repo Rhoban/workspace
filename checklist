@@ -239,9 +239,13 @@ msg('CHECK_VISION', '(Press enter when you are done)');
 readline();
 killProcess();
 cmd('customReset');
+runProcess('view /Vision/TaggedImg');
+cmd('moves/head/forceTrack=true');
 msg('CHECK_VISION', 'Check that I\'m correctly tracking the ball');
 msg('CHECK_VISION', '(Press enter when you are done)');
 readline();
+killProcess();
+cmd('moves/head/forceTrack=false');
 cmd('/moves/head/disabled=true');
 
 msg('CHECK_BUS', 'Finally, Check that there were errors :  ');
