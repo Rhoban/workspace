@@ -94,7 +94,7 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
     $teamLetter = prompt('DROPIN-ID', 'What team are we ?', ['A', 'B']);
     if ($teamLetter == 'A') {
         $teamId = 31;
-    } else {c
+    } else {
         $teamId = 32;
     }
 
