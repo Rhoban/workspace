@@ -91,7 +91,13 @@ while (true) {
 }
 
 if (question('DROPIN', 'Is it a drop-in game?')) {
-    $teamId = prompt('DROPIN-ID', 'What is the team ID?', ['101', '102', '103', '104']);
+    $teamLetter = prompt('DROPIN-ID', 'What team are we ?', ['A', 'B']);
+    if ($teamLetter == 'A') {
+        $teamId = 31;
+    } else {c
+        $teamId = 32;
+    }
+
     cmd('/referee/teamId='.$teamId);
 } else {
     cmd('/referee/teamId=9');
