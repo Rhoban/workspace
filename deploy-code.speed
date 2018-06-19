@@ -18,9 +18,15 @@ $binary = 'devel_release/lib/kid_size/KidSize';
 $targetHost = 'rhoban@'.$remote;
 $targetDir = '/home/rhoban/catkin_rel/';
 
+$libBlackList=array("libpthread.","libstdc","libm.","libgcc","libc.");
+
 
 function smartCopyFile($filename){
+    global $libBlackList;
     $name=basename($filename);
+    foreach($libBlackList as $l)
+        if (strpos($name,$l)===0)
+            return;
     //echo "smartCopyFile of ".$filename."\n";
     if (file_exists(".deploy/".$name))
         return;
@@ -48,7 +54,7 @@ function smartCopy($filePattern){
 // Libraries
 echo "* Preparing system libraries...\n";
 
-$out = `ldd $binary|grep -iv "Not found"`;
+$out = `ldd $binary|grep -iv "Not found|grep -iv "`;
 
 $lines = explode("\n", trim($out));
 
