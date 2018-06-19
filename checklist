@@ -63,6 +63,10 @@ function question($phrase, $msg) {
     return prompt($phrase, $msg, ['y', 'n']) == 'y';
 }
 
+function ask_restart($phrase){
+    return prompt($phrase, "Press r to restart last check, press enter otherwise", ['r', '']) == 'r';
+}
+
 function cmd($cmd, $display = true) {
     global $host;
     $result = trim(`rhio $host $cmd`);
@@ -204,22 +208,30 @@ readline();
 killProcess();
 
 
+
+// do{
+//     msg("coucouccou", "saze");
+// } while(ask_restart('coucou'));
+
+
 msg('CHECK_STANDUP', 'We will now check if I can stand up : ');
-msg('CHECK_STANDUP', 'Press enter to launch standup');
-readline();
-cmd('head');
-cmd('standup');
-msg('CHECK_STANDUP', 'Press enter when I\'m done standing up');
-readline();
-cmd('init');
-msg('CHECK_STANDUP', 'Now turn me so that i\'m facing FRONT, then press enter to launch standup');
-readline();
-cmd('standup');
 
-msg('CHECK_STANDUP', 'Press enter when I\'m done standing up');
-readline();
+do{
+    msg('CHECK_STANDUP', 'Press enter to launch standup');
+    readline();
+    cmd('init');
+    cmd('head');
+    cmd('standup');
+} while (ask_restart("CHECK_STANDUP"));
 
-cmd('init');
+
+do{
+    msg('CHECK_STANDUP', 'Now turn me so that i\'m facing FRONT, then press enter to launch standup');
+    readline();
+    cmd('init');
+    cmd('standup');
+} while (ask_restart("CHECK_STANDUP"));
+
 cmd('walk');
 
 msg('CHECK_VISION', 'We will now check stuff about my Vision : ');
