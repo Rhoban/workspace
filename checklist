@@ -166,25 +166,33 @@ msg('CHECK_KICKS', 'We will now check my kicks, I\'m going to perform a series o
 
 msg('CHECK_KICKS', 'Press enter to perform a classic Right Kick');
 readline();
-cmd('/moves/walk/walkKickRight=true');
-cmd('/moves/walk/walkKickRight=false');
+do{
+    cmd('/moves/walk/walkKickRight=true');
+    cmd('/moves/walk/walkKickRight=false');
+} while(ask_restart("CHECK_KICKS"));
 
 msg('CHECK_KICKS', 'Press enter to perform a classic Left Kick');
 readline();
-cmd('/moves/walk/walkKickLeft=true');
-cmd('/moves/walk/walkKickLeft=false');
+do{
+    cmd('/moves/walk/walkKickLeft=true');
+    cmd('/moves/walk/walkKickLeft=false');
+} while(ask_restart("CHECK_KICKS"));
 
 msg('CHECK_KICKS', 'Press enter to perform a lateral Right Kick');
 readline();
-cmd('/moves/walk/walkKickName=lateral');
-cmd('/moves/walk/walkKickRight=true');
-cmd('/moves/walk/walkKickRight=false');
+do{
+    cmd('/moves/walk/walkKickName=lateral');
+    cmd('/moves/walk/walkKickRight=true');
+    cmd('/moves/walk/walkKickRight=false');
+} while(ask_restart("CHECK_KICKS"));
 
 msg('CHECK_KICKS', 'Press enter to perform a lateral Left Kick');
 readline();
-cmd('/moves/walk/walkKickLeft=true');
-cmd('/moves/walk/walkKickLeft=false');
-cmd('/moves/walk/walkKickName=classic');
+do{
+    cmd('/moves/walk/walkKickLeft=true');
+    cmd('/moves/walk/walkKickLeft=false');
+    cmd('/moves/walk/walkKickName=classic');
+} while(ask_restart("CHECK_KICKS"));
 
 
 msg('CHECK_FEET', 'We will now check if I my feet\'s pressure sensors are correctly configured :');
