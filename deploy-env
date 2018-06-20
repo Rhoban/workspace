@@ -38,7 +38,7 @@ else
     K=0
     if [ "$ENVS" == "" ]
     then
-	ssh rhoban@$remote mkdir -f backup_env
+	ssh rhoban@$remote mkdir  backup_env
     fi;
     
     for E in $ENVS; do
@@ -73,6 +73,7 @@ else
 
     # Sending current environment
     echo "* Sending environment files"
+    ssh rhoban@$remote rm -rf env
     ssh rhoban@$remote mkdir env
     rsync -l -r ./strategies ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@$remote:env/
 fi
