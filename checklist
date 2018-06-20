@@ -244,10 +244,13 @@ cmd('walk');
 
 msg('CHECK_VISION', 'We will now check stuff about my Vision : ');
 cmd('head');
-cmd('/moves/head/disabled=false');
+
 cmd('customReset');
 runProcess('view /Vision/TaggedImg');
 msg('CHECK_VISION', '- Check that the image is sharp enough, adjust the lens if needed');
+readline();
+msg('CHECK_VISION', '(Press enter when you are done)');
+cmd('/moves/head/disabled=false');
 msg('CHECK_VISION', '- Check that the horizon line is correct');
 msg('CHECK_VISION', '(Press enter when you are done)');
 readline();
