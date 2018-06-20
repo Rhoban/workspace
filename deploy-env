@@ -36,7 +36,11 @@ else
     ROBOT=`ssh rhoban@$remote hostname`
     ENVS=`ssh rhoban@$remote ls -Ahdc ./backup_env/* | sort -r`
     K=0
-
+    if [ "$ENVS" == "" ]
+    then
+	ssh rhoban@$remote mkdir -f backup_env
+    fi;
+    
     for E in $ENVS; do
         K=$[$K+1]
         if [ $K -gt $MAX_OLD_ENVS ]; then
