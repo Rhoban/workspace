@@ -1,0 +1,136 @@
+#!/usr/bin/php
+<?php
+$host = '10.0.0.1';
+if (count($argv) >= 2) {
+    $host = $argv[1];
+}
+
+function msg($phase, $msg) {
+    echo "\n\e[1m$phase: $msg\e[m\n";
+}
+function prompt($phase, $msg, array $possibilities) {
+    $pos = implode(', ', $possibilities);
+    while (true) {
+        echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
+        echo "> ";
+        flush();
+        $m = strtolower(trim(readline()));
+        if (in_array($m, $possibilities)) {
+            return $m;
+        }
+        echo "\e[1;31mYou should answer one of the following: ".$pos."\e[m\n";
+    }
+}
+function question($phrase, $msg) {
+    return prompt($phrase, $msg, ['y', 'n']) == 'y';
+}
+function cmd($cmd, $display = true) {
+    global $host;
+    $result = trim(`rhio $host $cmd`);
+    if ($display) echo "$result\n";
+    return $result;
+}
+function isHandled() {
+    $r = cmd('/decision/handled');
+
+    return $r == '/decision/handled=true';
+}
+
+function isVisionOk() {
+    $r = explode('=',cmd('/Vision/lastUpdate'));
+    if (count($r) > 1) {
+      $r = $r[1];
+    } else {
+      echo "Failed to read vision last update";
+      return false;
+    }
+    // Vision is ok if last update is more recent than 200 ms
+    return floatval($r) < 200;
+}
+
+$hostname = explode('=', cmd('/server/hostname', false));
+if (count($hostname) > 1) $hostname = $hostname[1];
+else $hostname = '?';
+
+msg('HALF STARTUP');
+
+while (true) {
+    msg('CHECK', 'Checking that all devices are present');
+    $r = cmd('rhalCheck');
+    if (strpos($r, 'All devices are present') === false) {
+        if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+}
+
+msg('INIT', 'Press enter to run init');
+readline();
+cmd('init');
+
+msg('INIT', 'Press enter to run the walk');
+readline();
+cmd('walk');
+
+do {
+    msg('TARE', 'Hold me in the air for the tare and press enter');
+    readline();
+    $result = cmd('tare');
+    $error = (strstr(strtolower($result), 'error') !== false);
+} while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+
+while (true) {
+    do {
+        msg('GYROTARE', 'Put me on the floor now and press enter');
+        readline();
+        $result = cmd('rhalGyroTare');
+        $error = (strstr(strtolower($result), 'error') !== false);
+    } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+
+
+    cmd('rhalSaveConf rhal.json');
+
+    msg('CHECK', 'Checking the pressure');
+    if (isHandled()) {
+        if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
+            break;
+        }
+    } else {
+        break;
+    }
+
+    msg('CHECK', 'Checking vision status');
+    if (!isVisionOk()) {
+        if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
+            break;
+        }
+    }
+}
+
+//Fix it later
+$side = '';
+while (!$side) {
+    $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
+}
+if ('r' == $side) {
+    msg('GRASS', "We are playing with the grass, loading strategy");
+    cmd('/moves/q_kick_controler/strategyFile=kickStrategy_with_grass.json');
+    cmd('/strategy/grassOffset=180');
+} else {
+    msg('GRASS', "We are playing against the grass, loading strategy");
+    cmd('/moves/q_kick_controler/strategyFile=kickStrategy_counter_grass.json');
+    cmd('/strategy/grassOffset=0');
+}
+cmd('reloadStrategy');
+
+
+msg('GO', 'Press enter to run robocup');
+readline();
+cmd('robocup');
+
+msg("\e[32mYODA", 'May the force be with you');
+echo "\n";
+
+?>
