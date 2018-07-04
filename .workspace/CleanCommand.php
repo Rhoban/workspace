@@ -14,6 +14,7 @@ class CleanCommand extends Command
 
     public function run(array $arguments)
     {
+        $args = implode(' ', $arguments);
         $profile = 'release';
 
         if ($this->flags) {
@@ -24,6 +25,6 @@ class CleanCommand extends Command
             $profile = $this->flags[0];
         }
 
-        OS::run('catkin clean --yes --profile '.$profile);
+        OS::run('catkin clean --yes --profile '.$profile.' '.$args);
     }
 }
