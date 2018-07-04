@@ -20,12 +20,13 @@ class BuildCommand extends Command
         if ($this->flags) {
             if (count($this->flags) > 1) {
                 Terminal::error("This only support one flag\n");
-                return;
+                return 1;
             }
             $profile = $this->flags[0];
         }
 
         Terminal::success("* Running a build for profile $profile\n");
-        passthru('catkin build --force-color --profile '.$profile.' '.$args);
+        passthru('catkin build --force-color --profile '.$profile.' '.$args, $retCode);
+        return $retCode;
     }
 }
