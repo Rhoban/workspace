@@ -18,7 +18,6 @@ class Workspace
         $this->addCommand(new SetupCommand);
         $this->addCommand(new InstallCommand);
         $this->addCommand(new BuildCommand);
-        $this->addCommand(new BuildTestsCommand);
         $this->addCommand(new PackagesCommand);
         $this->addCommand(new StatusCommand);
         $this->addCommand(new PullCommand);
@@ -28,8 +27,12 @@ class Workspace
         $this->addCommand(new UnshallowCommand);
         $this->addCommand(new GraphCommand);
         $this->addCommand(new GitCommand);
-        $this->addCommand(new RunTestsCommand);
         $this->addCommand(new HashCommand);
+
+        // for testing purposes
+        $this->addCommand(new BuildTestsCommand);
+        $this->addCommand(new RunTestsCommand);
+        $this->addCommand(new ResultTestsCommand);
 
         $this->updatePackages();
         $this->repositories = array();
