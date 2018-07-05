@@ -25,9 +25,9 @@ class SetupCommand extends Command
         Terminal::info("* Runnin catkin init\n");
         OS::run('catkin init --workspace .');
         Terminal::info("* Setup of profile debug and release");
-        OS::run('catkin config --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
-        OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
-        OS::run('catkin config --profile novision -x _nv_release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx" -DBUILD_KID_SIZE_VISION=OFF');
-        OS::run('catkin config --profile novision_debug -x _nv_debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2 -mavx" -DBUILD_KID_SIZE_VISION=OFF');
+        OS::run('catkin config --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2"');
+        OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2"');
+        OS::run('catkin config --profile novision -x _nv_release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2" -DBUILD_KID_SIZE_VISION=OFF');
+        OS::run('catkin config --profile novision_debug -x _nv_debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2" -DBUILD_KID_SIZE_VISION=OFF');
     }
 }
