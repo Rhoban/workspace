@@ -1,0 +1,36 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "src/rhoban/kid_size"
+		},
+		{
+			"path": "src/rhoban/utils"
+		},
+		{
+			"path": "src/rhoban/geometry"
+		},
+		{
+			"path": "src/rhoban/graphs"
+		},
+		{
+			"path": "src/rhoban/rhio"
+		},
+		{
+			"path": "src/rhoban/rhal"
+		},
+		{
+			"path": "src/rhoban/teamplay"
+		},
+		{
+			"path": "src/rhoban/monitoring_robocup"
+		}
+	],
+    "settings": {
+        "scm.alwaysShowProviders": true,
+        "git.autoRepositoryDetection": true,
+        "git.detectSubmodules": false
+    }
+}

@@ -1,0 +1,35 @@
+#!/usr/bin/php
+<?php
+
+$data = '
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+		%INCLUDES%
+                "{workspaceFolder}/**"
+            ],
+            "defines": ["VISION_COMPONENT"],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
+';
+
+
+$parse = file_get_contents('build_release/kid_size/CMakeFiles/kid_size.dir/flags.make');
+preg_match('/CXX_INCLUDES = (.+)\n/mUsi', $parse, $matches);
+preg_match_all('/\-I([^ ]+?)/mUsi', $matches[1], $out);
+
+$includes = '';
+foreach ($out[1] as $include) {
+    $includes .= '"'.$include.'",'."\n";
+}
+
+$data = str_replace('%INCLUDES%', $includes, $data);
+file_put_contents('.vscode/c_cpp_properties.json', $data);
