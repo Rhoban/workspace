@@ -6,7 +6,7 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "./workspace build kid_size",
+            "command": "cd ../../../; ./workspace build kid_size",
             "problemMatcher": "$gcc",
             "group": {
                 "kind": "build",
@@ -16,25 +16,25 @@
         {
             "label": "Build (novision)",
             "type": "shell",
-            "command": "./workspace build:novision kid_size",
+            "command": "cd ../../../; ./workspace build:novision kid_size",
             "problemMatcher": "$gcc"
         },
         {
             "label": "Build (monitoring)",
             "type": "shell",
-            "command": "./workspace build monitoring_robocup",
+            "command": "cd ../../../; ./workspace build monitoring_robocup",
             "problemMatcher": "$gcc"
         },
         {
             "label": "Status",
             "type": "shell",
-            "command": "./workspace status",
+            "command": "cd ../../../; ./workspace status",
             "problemMatcher": []
         },
         {
             "label": "Workspace pull",
             "type": "shell",
-            "command": "./workspace pull",
+            "command": "cd ../../../; ./workspace pull",
             "problemMatcher": []
         }
     ]
