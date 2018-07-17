@@ -1,1 +1,2 @@
 ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:02:00.0", NAME:="wlan0"
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:3a:00.0", NAME:="wlan0"

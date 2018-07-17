@@ -1,0 +1,41 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "cd ../../../; ./workspace build kid_size",
+            "problemMatcher": "$gcc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build (novision)",
+            "type": "shell",
+            "command": "cd ../../../; ./workspace build:novision kid_size",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Build (monitoring)",
+            "type": "shell",
+            "command": "cd ../../../; ./workspace build monitoring_robocup",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Status",
+            "type": "shell",
+            "command": "cd ../../../; ./workspace status",
+            "problemMatcher": []
+        },
+        {
+            "label": "Workspace pull",
+            "type": "shell",
+            "command": "cd ../../../; ./workspace pull",
+            "problemMatcher": []
+        }
+    ]
+}
