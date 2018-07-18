@@ -208,12 +208,12 @@ if local_file==False:
         print("Change vision_filter back to all.json with \"git checkout %s/env/%s/vision_config.json\" and deploy-env? [Y/n]"%(workspace_path,robot))
         resp=raw_input().lower()
 
-    if resp=="y":
-        bash_command("git checkout %s/env/%s/vision_config.json")
-        bash_command("%s/deploy-env %s"%(workspace_path,ip))
-    raw_input()
+    if resp in ["","y"]:
+        bash_command("xterm -e \"cd %s/env/%s/ && git checkout vision_config.json"%(workspace_path,robot))
+        bash_command("xterm -e \"cd %s && ./deploy-env %s"%(workspace_path,ip))
     print("Press enter to halt the robot")
-    bash_command("%s/halt %s"(workspace_path,ip))
+    raw_input()
+    bash_command("%s/halt %s"%(workspace_path,ip))
 
 os.chdir("..")
 print("Finished")
