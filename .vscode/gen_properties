@@ -1,6 +1,15 @@
 #!/usr/bin/php
 <?php
 
+function removeWorkspacePrefix($include)
+{
+    if (strpos($include, getcwd()) === 0) {
+        return substr($include, strlen(getcwd())+1);
+    } else {
+        return $include;
+    }
+}
+
 $data = '
 {
     "configurations": [
@@ -24,10 +33,18 @@ $data = '
 
 $parse = file_get_contents('build_release/kid_size/CMakeFiles/kid_size.dir/flags.make');
 preg_match('/CXX_INCLUDES = (.+)\n/mUsi', $parse, $matches);
-preg_match_all('/\-I([^ ]+?)/mUsi', $matches[1], $out);
+preg_match_all('/\-I([^ ]+?)/mUs', $matches[1], $out);
 
 $includes = '';
 foreach ($out[1] as $include) {
+    $include = removeWorkspacePrefix($include);
+    $includes .= '"'.$include.'",'."\n";
+}
+
+preg_match_all('/\-isystem ([^ ]+?)/mUs', $matches[1], $out);
+
+foreach ($out[1] as $include) {
+    $include = removeWorkspacePrefix($include);
     $includes .= '"'.$include.'",'."\n";
 }
 
