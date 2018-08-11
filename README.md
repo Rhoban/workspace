@@ -1,16 +1,10 @@
-p	# catkin workspace with packages manager
+# catkin workspace with packages manager
 
 ## Usage
 
-First of all, you will need 'php' and some libraries: make sure to install
-necessary packages:
+First of all, you will need `php`, `catkin` and a few required packages:
 
-    sudo apt-get install php php-xml
-
-First, you'll need to install `catkin` and a few required packages, the most
-convenient method is the following:
-
-    sudo apt-get install python-pip python-empy python-setuptools python-nose
+    sudo apt-get install php php-xml python-pip python-empy python-setuptools python-nose
     sudo pip install -U catkin_tools mock
 
 
@@ -23,13 +17,22 @@ Run the setup:
 
     ./workspace setup
 
-If you are a power rhoban team developper, use following command to perform a full install:
+## For rhoban developers
+
+You can install the latest unstable version using:
+
     ./workspace install rhoban/kid_size.git
+    ./workspace install rhoban/environments.git
+    
+## For non-rhoban developers
 
+You can install the latest public release using:
 
-You can now install a repository:
-
-    ./workspace install rhoban/rhio
+    git checkout final_2018
+    ./workspace install rhoban/hl_kid_public.git
+    ./workspace install rhoban/environments_public.git
+    ./global_cmd.sh git checkout final_2018
+    ln -sf src/rhoban/environments_public env
 
 ## Commands
 
@@ -70,10 +73,4 @@ By default, this will use GitHub, you can also use complete repo names
 Here, a full repository name is used, and the dependency is tagged `optional`. This means that
 the user will be asked if he wants to install the dependency. You can also use `recommend`, that
 would do the same, except that the default choice will be yes instead of no.
-
-## Note when installing Rhoban's infamous Code repository
-Try installing random stuff until it works, under ubuntu 16.04 the following were needed:
-
-    sudo apt-get install liburdfdom-dev libboost-thread1.58-dev lib64ncurses5-dev g++ libopencv-dev libv4l-dev php7.0-xml
-
 
