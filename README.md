@@ -72,6 +72,7 @@ the user will be asked if he wants to install the dependency. You can also use `
 would do the same, except that the default choice will be yes instead of no.
 
 ## Note when installing Rhoban's infamous Code repository
+You need OpenCV2 (the next release will b with OpenCV3).
 Try installing random stuff until it works, under ubuntu 16.04 the following were needed:
 
     sudo apt-get install liburdfdom-dev libboost-thread1.58-dev lib64ncurses5-dev g++ libopencv-dev libv4l-dev php7.0-xml
