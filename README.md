@@ -1,4 +1,4 @@
-p	# catkin workspace with packages manager
+# catkin workspace with packages manager
 
 ## Usage
 
