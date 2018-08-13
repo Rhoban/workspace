@@ -14,7 +14,7 @@ First of all, you will need to install required packages:
 
     sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev\
         php php-cli php-xml libopencv-dev libv4l-dev gnuplot5-qt \
-        python-pip python-empy python-setuptools python-nose chrpath ffmpeg
+        python-pip python-empy python-setuptools python-nose chrpath ffmpeg libudev-dev
         
 ### Installing catkin
 
@@ -81,6 +81,19 @@ Run this command to add `rhio` to your `$PATH`:
 Don't forget to re-run the shell to have the change, you should then be able to
 run the `rhio` command.
 
+### Installing RoboCup monitoring software
+
+You can now compile the RoboCup monitoring software:
+
+    ./workspace build monitoring_robocup
+    
+Run this command to add `MonitoringRobocup` to your `$PATH`:
+
+    echo alias "MonitoringRoboCup=\"\$PWD/devel_release/lib/monitoring_robocup/MonitoringRoboCup\"" >> ~/.bashrc
+    
+Don't forget to re-run the shell to have the change, you should then be able to
+run the `MonitoringRoboCup` command.
+
 ## Basic commands
 
     
@@ -111,6 +124,25 @@ This will remotely run the program on the robot
 ### Connecting to the robot with rhio
 
     rhio 10.0.0.1
+    
+### Saving logs with MonitoringRoboCup
+
+Simply place a terminal with the location in which you want to save the log and run:
+
+    MonitoringRoboCup
+
+This will save all the content in a file named `monitoring.log` and if a webcam
+is connected, it will also save images in the folder.
+
+Note: If a file named `monitoring.log` exists in the folder, `MonitoringRoboCup`
+will crash rather than overwritting current log. If you want to ecrase current
+log, just remove the file `monitoring.log` to allow the program to start.
+
+### Replaying logs with MonitoringRoboCup
+
+Move to the folder containing the `monitoring.log` file and run:
+
+    MonitoringRoboCup monitoring.log
 
 ## Workspace commands
 
