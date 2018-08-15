@@ -64,7 +64,6 @@ the configuration for your own robots.
 Some symbolic links should be modified in env/fake.
 "default_robot" should be change with one of the robot folder name:
 
-    cd env/fake
     ln -sf ../default_robot/kick_classic.json env/fake
     ln -sf ../default_robot/kick_small.json env/fake
     ln -sf ../default_robot/kick_lateral.json env/fake
