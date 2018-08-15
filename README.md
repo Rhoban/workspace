@@ -24,7 +24,7 @@ First of all, you will need to install required packages:
     sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev\
         php php-cli php-xml libopencv-dev libv4l-dev gnuplot5-qt \
         python-pip python-empy python-setuptools python-nose chrpath ffmpeg libudev-dev \
-        libsfml-dev
+        libsfml-dev libconsole-bridge-dev
         
 ### Installing catkin
 
