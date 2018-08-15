@@ -69,6 +69,10 @@ Some symbolic links should be modified in env/fake.
     ln -sf ../default_robot/kick_small.json env/fake
     ln -sf ../default_robot/kick_lateral.json env/fake
     ln -sf ../default_robot/KickModelCollection.json env/fake
+    ln -sf ../default_robot/VCM.json env/fake
+    ln -sf ../default_robot/sigmaban.urdf env/fake
+    ln -sf ../../model/Data/font.ttf env/fake
+
     
 ### Installing FlyCapture dependency
 
