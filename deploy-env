@@ -2,12 +2,14 @@
 
 MAX_OLD_ENVS=5
 CONFIRMATION_SIZE=1000000 #Confirmation required to suppress environments larger than this
+HOST_LOGIN=rhoban #TODO: you might change this
+
 
 confirm() {
     # call with a prompt string or use a default
     read -r -p "${1:-Are you sure? [y/N]} " response
     case "$response" in
-        [yY][eE][sS]|[yY]) 
+        [yY][eE][sS]|[yY])
             true
             ;;
         *)
@@ -20,11 +22,11 @@ remote="10.0.0.1"
 if [ $# -gt 0 ]
 then
     remote=$1
-fi 
+fi
 
 # Killing server on host
-echo "Killing KidSize on $remote"
-`ssh rhoban@$remote ./env/stop.sh`
+echo "Killing KidSize on $remote (login: ${HOST_LOGIN})"
+`ssh ${HOST_LOGIN}@$remote ./env/stop.sh`
 
 DIR="env"
 if [ ! -d $DIR ]; then
@@ -33,21 +35,21 @@ else
     cd env
 
     # Cleaning old environents
-    ROBOT=`ssh rhoban@$remote hostname`
-    ENVS=`ssh rhoban@$remote ls -Ahdc ./backup_env/* | sort -r`
+    ROBOT=`ssh ${HOST_LOGIN}@$remote hostname`
+    ENVS=`ssh ${HOST_LOGIN}@$remote ls -Ahdc ./backup_env/* | sort -r`
     K=0
     if [ "$ENVS" == "" ]
     then
-	ssh rhoban@$remote mkdir  backup_env
+	ssh ${HOST_LOGIN}@$remote mkdir  backup_env
     fi;
-    
+
     for E in $ENVS; do
         K=$[$K+1]
         if [ $K -gt $MAX_OLD_ENVS ]; then
-            E_SIZE=( $(ssh rhoban@$remote du -s $E) )
+            E_SIZE=( $(ssh ${HOST_LOGIN}@$remote du -s $E) )
             E_SIZE=${E_SIZE[0]}
             if [ $E_SIZE -gt $CONFIRMATION_SIZE ]; then
-                HUMAN_SIZE=( $(ssh rhoban@$remote du -sh $E) )
+                HUMAN_SIZE=( $(ssh ${HOST_LOGIN}@$remote du -sh $E) )
                 HUMAN_SIZE=${HUMAN_SIZE[0]}
                 echo "$E contains $HUMAN_SIZE of data, do you really want to remove it?"
                 if ! $(confirm) ; then
@@ -55,25 +57,28 @@ else
                 fi
             fi
             echo "* Removing old environment $E with size ${E_SIZE}"
-            ssh rhoban@$remote rm -rf $E
+            ssh ${HOST_LOGIN}@$remote rm -rf $E
         fi
     done
 
     # Archiving current environment
     echo "* Retrieving current env date"
-    CHG=`ssh rhoban@$remote stat -c %y ./env/`
+    CHG=`ssh ${HOST_LOGIN}@$remote stat -c %y ./env/`
 
     if [ "$CHG" != "" ]; then
         FMT="+%d_%m_%Y__%H_%M_%S"
         DATE=`date -d "$CHG" "+%d_%m_%Y__%H_%M_%S"`
         OLDNAME="backup_env/$DATE"
         echo "* Backuping old env to $OLDNAME"
-        `ssh rhoban@$remote mv env $OLDNAME`
+        `ssh ${HOST_LOGIN}@$remote mv env $OLDNAME`
     fi
 
     # Sending current environment
     echo "* Sending environment files"
-    ssh rhoban@$remote rm -rf env
-    ssh rhoban@$remote mkdir env
-    rsync -l -r ./strategies ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh rhoban@$remote:env/
+    ssh ${HOST_LOGIN}@$remote rm -rf env
+    ssh ${HOST_LOGIN}@$remote mkdir env
+    rsync -l -r ./strategies ./$ROBOT ./common ./boot.sh ./stop.sh ./out.sh ${HOST_LOGIN}@$remote:env/
+    echo "* disabling the display mode in json files (just in case...)"
+    ssh ${HOST_LOGIN}@$remote find ./common -type f -exec sed -i -e 's@"display" *: *true@"display" : false@g' {} \;
+
 fi

@@ -6,17 +6,27 @@ if ($ret != 0) {
     die("Error: you should have chrpath installed (apt-get install chrpath)\n");
 }
 
+// Remote login
+$host_login="rhoban"; //TODO: you should adapt to your robot
+
 // Remote host
 $remote = isset($argv[1]) ? $argv[1] : '10.0.0.1';
 
-// Killing server on host
-echo "Killing KidSize on " . $remote;
-`ssh rhoban@$remote ./env/stop.sh`;
 
 // Parameters
 $binary = 'devel_release/lib/kid_size/KidSize';
-$targetHost = 'rhoban@'.$remote;
-$targetDir = '/home/rhoban/catkin_rel/';
+$targetHost = $host_login . '@' .$remote;
+$targetDir = '/home/' . $host_login . '/catkin_rel/';
+
+// Killing server on host
+echo "Killing KidSize on " . $remote;
+`ssh $host_login@$remote ./env/stop.sh`;
+
+
+echo "\nbinary: " . $binary;
+echo "\ntarget host: " . $targetHost;
+echo "\ntarget dir: " . $targetDir;
+
 
 $libBlackList=array("libpthread.","libstdc","libm.","libgcc","libc.");
 
@@ -30,19 +40,19 @@ function smartCopyFile($filename){
     //echo "smartCopyFile of ".$filename."\n";
     if (file_exists(".deploy/".$name))
         return;
-    if (is_link($filename)){ 
-        $src=readlink($filename);
-        //echo $filename." is a link pointing to ".$src."\n";
-        if (substr($src,0,1)!='/'){
-            $src=dirname($filename)."/".$src;
-            //echo "rel to abs: ".$src."\n";
-        }
-        smartCopyFile($src);
+    if (is_link($filename)){
+    $src=readlink($filename);
+    //echo $filename." is a link pointing to ".$src."\n";
+    if (substr($src,0,1)!='/'){
+      $src=dirname($filename)."/".$src;
+      //echo "rel to abs: ".$src."\n";
+    }
+    smartCopyFile($src);
         $srcname=basename($src);
         symlink($srcname,".deploy/".$name);
     } else {
         copy($filename,".deploy/".$name);
-    }    
+    }
 }
 
 function smartCopy($filePattern){
@@ -80,4 +90,3 @@ echo "* Sending files...\n";
 $binaryName = basename($binary);
 `chrpath --replace $targetDir .deploy/$binaryName`;
 `rsync --delete -av --info=flist2,name,progress .deploy/ $targetHost:$targetDir`;
-
