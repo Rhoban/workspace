@@ -136,7 +136,7 @@
             -   plot the IMU acc and gyr values in rhio
         -   check that there is no problem with the neck motors (all screws tight, nothing bent)
             -   Put the robot in the init position, everything should be straight (the camera should be perfectly level)
-                -   You may need to adjust the zero of the motor (lowlevel/head<sub>pitch</sub>/parameters/zero, then init again)
+                -   You may need to adjust the zero of the motor (lowlevel/head\_pitch/parameters/zero, then init again)
         -   check that the IMU doesn't move (open the robot and try to move the IMU pcb, **it should not move**)
             -   Notice that the IMU precise position was calibrated by us (long and difficult process) and it **should never be moved!**
 
@@ -258,7 +258,7 @@
 
     -   Check the fields
 
-        -   Measure the fields (cf. Robocup rules) and adapt the configuration (file: env/common/field<sub>dimensions</sub>)
+        -   Measure the fields (cf. Robocup rules) and adapt the configuration (file: env/common/field\_dimensions)
         -   Check the grass and the lines, you may need to adapt (walk, foot studs, vision&#x2026;)
         -   Check and configure the wifi for each field
 
@@ -467,7 +467,7 @@
 
             -   Add the udev rule
 
-            -   Configure grub to autoboo
+            -   Configure grub to autoboot
 
             -   configure the network (the simple way is to copy the file `/etc/network/interfaces` from another robot)
 
@@ -501,4 +501,4 @@
 
     -   If you change the camera/lens you may need to calibrate it (file `camera_calib.yml` using opencv calibration)
 
-        -   You may also need to adjust the camera angular field of view parameters in `VCM.json` (camera<sub>pan</sub>, camera<sub>tilt</sub>)
+        -   You may also need to adjust the camera angular field of view parameters in `VCM.json` (camera\_pan, camera\_tilt)
