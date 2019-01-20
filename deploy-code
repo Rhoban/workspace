@@ -152,6 +152,12 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libIlmThread-2_2.so* .deploy/`; // Needed for metaone's pc (Ubuntu 16.04 LTS)
 `cp /usr/lib/x86_64-linux-gnu/libnuma.so* .deploy/`; // Needed for metaone's pc (Ubuntu 16.04 LTS)
 `cp /usr/lib/x86_64-linux-gnu/libGL.so* .deploy/`; // Needed for leph's pc (Debian stable)
+`cp /usr/lib/x86_64-linux-gnu/libprotobuf.so.9 .deploy/`; // Needed for patxi's pc (Ubuntu 16.04 LTS)
+`cp /usr/lib/x86_64-linux-gnu/libgfortran.so.3 .deploy/`; // Needed for patxi's pc (Ubuntu 16.04 LTS)
+`cp /usr/lib/x86_64-linux-gnu/libpcre16.so.3 .deploy/`; // Needed for patxi's pc (Ubuntu 16.04 LTS)
+`cp /usr/lib/x86_64-linux-gnu/libgst*-0.10.so.0 .deploy/`; // Needed for patxi's pc (Ubuntu 16.04 LTS)
+`cp /usr/lib/libopenblas.so.0 .deploy/`; // Needed for patxi's pc (Ubuntu 16.04 LTS)
+`cp /usr/lib/x86_64-linux-gnu/libquadmath.so.0 .deploy/`; // Needed for patxi's pc (Ubuntu 16.04 LTS)
 
 
 `cp /usr/lib/libflycapture*.so* .deploy/`;
