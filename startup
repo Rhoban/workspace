@@ -289,6 +289,9 @@ if ($grassDirection == $side) {
 }
 cmd('reloadStrategy');
 
+$fieldInverted = $side == 'l';
+cmd('/teamplay/isFieldInverted='.$fieldInverted);
+
 
 msg('DISK', "Checking robot space");
 echo `ssh rhoban@$host df -h /dev/sda2`;
