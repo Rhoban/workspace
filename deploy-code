@@ -161,8 +161,7 @@ echo "* Preparing system libraries...\n";
 `cp /usr/lib/x86_64-linux-gnu/libprotobuf.so.10 .deploy/`; // Needed for medrimonia's pc (Ubuntu 18.04 LTS)
 `cp /usr/lib/x86_64-linux-gnu/libGLX.so.* .deploy/`; // Needed for medrimonia's pc (Ubuntu 18.04 LTS)
 `cp /usr/lib/x86_64-linux-gnu/libopencv*.so* .deploy/`;// Needed for medrimonia's pc (Ubuntu 18.04 LTS)
-
-
+`cp /usr/lib/x86_64-linux-gnu/libcairo.so* .deploy/`;
 `cp /usr/lib/libflycapture*.so* .deploy/`;
 `cp /usr/lib/libptgreyvideoencoder.so* .deploy/`;
 
