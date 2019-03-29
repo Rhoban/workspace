@@ -18,7 +18,7 @@ $binary = 'devel_release/lib/kid_size/KidSize';
 $targetHost = 'rhoban@'.$remote;
 $targetDir = '/home/rhoban/catkin_rel/';
 
-$libBlackList=array("libpthread.","libstdc","libm.","libgcc","libc.");
+$libBlackList=array("libpthread.","libstdc","libm.","libgcc","libc.","libdl-","libdl.");
 
 
 function smartCopyFile($filename){
