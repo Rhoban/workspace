@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [ "${workspaceFolder}/**" ],
+            "intelliSenseMode": "clang-x64",
+            "defines": ["VISION_COMPONENT"],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "browse": {}
+        }
+    ],
+    "version": 4
+}
