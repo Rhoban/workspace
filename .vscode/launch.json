@@ -5,13 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Log manager",
+      "name": "Env fake",
       "type": "cppdbg",
       "request": "launch",
-      "program": "./devel_debug/lib/vive_provider/log_manager",
+      "program": "${workspaceFolder}/devel_debug/lib/kid_size/KidSize",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/env/fake",
       "environment": [],
       "externalConsole": true,
       "MIMode": "gdb",
