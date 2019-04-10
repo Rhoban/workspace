@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
-""""
+'''
 Script to recode json shoot from motor based description to time based description in both ways
-""""
+'''
 
 import json
 import sys
