@@ -22,7 +22,7 @@ it indicates that there was an error and you should start over.
 
 You can check that everything is OK by running:
 
-  ./vive_buller.py
+  ./vive_bullet.py
 
 And visualize
 
