@@ -20,7 +20,14 @@ Run:
 
   ./vive_field_calibration.py
 
-And click the calibration points to calibrate the vive
+And click the calibration points to calibrate the vive. If the controller vibrates,
+it indicates that there was an error and you should start over.
+
+You can check that everything is OK by running:
+
+  ./vive_buller.py
+
+And visualize
 
 ## 2) Take logs
 
