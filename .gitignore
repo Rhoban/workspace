@@ -15,4 +15,3 @@ robot_logs
 .my_make.sh
 tags
 .vscode/ipch/
-bin
