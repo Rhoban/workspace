@@ -7,6 +7,11 @@ if (count($argv) >= 2) {
   $host = $argv[1];
 }
 
+$viveServer=`ps aux|grep vive_server.py|grep -v grep|awk '{print $2}'`;
+if (!$viveServer) {
+  die("WARNING: Vive server is not running!\n");
+}
+
 include "robot_tools.php";
 
 // We want to make sure that the robot detects when it is handled to avoid

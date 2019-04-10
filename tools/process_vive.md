@@ -56,7 +56,7 @@ And do the log
 
 ### 2.3) Download the logs
 
-Download the logs on your computer:
+Stop the vive server and download the logs on your computer:
 
   ./tools/downloadViveLog.sh
 

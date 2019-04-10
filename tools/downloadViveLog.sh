@@ -7,6 +7,14 @@ HOST="rhoban@10.0.0.1"
 
 OUTPUT_DIR="vive_logs"
 VIVE_DIR='src/rhoban/vive_provider/logs/'
+VIVE_SERVER_PID=`ps aux|grep vive_server.py|grep -v grep|awk '{print $2}'`
+
+if [ "${VIVE_SERVER_PID}" != "" ]; then
+  echo "Warning: a vive server is running, if you press enter it will be killed to dump its log"
+  read X
+  kill -2 ${VIVE_SERVER_PID}
+  sleep 0.5
+fi
 
 if [ $# -gt 0 ]
 then
@@ -26,7 +34,7 @@ then
 
     echo "* Retrieving ${LAST_LOG} and ${LAST_VIVE}..."
     mkdir -p ${OUTPUT_DIR}
-    # scp -r ${HOST}:${LOG_PATH}/${LAST_LOG} ${OUTPUT_DIR}
+    scp -r ${HOST}:${LOG_PATH}/${LAST_LOG} ${OUTPUT_DIR}
     cp ${VIVE_DIR}/$LAST_VIVE ${OUTPUT_DIR}/${LAST_LOG}/vive.bin
 else
     echo "${LOG_PATH} not found on ${HOST}"
