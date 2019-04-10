@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "Linux",
-            "includePath": [ "${workspaceFolder}/**" ],
+            "includePath": [ "src/**", "build_release/**" ],
             "intelliSenseMode": "clang-x64",
             "defines": ["VISION_COMPONENT"],
             "cStandard": "c11",
