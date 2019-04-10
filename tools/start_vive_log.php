@@ -20,6 +20,9 @@ include "robot_tools.php";
 
 $logDuration = askDouble("What is the required duration for log? [s]");
 
+msg('AUTO', "Running NTP sync");
+echo `ssh rhoban@$host sudo ntpdate -b 10.0.0.2`;
+
 msg('AUTO', "Forbiding robot to track the ball");
 cmd('/moves/head/trackingPeriod=-1');
 

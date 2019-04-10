@@ -32,10 +32,11 @@ then
     LAST_LOG=`ssh $HOST ls -c $LOG_PATH|head -n1`
     LAST_VIVE=`ls -c $VIVE_DIR|head -n1`
 
-    echo "* Retrieving ${LAST_LOG} and ${LAST_VIVE}..."
     mkdir -p ${OUTPUT_DIR}
     scp -r ${HOST}:${LOG_PATH}/${LAST_LOG} ${OUTPUT_DIR}
     cp ${VIVE_DIR}/$LAST_VIVE ${OUTPUT_DIR}/${LAST_LOG}/vive.bin
+    
+    echo "* Retrieved ${LAST_LOG} and ${LAST_VIVE}"
 else
     echo "${LOG_PATH} not found on ${HOST}"
     exit -1

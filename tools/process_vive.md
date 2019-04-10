@@ -7,10 +7,7 @@
 The computer hosting the vive server can run an NTP server using the `ntp.conf`
 file in this folder.
 
-Then, use `ntpdate` with the `-b` argument (force immediate update) on the robot
-with your IP, like:
-
-  sudo ntpdate -b 10.0.0.2
+The NTP sync will be done at the begining of each log using `start_vive_log` (see below).
 
 ### 1.2) Calibrate the field using vive controller
 
