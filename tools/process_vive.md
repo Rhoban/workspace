@@ -14,6 +14,8 @@ with your IP, like:
 
 ### 1.2) Calibrate the field using vive controller
 
+After starting SteamVR, and having at least a controller plugged.
+
 Run:
 
   ./vive_field_calibration.py
