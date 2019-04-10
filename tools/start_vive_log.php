@@ -11,7 +11,7 @@ include "robot_tools.php";
 
 // We want to make sure that the robot detects when it is handled to avoid
 // logging image in this case
-requestTare();
+// requestTare();
 
 $logDuration = askDouble("What is the required duration for log? [s]");
 

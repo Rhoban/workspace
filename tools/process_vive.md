@@ -10,7 +10,7 @@ file in this folder.
 Then, use `ntpdate` with the `-b` argument (force immediate update) on the robot
 with your IP, like:
 
-  sudo ntpdate -bd 10.0.0.2
+  sudo ntpdate -b 10.0.0.2
 
 ### 1.2) Calibrate the field using vive controller
 

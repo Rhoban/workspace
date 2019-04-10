@@ -6,7 +6,7 @@
 HOST="rhoban@10.0.0.1"
 
 OUTPUT_DIR="vive_logs"
-VIVE_DIR='src/rhoban/vive_provider/'
+VIVE_DIR='src/rhoban/vive_provider/logs/'
 
 if [ $# -gt 0 ]
 then
@@ -26,8 +26,8 @@ then
 
     echo "* Retrieving ${LAST_LOG} and ${LAST_VIVE}..."
     mkdir -p ${OUTPUT_DIR}
-    scp -r ${HOST}:${LOG_PATH}/${LAST_LOG} ${OUTPUT_DIR}
-    cp $LAST_VIVE ${OUTPUT_DIR}/${LAST_LOG}
+    # scp -r ${HOST}:${LOG_PATH}/${LAST_LOG} ${OUTPUT_DIR}
+    cp ${VIVE_DIR}/$LAST_VIVE ${OUTPUT_DIR}/${LAST_LOG}/vive.bin
 else
     echo "${LOG_PATH} not found on ${HOST}"
     exit -1
