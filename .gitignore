@@ -14,4 +14,4 @@ robot_logs
 .local.vimrc
 .my_make.sh
 tags
-
+.vscode/ipch/
