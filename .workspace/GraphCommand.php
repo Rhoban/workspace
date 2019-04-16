@@ -43,7 +43,7 @@ class GraphCommand extends Command
         }
         $graph .= "}\n";
         file_put_contents('/tmp/out.dot', $graph);
-        `dot -Tpng /tmp/out.dot > /tmp/out.png`;
-        `eog /tmp/out.png`;
+        `dot -Tpdf /tmp/out.dot > /tmp/out.pdf`;
+        `evince /tmp/out.pdf`;
     }
 }
