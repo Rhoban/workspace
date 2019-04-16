@@ -92,7 +92,7 @@ class Repository
 
     public function install()
     {
-        $depth1 = getenv('GIT_DEPTH1');
+        $depth1 = getenv('GIT_FAST');
         $args = '';
         if ($depth1) {
             $args = '--depth=1';
@@ -110,6 +110,10 @@ class Repository
 
     public function updateRemotes()
     {
+        if (getenv('GIT_FAST')) {
+            return;
+        }
+
         foreach ($this->getRemotes() as $name => $remote) {
             OS::run("cd $this->directory; git remote rm $name");
             OS::run("cd $this->directory; git remote add $name $remote");
