@@ -92,7 +92,12 @@ class Repository
 
     public function install()
     {
-        $r = OS::run("cd src/; git clone ".$this->getOrigin()." ".$this->getTarget());
+        $depth1 = getenv('GIT_DEPTH1');
+        $args = '';
+        if ($depth1) {
+            $args = '--depth=1';
+        }
+        $r = OS::run("cd src/; git clone ".$args." ".$this->getOrigin()." ".$this->getTarget());
         if ($r != 0) {
             Terminal::error('Unable to clone '.$this->getOrigin()."\n");
             die();
