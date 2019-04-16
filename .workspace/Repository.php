@@ -92,28 +92,30 @@ class Repository
 
     public function install()
     {
-        $depth1 = getenv('GIT_FAST');
+        $dump = getenv('GIT_DUMP');
         $args = '';
-        if ($depth1) {
+        if ($dump) {
             $args = '--depth=1';
         }
-        $r = OS::run("cd src/; git clone ".$args." ".$this->getOrigin()." ".$this->getTarget());
-        if ($r != 0) {
-            Terminal::error('Unable to clone '.$this->getOrigin()."\n");
-            die();
+        $command = "cd src/; git clone ".$args." ".$this->getOrigin()." ".$this->getTarget();
+
+        if ($dump) {
+            echo $command."\n";
+        } else {
+            $r = OS::run($command);
+            if ($r != 0) {
+                Terminal::error('Unable to clone '.$this->getOrigin()."\n");
+                die();
+            }
+            OS::run("cd $this->directory; git remote set-branches origin '*'");
+            OS::run("cd $this->directory; git fetch");
+            $this->updateRemotes();
+            $this->setUpstream('origin');
         }
-        OS::run("cd $this->directory; git remote set-branches origin '*'");
-        OS::run("cd $this->directory; git fetch");
-        $this->updateRemotes();
-        $this->setUpstream('origin');
     }
 
     public function updateRemotes()
     {
-        if (getenv('GIT_FAST')) {
-            return;
-        }
-
         foreach ($this->getRemotes() as $name => $remote) {
             OS::run("cd $this->directory; git remote rm $name");
             OS::run("cd $this->directory; git remote add $name $remote");
