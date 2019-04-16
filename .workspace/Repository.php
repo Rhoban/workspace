@@ -92,21 +92,20 @@ class Repository
 
     public function install()
     {
-        $dump = getenv('GIT_DUMP');
+        $fast = getenv('GIT_FAST');
         $args = '';
-        if ($dump) {
+        if ($fast) {
             $args = '--depth=1';
         }
         $command = "cd src/; git clone ".$args." ".$this->getOrigin()." ".$this->getTarget();
 
-        if ($dump) {
-            echo $command."\n";
-        } else {
-            $r = OS::run($command);
-            if ($r != 0) {
-                Terminal::error('Unable to clone '.$this->getOrigin()."\n");
-                die();
-            }
+        $r = OS::run($command);
+        if ($r != 0) {
+            Terminal::error('Unable to clone '.$this->getOrigin()."\n");
+            die();
+        }
+
+        if (!$fast) {
             OS::run("cd $this->directory; git remote set-branches origin '*'");
             OS::run("cd $this->directory; git fetch");
             $this->updateRemotes();
