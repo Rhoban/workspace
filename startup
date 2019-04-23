@@ -99,8 +99,17 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
     }
 
     cmd('/referee/teamId='.$teamId);
-} else {
-    cmd('/referee/teamId=9');
+}
+else {
+    $defaultTeamId = 9;
+    $r = cmd('referee/teamId');
+    $readTeamId = intval(substr($r, strpos($r,'=')+1));
+  if ($readTeamId != $defaultTeamId) {
+    $msg = "Current team id unexpected (".$readTeamId."). Set it to ".$defaultTeamId."?";
+    if (question('TEAMID', $msg)) {
+      cmd('/referee/teamId='.$defaultTeamId);
+    }
+  }
 }
 
 $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
