@@ -100,22 +100,22 @@ class Workspace
         if (isset($this->installed[$name])) {
             return;
         }
-        $this->installed[$name] = false;
-
+        
         // Asking for install
         $install = true;
         $ask = "Do you want to install the optional $name package ?";
         if ($prefix == 'optional') {
-            $install = Prompt::ask($ask, false);
+          $install = Prompt::ask($ask, false);
         }
         if ($prefix == 'recommend') {
-            $install = Prompt::ask($ask, true);
+          $install = Prompt::ask($ask, true);
         }
-
+        
         if (!$install) {
-            Terminal::error("* Not installing $name\n");
-            return;
+          Terminal::error("* Not installing $name\n");
+          return;
         }
+        $this->installed[$name] = false;
 
         if (!is_dir($repository->getDirectory())) {
             Terminal::success("* Installing $name in $directory\n");
