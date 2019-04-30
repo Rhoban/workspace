@@ -2,12 +2,8 @@
 # coding: utf-8
 
 from subprocess import Popen, PIPE
-import os
 import sys
-import datetime
-import re
-import glob
-import time 
+import time
 
 workspace_path="~/private/recherche/robhan/workspace"
 
@@ -21,6 +17,7 @@ if len(argv) != 3 or argv[2] not in {"front", "back"}:
     print("Usage : %s <robot_name> <front/back>"%argv[0])
     sys.exit(1)
 
+robot = argv[1]
 side = argv[2]
 
 if robot=="olive":
@@ -47,25 +44,54 @@ _,_,returncode= bash_command("ping -c 1 -W 2 10.0.0.1")
 if returncode== 0:
     ip="10.0.0.1"
 
-print("Press enter to lunch init")
+print("Press enter to lunch init.")
 raw_input()
 bash_command("rhio %s init"%(ip,))
-if argv[2]=="back":
-    bash_command("rhio /moves/standup_imu_calibration/front=false"%(ip,))
 
+print("Press enter to run gyroTare.")
+print("The robot should be standing still.")
+raw_input()
+bash_command("rhio %s gyroTare"%(ip,))
+while True:
+    print("Did it work ? [n/Y]")
+    resp=raw_input().lower()
+    if not resp=="n":
+        break
+
+if argv[2]=="back":
+    bash_command("rhio %s /moves/standup_imu_calibration/front=false"%(ip,))
+
+bash_command("rhio %s stop standup_imu_calibration"%(ip,))
 bash_command("rhio %s standup_imu_calibration"%(ip,))
 
 while True:
     print("Do you want to lunch a standup ? [n/Y]")
     resp=raw_input().lower()
-    if resp in {"n", "N"}:
+    if resp in {"n"}:
+        bash_command("rhio %s stop standup_imu_calibration"%(ip,))
         break
     else:
         print("Press enter when the robot "+ side +" in on the ground again.")
         raw_input()
-        bash_command("rhio /moves/standup_imu_calibration/lunch=true"%(ip,))
+        bash_command("rhio %s /moves/standup_imu_calibration/lunch=true"%(ip,))
 
+# waits for standup_imu_calibration to generate the csv files
+time.sleep(1)
 bash_command("mkdir tmp_imu_during_standup")
 if robot!="fake":
     bash_command("scp rhoban@%s:~/env/%s/imu_trajectories.csv tmp_imu_during_standup"%(ip,robot))
+    bash_command("ssh rhoban@%s \"rm ~/env/%s/imu_trajectories.csv\""%(ip,robot))
+
     bash_command("scp rhoban@%s:~/env/%s/imu_model.csv tmp_imu_during_standup"%(ip,robot))
+    bash_command("ssh rhoban@%s \"rm ~/env/%s/imu_model.csv\""%(ip,robot))
+else:
+    bash_command("cp ../env/fake/imu_trajectories.csv tmp_imu_during_standup")
+    bash_command("rm ../env/fake/imu_trajectories.csv")
+
+    bash_command("cp ../env/fake/imu_model.csv tmp_imu_during_standup")
+    bash_command("rm ../env/fake/imu_model.csv")
+
+print("Do you want to delete the tmp folder ? [n/Y]")
+resp=raw_input().lower()
+if not resp == "n":
+    bash_command("mkdir tmp_imu_during_standup")
