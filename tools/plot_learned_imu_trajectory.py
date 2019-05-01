@@ -45,22 +45,27 @@ def compute_indices(filename, roll_or_pitch):
         f.close()
     return res
 
+tol_imu_pitch = 2
+tol_imu_roll= 2
+
 #Pitch
 trajectories= construct_list_of_pairs("imu_trajectories.csv", "pitch")
-for i in range(1, len(trajectories)):
-    plt.plot(trajectories[0], trajectories[i])
-
 model= construct_list_of_pairs("imu_model.csv", "pitch")
+model[2] = map(lambda x:tol_imu_pitch*x,model[2])
 plt.errorbar(model[0], model[1], model[2], linestyle='None', marker='o')
+for i in range(1, len(trajectories)):
+    plt.plot(trajectories[0], trajectories[i])#, linestyle='None', marker='o', markersize='1')
+
 plt.show()
 
 plt.clf()
 
 #Roll
 trajectories= construct_list_of_pairs("imu_trajectories.csv", "roll")
-for i in range(1, len(trajectories)):
-    plt.plot(trajectories[0], trajectories[i])
-
 model= construct_list_of_pairs("imu_model.csv", "roll")
-plt.errorbar(model[0], model[1], model[2], linestyle='None', marker='o')
+model[2] = map(lambda x:tol_imu_roll*x,model[2])
+plt.errorbar(model[0], model[1], model[2], linestyle='None', marker='o', markersize='1')
+for i in range(1, len(trajectories)):
+    plt.plot(trajectories[0], trajectories[i])#, linestyle='None', marker='o')
+
 plt.show()

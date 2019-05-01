@@ -51,8 +51,8 @@ bash_command("rhio %s init"%(ip,))
 print("Press enter to run gyroTare.")
 print("The robot should be standing still.")
 raw_input()
-bash_command("rhio %s gyroTare"%(ip,))
 while True:
+    bash_command("rhio %s gyroTare"%(ip,))
     print("Did it work ? [n/Y]")
     resp=raw_input().lower()
     if not resp=="n":
@@ -94,4 +94,4 @@ else:
 print("Do you want to delete the tmp folder ? [n/Y]")
 resp=raw_input().lower()
 if not resp == "n":
-    bash_command("mkdir tmp_imu_during_standup")
+    bash_command("rm -r tmp_imu_during_standup")
