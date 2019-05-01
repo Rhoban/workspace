@@ -75,7 +75,21 @@ Some symbolic links should be modified in env/fake.
     ln -sf ../default_robot/sigmaban.urdf env/fake
     ln -sf ../../../rhoban/model/Data/font.ttf env/fake
 
-    
+### Installing OpenCV with DNN support
+
+From home directory
+
+    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv.git
+    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv_contrib.git
+
+Then build opencv with contrib support
+
+     cd opencv && mkdir build && cd build
+     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
+           -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -D WITH_GTK=ON ..
+     make -j
+     sudo make install
+
 ### Installing FlyCapture dependency
 
 To use *BlackFly* cameras from *FLIR*, you have to install their software. First
