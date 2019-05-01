@@ -2,9 +2,14 @@
     "configurations": [
         {
             "name": "Linux",
-            "includePath": [ "src/**", "build_release/**" ],
+            "includePath": [
+                "src/**",
+                "build_release/**",
+                "/usr/include/python3.6m",
+                "${workspaceFolder}/src/rhoban/model",
+                "${workspaceFolder}/devel_release/.private/rbdl/include"
+            ],
             "intelliSenseMode": "clang-x64",
-            "defines": ["VISION_COMPONENT"],
             "cStandard": "c11",
             "cppStandard": "c++17",
             "browse": {}
