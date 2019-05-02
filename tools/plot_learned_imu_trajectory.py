@@ -52,7 +52,7 @@ tol_imu_roll= 2
 trajectories= construct_list_of_pairs("imu_trajectories.csv", "pitch")
 model= construct_list_of_pairs("imu_model.csv", "pitch")
 model[2] = map(lambda x:tol_imu_pitch*x,model[2])
-plt.errorbar(model[0], model[1], model[2], linestyle='None', marker='o')
+plt.errorbar(model[0], model[1], model[2], linestyle='None')
 for i in range(1, len(trajectories)):
     plt.plot(trajectories[0], trajectories[i])#, linestyle='None', marker='o', markersize='1')
 
@@ -64,7 +64,7 @@ plt.clf()
 trajectories= construct_list_of_pairs("imu_trajectories.csv", "roll")
 model= construct_list_of_pairs("imu_model.csv", "roll")
 model[2] = map(lambda x:tol_imu_roll*x,model[2])
-plt.errorbar(model[0], model[1], model[2], linestyle='None', marker='o', markersize='1')
+plt.errorbar(model[0], model[1], model[2], linestyle='None')
 for i in range(1, len(trajectories)):
     plt.plot(trajectories[0], trajectories[i])#, linestyle='None', marker='o')
 

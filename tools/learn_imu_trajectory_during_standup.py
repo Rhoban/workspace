@@ -90,8 +90,3 @@ else:
 
     bash_command("cp ../env/fake/imu_model.csv tmp_imu_during_standup")
     bash_command("rm ../env/fake/imu_model.csv")
-
-print("Do you want to delete the tmp folder ? [n/Y]")
-resp=raw_input().lower()
-if not resp == "n":
-    bash_command("rm -r tmp_imu_during_standup")
