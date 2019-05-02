@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php
 
+setlocale(LC_NUMERIC, "en_US.UTF-8");
+
 // Robots roles
 $roles = [
     'olive' => 'B',
@@ -18,11 +20,7 @@ $roles = [
 // 3: ID of field (for visualCompass)
 $fields = [
     // Fields
-    'a' => [0, -180, 'r', 0],
-    'b' => [0, -180, 'r', 0],
-    'c' => [0, -180, 'r', 0],
-    'd' => [0, -180, 'r', 0],
-    'e' => [0, -180, 'r', 0],
+    'g' => [0, -180, 'l', 0]
 ];
 
 $host = '10.0.0.1';
