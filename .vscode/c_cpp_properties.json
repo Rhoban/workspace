@@ -6,7 +6,8 @@
                 "src/**",
                 "build_release/**",
                 "devel_release/**",
-                "/usr/include/python3.6m"
+                "/usr/include/python3.6m",
+                "${workspaceFolder}/src/rhoban/geometry/include"
             ],
             "intelliSenseMode": "clang-x64",
             "defines": [
