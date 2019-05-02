@@ -25,7 +25,8 @@ First of all, you will need to install required packages:
         php php-cli php-xml libopencv-dev libv4l-dev gnuplot5-qt \
         python-pip python-empy python-setuptools python-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
-		libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev
+		    libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
+        qt5-default qtmultimedia5-dev libqt5webkit5
         
 ### Installing catkin
 

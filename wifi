@@ -19,7 +19,7 @@ function cmd($cmd) {
 $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
-$ESSID = 'HL_FIELD_'.strtoupper($field).'_5G';
+$ESSID = 'Humanoid';
 $teamId = $result[1];
 
 //Retrieve robot hostname
@@ -67,7 +67,7 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 `ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.0.0`;
 
 // Connecting to WiFi
-`ssh rhoban@$remote "wpa_passphrase $ESSID humanoid2018 > /tmp/wpa.conf"`;
+`ssh rhoban@$remote "wpa_passphrase $ESSID Humanoid > /tmp/wpa.conf"`;
 `ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
 
 // Open Iran
@@ -81,7 +81,7 @@ sleep(3);
 
 //Check to ping to router twice
 echo "Check wifi by pinging router:\n";
-$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.1.100`;
+$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.0.2`;
 
 if (strpos($checkPing, '2 received, 0% packet loss')) {
     echo "\e[1mOK. Network is ready.\e[m\n";
