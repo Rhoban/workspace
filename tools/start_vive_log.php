@@ -28,7 +28,7 @@ msg('AUTO', "Forbiding robot to track the ball");
 cmd('/moves/head/trackingPeriod=-1');
 
 msg('AUTO', "Reducing head max speed");
-cmd('/moves/head/maxSpeed=200');
+cmd('/moves/head/maxSpeed=100');
 
 msg('AUTO', "Reducing framerate to 25 FPS");
 cmd('/Vision/source/FrameRate/absValue=25');
