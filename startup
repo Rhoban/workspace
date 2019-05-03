@@ -8,8 +8,8 @@ $roles = [
     'olive' => 'B',
     'nova' => 'C',
     'arya' => 'B',
-    'rush' => 'A',
-    'tom' => 'D'
+    'rush' => 'B',
+    'tom' => 'A'
 ];
 
 // Compass offsets and field settings
