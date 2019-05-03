@@ -1,16 +1,6 @@
 #!/usr/bin/php
 <?php
 
-/**
- * XXX TODO:
- * 
- * - Quand on n'a pas d'infos du referee: proposer de re-vérifier sans relancer
- *   le script
- * 
- * - Quand il n'y a qu'un choix (genre qu'un terrain), ne pas proposer ?
- * 
- */
-
 setlocale(LC_NUMERIC, "en_US.UTF-8");
 
 // Robots roles
