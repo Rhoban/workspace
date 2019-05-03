@@ -6,11 +6,11 @@
 
 ## 2) Toujours être dans le virtualenv
 
-En mettant:
+En mettant par exemple:
 
-source $HOME/python3/bin/activate
+  source $HOME/python3/bin/activate
 
-Dans le `.bashrc` par exemple
+Dans le `.bashrc` par exemple. Ne pas oublier de relancer bash après.
 
 ## 3) Installer catkin et pybullet dans le virtualenv
 
