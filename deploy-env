@@ -2,6 +2,8 @@
 
 MAX_OLD_ENVS=5
 CONFIRMATION_SIZE=1000000 #Confirmation required to suppress environments larger than this
+FORMAT_RED="\e[31m"
+FORMAT_NONE="\e[m"
 
 confirm() {
     # call with a prompt string or use a default
@@ -49,10 +51,8 @@ else
             if [ $E_SIZE -gt $CONFIRMATION_SIZE ]; then
                 HUMAN_SIZE=( $(ssh rhoban@$remote du -sh $E) )
                 HUMAN_SIZE=${HUMAN_SIZE[0]}
-                echo "$E contains $HUMAN_SIZE of data, do you really want to remove it?"
-                if ! $(confirm) ; then
-                    continue
-                fi
+                echo -e "${FORMAT_RED}WARNING: $E contains $HUMAN_SIZE of data, not removing it${FORMAT_NONE}"
+                continue
             fi
             echo "* Removing old environment $E with size ${E_SIZE}"
             ssh rhoban@$remote rm -rf $E
