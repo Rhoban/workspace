@@ -1,13 +1,15 @@
 #!/usr/bin/php
 <?php
 
+setlocale(LC_NUMERIC, "en_US.UTF-8");
+
 // Robots roles
 $roles = [
     'olive' => 'B',
     'nova' => 'C',
     'arya' => 'B',
-    'rush' => 'A',
-    'tom' => 'D'
+    'rush' => 'B',
+    'tom' => 'A'
 ];
 
 // Compass offsets and field settings
@@ -18,11 +20,7 @@ $roles = [
 // 3: ID of field (for visualCompass)
 $fields = [
     // Fields
-    'a' => [0, -180, 'r', 0],
-    'b' => [0, -180, 'r', 0],
-    'c' => [0, -180, 'r', 0],
-    'd' => [0, -180, 'r', 0],
-    'e' => [0, -180, 'r', 0],
+    'g' => [0, -180, 'l', 0]
 ];
 
 $host = '10.0.0.1';
@@ -299,7 +297,7 @@ if ($grassDirection == $side) {
 }
 cmd('reloadStrategy');
 
-$fieldInverted = $side == 'l';
+$fieldInverted = ($side == 'l') ? 'true' : 'false';
 cmd('/teamplay/isFieldInverted='.$fieldInverted);
 
 
