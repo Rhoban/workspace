@@ -22,7 +22,7 @@ packages required.
 First of all, you will need to install required packages:
 
     sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev\
-        php php-cli php-xml libopencv-dev libv4l-dev gnuplot5-qt \
+        php php-cli php-xml libv4l-dev gnuplot5-qt \
         python-pip python-empy python-setuptools python-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
 		    libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
