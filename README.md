@@ -223,3 +223,26 @@ By default, this will use GitHub, you can also use complete repo names
 Here, a full repository name is used, and the dependency is tagged `optional`. This means that
 the user will be asked if he wants to install the dependency. You can also use `recommend`, that
 would do the same, except that the default choice will be yes instead of no.
+
+### Working on robot logs
+
+All of this commands have to be issued while located in the `env/fake` folder.
+
+In order to work with a specific log, use:
+
+   ./prepare.py <path_to_log>
+
+It is possible to extract ground truth based on multiple logs with HTC Vive tracker
+
+   ./extract_vive_patches.py <log1> <log2> ...
+
+In this case, all the data will be placed in the folder `vive_data`. It is
+possible to collect them in compressed `tar.gz` files to send them on distant
+servers faster:
+
+  ./compress_vive_data.sh
+
+This command will use the data in the folder `vive_data`. The patches used for
+classification will be stored in file `classification_data.tar.gz` and the
+images with the position of the objects will be stored in
+`attention_data.tar.gz`.
