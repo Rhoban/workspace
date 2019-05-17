@@ -228,17 +228,31 @@ would do the same, except that the default choice will be yes instead of no.
 
 All of this commands have to be issued while located in the `env/fake` folder.
 
+#### Preparing a log environment
+
 In order to work with a specific log, use:
 
    ./prepare.py <path_to_log>
 
+This command also set the serial_number of the tracker of the robot if available
+in the `metadata.json` file.
+
+#### Extracting ground truth from Vive
+
 It is possible to extract ground truth based on multiple logs with HTC Vive tracker
 
+   ln -sf ../common/vive_roi_extractor.json vision_config.json
    ./extract_vive_patches.py <log1> <log2> ...
 
 In this case, all the data will be placed in the folder `vive_data`. It is
-possible to collect them in compressed `tar.gz` files to send them on distant
-servers faster:
+important not to rewind the video (using key 'p') or update it stationary (using
+key 'u') while you extracting log data, because it has a risk of duplicating data.
+If you want to investigate on vive issues
+
+#### Compressing vive data
+
+It is possible to collect them in compressed `tar.gz` files to send them on
+distant servers faster:
 
   ./compress_vive_data.sh
 
