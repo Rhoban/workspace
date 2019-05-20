@@ -5,7 +5,8 @@
     "**/bower_components": true,
     "**/*.o": true,
     "build_*": true,
-    "devel_*": true
+    "devel_*": true,
+    "logs_*": true
   },
   "catch2TestExplorer.executables": [
     "./devel_debug/.private/**"
@@ -65,7 +66,8 @@
     "string_view": "cpp",
     "algorithm": "cpp",
     "unordered_set": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "forward_list": "cpp"
   },
   // "editor.formatOnSave": true,
   // "editor.formatOnType": true,
