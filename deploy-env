@@ -64,8 +64,7 @@ else
     CHG=`ssh rhoban@$remote stat -c %y ./env/`
 
     if [ "$CHG" != "" ]; then
-        FMT="+%d_%m_%Y__%H_%M_%S"
-        DATE=`date -d "$CHG" "+%d_%m_%Y__%H_%M_%S"`
+        DATE=`date -d "$CHG" "+%Y_%m_%d__%H_%M_%S"`
         OLDNAME="backup_env/$DATE"
         echo "* Backuping old env to $OLDNAME"
         `ssh rhoban@$remote mv env $OLDNAME`
