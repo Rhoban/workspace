@@ -6,7 +6,12 @@
     "**/*.o": true,
     "build_*": true,
     "devel_*": true,
-    "logs_*": true
+    "logs_*": true,
+    ".vscode/ipch/*": true,
+    "**/.git": true,
+    "vision_logs/*": true,
+    "vive_logs/*": true,
+    ".deploy/*": true
   },
   "catch2TestExplorer.executables": [
     "./devel_debug/.private/**"
