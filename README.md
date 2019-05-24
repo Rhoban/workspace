@@ -260,3 +260,20 @@ This command will use the data in the folder `vive_data`. The patches used for
 classification will be stored in file `classification_data.tar.gz` and the
 images with the position of the objects will be stored in
 `attention_data.tar.gz`.
+
+### Using PyBullet viewer
+
+The code allowing to display the robot with `pybullet` can be cloned outside of workspace:
+
+  git clone git@github.com:rhoban/sigmaban_pybullet.git
+
+It requires some dependencies
+
+  sudo apt install python3-pip
+  sudo pip3 install -U zmq pybullet numpy protobuf
+
+In order to use it, you have to enable publishing of the model using RhIO: set `model/publish=true`
+
+Then you can launch the viewer from the sigmaban_pybullet folder
+
+  python3 client.py
