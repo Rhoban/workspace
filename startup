@@ -142,6 +142,7 @@ cmd('init');
 msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
+cmd('/moves/walk/armsState=2');
 
 do {
   msg('TARE', 'Hold me in the air for the tare and press enter');
