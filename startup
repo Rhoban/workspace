@@ -177,6 +177,8 @@ while (true) {
     if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
       break;
     }
+  } else {
+    break;
   }
 }
 
