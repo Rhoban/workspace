@@ -5,11 +5,11 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 
 // Robots roles
 $roles = [
-    'olive' => 'B',
-    'nova' => 'C',
-    'arya' => 'B',
-    'rush' => 'B',
-    'tom' => 'A'
+  'olive' => 'B',
+  'nova' => 'B',
+  'arya' => 'A',
+  'rush' => 'D',
+  'tom' => 'A'
 ];
 
 // Compass offsets and field settings
@@ -19,94 +19,99 @@ $roles = [
 // 2: grass direction (left or right according to manutention table)
 // 3: ID of field (for visualCompass)
 $fields = [
-    // Fields
-    'g' => [0, -180, 'l', 0]
+  // Fields
+  'g' => [0, -180, 'l', 0]
 ];
 
 $host = '10.0.0.1';
 if (count($argv) >= 2) {
-    $host = $argv[1];
+  $host = $argv[1];
 }
 
-function msg($phase, $msg) {
-    echo "\n\e[1m$phase: $msg\e[m\n";
+function msg($phase, $msg)
+{
+  echo "\n\e[1m$phase: $msg\e[m\n";
 }
-function prompt($phase, $msg, array $possibilities) {
-    $pos = implode(', ', $possibilities);
-    while (true) {
-        echo "\n\e[1m$phase: $msg\e[m (".$pos.")\n";
-        echo "> ";
-        flush();
-        $m = strtolower(trim(readline()));
-        if (in_array($m, $possibilities)) {
-            return $m;
-        }
-        echo "\e[1;31mYou should answer one of the following: ".$pos."\e[m\n";
+function prompt($phase, $msg, array $possibilities)
+{
+  $pos = implode(', ', $possibilities);
+  while (true) {
+    echo "\n\e[1m$phase: $msg\e[m (" . $pos . ")\n";
+    echo "> ";
+    flush();
+    $m = strtolower(trim(readline()));
+    if (in_array($m, $possibilities)) {
+      return $m;
     }
+    echo "\e[1;31mYou should answer one of the following: " . $pos . "\e[m\n";
+  }
 }
-function question($phrase, $msg) {
-    return prompt($phrase, $msg, ['y', 'n']) == 'y';
+function question($phrase, $msg)
+{
+  return prompt($phrase, $msg, ['y', 'n']) == 'y';
 }
-function cmd($cmd, $display = true) {
-    global $host;
-    $result = trim(`rhio $host $cmd`);
-    if ($display) echo "$result\n";
-    return $result;
+function cmd($cmd, $display = true)
+{
+  global $host;
+  $result = trim(`rhio $host $cmd`);
+  if ($display) echo "$result\n";
+  return $result;
 }
-function isHandled() {
-    $r = cmd('/decision/handled');
+function isHandled()
+{
+  $r = cmd('/decision/handled');
 
-    return $r == '/decision/handled=true';
+  return $r == '/decision/handled=true';
 }
 
-function isVisionOk() {
-    $r = explode('=',cmd('/Vision/lastUpdate'));
-    if (count($r) > 1) {
-      $r = $r[1];
-    } else {
-      echo "Failed to read vision last update";
-      return false;
-    }
-    // Vision is ok if last update is more recent than 200 ms
-    return floatval($r) < 200;
+function isVisionOk()
+{
+  $r = explode('=', cmd('/Vision/lastUpdate'));
+  if (count($r) > 1) {
+    $r = $r[1];
+  } else {
+    echo "Failed to read vision last update";
+    return false;
+  }
+  // Vision is ok if last update is more recent than 200 ms
+  return floatval($r) < 200;
 }
 
 $hostname = explode('=', cmd('/server/hostname', false));
 if (count($hostname) > 1) $hostname = $hostname[1];
 else $hostname = '?';
 
-msg('STARTUP', 'Robot is: '.$hostname);
+msg('STARTUP', 'Robot is: ' . $hostname);
 
 while (true) {
-    msg('CHECK', 'Checking that all devices are present');
-    $r = cmd('rhalCheck');
-    if (strpos($r, 'All devices are present') === false) {
-        if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
-            break;
-        }
-    } else {
-        break;
+  msg('CHECK', 'Checking that all devices are present');
+  $r = cmd('rhalCheck');
+  if (strpos($r, 'All devices are present') === false) {
+    if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
+      break;
     }
+  } else {
+    break;
+  }
 }
 
 if (question('DROPIN', 'Is it a drop-in game?')) {
-    $teamLetter = prompt('DROPIN-ID', 'What team are we ?', ['a', 'b']);
-    if ($teamLetter == 'a') {
-        $teamId = 31;
-    } else {
-        $teamId = 32;
-    }
+  $teamLetter = prompt('DROPIN-ID', 'What team are we ?', ['a', 'b']);
+  if ($teamLetter == 'a') {
+    $teamId = 31;
+  } else {
+    $teamId = 32;
+  }
 
-    cmd('/referee/teamId='.$teamId);
-}
-else {
-    $defaultTeamId = 9;
-    $r = cmd('referee/teamId');
-    $readTeamId = intval(substr($r, strpos($r,'=')+1));
+  cmd('/referee/teamId=' . $teamId);
+} else {
+  $defaultTeamId = 9;
+  $r = cmd('referee/teamId');
+  $readTeamId = intval(substr($r, strpos($r, '=') + 1));
   if ($readTeamId != $defaultTeamId) {
-    $msg = "Current team id unexpected (".$readTeamId."). Set it to ".$defaultTeamId."?";
+    $msg = "Current team id unexpected (" . $readTeamId . "). Set it to " . $defaultTeamId . "?";
     if (question('TEAMID', $msg)) {
-      cmd('/referee/teamId='.$defaultTeamId);
+      cmd('/referee/teamId=' . $defaultTeamId);
     }
   }
 }
@@ -114,20 +119,20 @@ else {
 $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 
 while (true) {
-    if (question('WIFI', 'Do you want to run the wifi script?')) {
-        passthru("./wifi ".strtoupper($field)." $host");
-    }
+  if (question('WIFI', 'Do you want to run the wifi script?')) {
+    passthru("./wifi " . strtoupper($field) . " $host");
+  }
 
-    msg('CHECK', 'Checking that there is info from the referee');
-    $r = cmd('infoPlaying');
-    preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
-    if ($match && (float)($match[1]) > 5) {
-        if (question("\e[31mERROR", 'No info from the referee, continue anyway?')) {
-            break;
-        }
-    } else {
-        break;
+  msg('CHECK', 'Checking that there is info from the referee');
+  $r = cmd('infoPlaying');
+  preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
+  if ($match && (float)($match[1]) > 5) {
+    if (question("\e[31mERROR", 'No info from the referee, continue anyway?')) {
+      break;
     }
+  } else {
+    break;
+  }
 }
 
 msg('INIT', 'Press enter to run init');
@@ -137,40 +142,45 @@ cmd('init');
 msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
+cmd('/moves/walk/armsState=2');
 
 do {
-    msg('TARE', 'Hold me in the air for the tare and press enter');
-    readline();
-    $result = cmd('tare');
-    $error = (strstr(strtolower($result), 'error') !== false);
+  msg('TARE', 'Hold me in the air for the tare and press enter');
+  readline();
+  $result = cmd('tare');
+  $error = (strstr(strtolower($result), 'error') !== false);
 } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
 
 while (true) {
-    do {
-        msg('GYROTARE', 'Put me on the floor now and press enter');
-        readline();
-        $result = cmd('rhalGyroTare');
-        $error = (strstr(strtolower($result), 'error') !== false);
-    } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+  do {
+    msg('GYROTARE', 'Put me on the floor now and press enter');
+    readline();
+    $result = cmd('rhalGyroTare');
+    $error = (strstr(strtolower($result), 'error') !== false);
+  } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
 
 
-    cmd('rhalSaveConf rhal.json');
+  cmd('rhalSaveConf rhal.json');
 
-    msg('CHECK', 'Checking the pressure');
-    if (isHandled()) {
-        if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
-            break;
-        }
-    } else {
-        break;
+  msg('CHECK', 'Checking the pressure');
+  if (isHandled()) {
+    if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
+      break;
     }
+  } else {
+    break;
+  }
+}
 
-    msg('CHECK', 'Checking vision status');
-    if (!isVisionOk()) {
-        if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
-            break;
-        }
+while (true) {
+  msg('CHECK', 'Checking vision status');
+  if (!isVisionOk()) {
+    if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
+      break;
     }
+  } else {
+    break;
+  }
 }
 
 $fieldData = "
@@ -192,83 +202,83 @@ $fieldData = "
 ";
 
 $positions = array(
-    'A' => [
-        -0.75, 3.1, -90,  // Start pos
-        -0.75, 1.5,       // Init pos
-        2.5, 1.0, 0,     // Patrol1
-        -1.50, 1.0, 180,  // Patrol2
-        1.50
-    ],
-    'B' => [
-        -0.75, -3.1, 90,
-        -1.5, 0.0,
-        2.5, -1.0, 0,
-        -1.5, -1.0, 180,
-        1.0
-    ],
-    'C' => [
-        -2.5, -3.1, 90,
-        -1.5, -1.5,
-        -2.5,  1.5, 90,
-        -2.5, -1.5, -90,
-        2.00
-    ],
-    'D' => [
-        -3.5, 3.1, -90,
-        -4.0, 0,
-        0, 0, 0,
-        0, 0, 0,
-        2.00
-    ],
+  'A' => [
+    -0.75, 3.1, -90,  // Start pos
+    -0.75, 1.5,       // Init pos
+    2.5, 1.0, 0,     // Patrol1
+    -1.50, 1.0, 180,  // Patrol2
+    1.50
+  ],
+  'B' => [
+    -0.75, -3.1, 90,
+    -1.5, 0.0,
+    2.5, -1.0, 0,
+    -1.5, -1.0, 180,
+    1.0
+  ],
+  'C' => [
+    -2.5, -3.1, 90,
+    -1.5, -1.5,
+    -2.5,  1.5, 90,
+    -2.5, -1.5, -90,
+    2.00
+  ],
+  'D' => [
+    -3.5, 3.1, -90,
+    -4.0, 0,
+    0, 0, 0,
+    0, 0, 0,
+    2.00
+  ],
 );
 
 if (isset($roles[$hostname])) {
-    $fieldData = "\e[42;30;1m$fieldData\e[m";
-    $position = $roles[$hostname];
-    $fieldData = str_replace("$position", "\e[37m$position\e[42;30;1m", $fieldData);
-    echo $fieldData;
-    msg('ROLE', "Automatically assigning $hostname to role $position");
+  $fieldData = "\e[42;30;1m$fieldData\e[m";
+  $position = $roles[$hostname];
+  $fieldData = str_replace("$position", "\e[37m$position\e[42;30;1m", $fieldData);
+  echo $fieldData;
+  msg('ROLE', "Automatically assigning $hostname to role $position");
 } else {
-    $fieldData = "\e[42;37;1m$fieldData\e[m";
-    echo $fieldData;
-    $position = strtoupper(prompt('ROLE', 'Unknown robot ('.$hostname.'), what is my role ?', ['a', 'b', 'c', 'd']));
+  $fieldData = "\e[42;37;1m$fieldData\e[m";
+  echo $fieldData;
+  $position = strtoupper(prompt('ROLE', 'Unknown robot (' . $hostname . '), what is my role ?', ['a', 'b', 'c', 'd']));
 }
 
 if ($position == 'D') {
-    cmd('/moves/robocup/goalKeeper=1');
+  cmd('/moves/robocup/goalKeeper=1');
 } else {
-    cmd('/moves/robocup/goalKeeper=0');
+  cmd('/moves/robocup/goalKeeper=0');
 }
 cmd('/moves/robocup/autoKickOff=1');
 
 if ($position == 'B') {
-    cmd('/moves/robocup/freeKicker=1');
+  cmd('/moves/robocup/freeKicker=1');
 } else {
-    cmd('/moves/robocup/freeKicker=0');
+  cmd('/moves/robocup/freeKicker=0');
 }
 
 $config = "";
 $c = $positions[$position];
-$config .= '/moves/robocup/autoStartX='.$c[0]."\n";
-$config .= '/moves/robocup/autoStartY='.$c[1]."\n";
-$config .= '/moves/robocup/autoStartAzimuth='.$c[2]."\n";
-$config .= '/moves/robocup/autoTargetX='.$c[3]."\n";
-$config .= '/moves/robocup/autoTargetY='.$c[4]."\n";
+$config .= '/moves/robocup/autoStartX=' . $c[0] . "\n";
+$config .= '/moves/robocup/autoStartY=' . $c[1] . "\n";
+$config .= '/moves/robocup/autoStartAzimuth=' . $c[2] . "\n";
+$config .= '/moves/robocup/autoTargetX=' . $c[3] . "\n";
+$config .= '/moves/robocup/autoTargetY=' . $c[4] . "\n";
 // Patrol
-$config .= '/moves/search/P1X='.$c[5]."\n";
-$config .= '/moves/search/P1Y='.$c[6]."\n";
-$config .= '/moves/search/P1Azimuth='.$c[7]."\n";
-$config .= '/moves/search/P2X='.$c[8]."\n";
-$config .= '/moves/search/P2Y='.$c[9]."\n";
-$config .= '/moves/search/P2Azimuth='.$c[10]."\n";
+$config .= '/moves/search/P1X=' . $c[5] . "\n";
+$config .= '/moves/search/P1Y=' . $c[6] . "\n";
+$config .= '/moves/search/P1Azimuth=' . $c[7] . "\n";
+$config .= '/moves/search/P2X=' . $c[8] . "\n";
+$config .= '/moves/search/P2Y=' . $c[9] . "\n";
+$config .= '/moves/search/P2Azimuth=' . $c[10] . "\n";
 // Begin Y target
-$config .= '/moves/search/beginY=1.50'."\n";
-$config .= '/moves/search/beginY=-1.50'."\n";// Duplicated line with opposite signs
-$config .= '/teamplay/teamRadius='.$c[11]."\n";
-$config .= '/moves/robocup/freeKickX=-0.5'."\n";
-$config .= '/moves/robocup/freeKickY=0'."\n";
-$config .= '/moves/placer/directMode=true'."\n";
-$config .= '/teamplay/aggressivity=0.75'."\n";
+$config .= '/moves/search/beginY=1.50' . "\n";
+$config .= '/moves/search/beginY=-1.50' . "\n"; // Duplicated line with opposite signs
+$config .= '/teamplay/teamRadius=' . $c[11] . "\n";
+$config .= '/moves/robocup/freeKickX=-0.5' . "\n";
+$config .= '/moves/robocup/freeKickY=0' . "\n";
+$config .= '/moves/placer/directMode=true' . "\n";
+$config .= '/teamplay/aggressivity=0.75' . "\n";
 $config .= "exit\n";
 $tmp = tempnam(sys_get_temp_dir(), 'startup');
 file_put_contents($tmp, $config);
@@ -278,27 +288,27 @@ unlink($tmp);
 //Fix it later
 $side = '';
 while (!$side) {
-    $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
+  $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
 }
 $compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
-echo("Setting compass offset to $compassOffset");
-cmd('/localisation/field/CompassObservation/offset='.$compassOffset);
-cmd('/Vision/visualCompass/fieldNumber='.$fields[$field][3]);
+echo ("Setting compass offset to $compassOffset");
+cmd('/localisation/field/CompassObservation/offset=' . $compassOffset);
+cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
 
 $grassDirection = $fields[$field][2];
 if ($grassDirection == $side) {
-    msg('GRASS', "We are playing with the grass, loading strategy");
-    cmd('/moves/q_kick_controler/strategyFile=kickStrategy_with_grass.json');
-    cmd('/strategy/grassOffset=180');
+  msg('GRASS', "We are playing with the grass, loading strategy");
+  cmd('/moves/q_kick_controler/strategyFile=kickStrategy_with_grass.json');
+  cmd('/strategy/grassOffset=180');
 } else {
-    msg('GRASS', "We are playing against the grass, loading strategy");
-    cmd('/moves/q_kick_controler/strategyFile=kickStrategy_counter_grass.json');
-    cmd('/strategy/grassOffset=0');
+  msg('GRASS', "We are playing against the grass, loading strategy");
+  cmd('/moves/q_kick_controler/strategyFile=kickStrategy_counter_grass.json');
+  cmd('/strategy/grassOffset=0');
 }
 cmd('reloadStrategy');
 
 $fieldInverted = ($side == 'l') ? 'true' : 'false';
-cmd('/teamplay/isFieldInverted='.$fieldInverted);
+cmd('/teamplay/isFieldInverted=' . $fieldInverted);
 
 
 msg('DISK', "Checking robot space");
