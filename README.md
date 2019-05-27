@@ -265,15 +265,38 @@ images with the position of the objects will be stored in
 
 The code allowing to display the robot with `pybullet` can be cloned outside of workspace:
 
-  git clone git@github.com:rhoban/sigmaban_pybullet.git
+    git clone git@github.com:rhoban/sigmaban_pybullet.git
 
 It requires some dependencies
 
-  sudo apt install python3-pip
-  sudo pip3 install -U zmq pybullet numpy protobuf
+    sudo apt install python3-pip
+    sudo pip3 install -U zmq pybullet numpy protobuf
 
 In order to use it, you have to enable publishing of the model using RhIO: set `model/publish=true`
 
 Then you can launch the viewer from the sigmaban_pybullet folder
 
-  python3 client.py
+    python3 client.py
+
+### Using rhoban_monitoring tool
+
+The rhoban monitoring tool can be installed as following:
+
+    ./workspace install rhoban/qt_monitoring
+
+In order to view a game in progress, move to the folder where you want to write
+the log and use the following command:
+
+    rhoban_monitoring -l
+
+A folder with a name based on current date will be created. You can replay it by
+moving in the folder and running:
+
+    rhoban_monitoring -r
+
+For custom execution and extended options (name of the robots, cameras, etc...),
+you can edit a json configuration file (examples available in the
+`qt_monitoring` repository) and launch the element as follows:
+
+    rhoban_monitoring -m manager.json
+
