@@ -21,10 +21,16 @@ cmd('walk');
 // logging image in this case
 requestTare();
 
+// Since we log robot in field, gyroTare might be useful
+requestGyroTare();
+
 $logDuration = askDouble("What is the required duration for log? [s]");
 
-msg('AUTO', "Forbiding robot to track the ball");
-cmd('/moves/head/trackingPeriod=-1');
+msg('AUTO', "Forcing the robot to scan for the ball");
+cmd('/moves/head/forceScanBall=1');
+
+msg('AUTO', "Slowing down scan speed");
+cmd('/moves/head/maxSpeed=90');
 
 msg('AUTO', "Reducing framerate to 25 FPS");
 cmd('/Vision/source/FrameRate/absValue=25');
