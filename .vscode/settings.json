@@ -11,7 +11,8 @@
     "**/.git": true,
     "vision_logs/*": true,
     "vive_logs/*": true,
-    ".deploy/*": true
+    ".deploy/*": true,
+    "monitoring/*": true
   },
   "catch2TestExplorer.executables": [
     "./devel_debug/.private/**"
@@ -74,7 +75,8 @@
     "valarray": "cpp",
     "forward_list": "cpp"
   },
-  // "editor.formatOnSave": true,
+  "editor.formatOnSave": true,
   // "editor.formatOnType": true,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "C_Cpp.errorSquiggles": "Enabled"
 }
