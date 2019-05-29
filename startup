@@ -291,9 +291,9 @@ while (!$side) {
   $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
 }
 $compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
-echo ("Setting compass offset to $compassOffset");
-cmd('/localisation/field/CompassObservation/offset=' . $compassOffset);
-cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
+// echo ("Setting compass offset to $compassOffset");
+// cmd('/localisation/field/CompassObservation/offset=' . $compassOffset);
+// cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
 
 $grassDirection = $fields[$field][2];
 if ($grassDirection == $side) {
