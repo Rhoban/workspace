@@ -298,11 +298,11 @@ cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
 $grassDirection = $fields[$field][2];
 if ($grassDirection == $side) {
   msg('GRASS', "We are playing with the grass, loading strategy");
-  cmd('/moves/q_kick_controler/strategyFile=kickStrategy_with_grass.json');
+  cmd('/moves/mc_kick_controler/strategyFile=kickStrategy_with_grass.json');
   cmd('/strategy/grassOffset=180');
 } else {
   msg('GRASS', "We are playing against the grass, loading strategy");
-  cmd('/moves/q_kick_controler/strategyFile=kickStrategy_counter_grass.json');
+  cmd('/moves/mc_kick_controler/strategyFile=kickStrategy_counter_grass.json');
   cmd('/strategy/grassOffset=0');
 }
 cmd('reloadStrategy');
