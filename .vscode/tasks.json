@@ -7,29 +7,45 @@
       "label": "Build",
       "type": "shell",
       "command": "./workspace build kid_size",
-      "problemMatcher": "$gcc",
+      "problemMatcher": {
+        "base": "$gcc",
+        "fileLocation": "absolute"
+      },
       "group": {
         "kind": "build",
         "isDefault": true
       }
     },
     {
-      "label": "Build (novision)",
+      "label": "Build (behavior)",
       "type": "shell",
-      "command": "./workspace build:novision kid_size",
-      "problemMatcher": "$gcc"
+      "command": "./workspace build behavior_viewer",
+      "problemMatcher": {
+        "base": "$gcc",
+        "fileLocation": "absolute"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "Build (debug)",
       "type": "shell",
       "command": "./workspace build:debug kid_size",
-      "problemMatcher": "$gcc"
+      "problemMatcher": {
+        "base": "$gcc",
+        "fileLocation": "absolute"
+      },
     },
     {
       "label": "Build (monitoring)",
       "type": "shell",
-      "command": "./workspace build monitoring_robocup",
-      "problemMatcher": "$gcc"
+      "command": "./workspace build qt_monitoring",
+      "problemMatcher": {
+        "base": "$gcc",
+        "fileLocation": "absolute"
+      }
     },
     {
       "label": "Status",
