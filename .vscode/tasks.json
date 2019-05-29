@@ -17,6 +17,15 @@
       }
     },
     {
+      "label": "Build (all)",
+      "type": "shell",
+      "command": "./workspace build",
+      "problemMatcher": {
+        "base": "$gcc",
+        "fileLocation": "absolute"
+      }
+    },
+    {
       "label": "Build (behavior)",
       "type": "shell",
       "command": "./workspace build behavior_viewer",
