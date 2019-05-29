@@ -1,15 +1,22 @@
 #!/bin/sh
 
 # No arguments : creates folder 'vision_logs' in current directory
-# Argument 1 : path of directory where 'logs' are downloaded
+# Argument 1 : ip address of the robot containing the logs
+# Argument 2 : dst folder for logs
 
-HOST="rhoban@10.0.0.1"
+HOST="10.0.0.1"
 
 OUTPUT_DIR="vision_logs"
 if [ $# -gt 0 ]
 then
-    OUTPUT_DIR=$1
+    HOST=$1
 fi
+if [ $# -gt 1 ]
+then
+    OUTPUT_DIR=$2
+fi
+
+HOST="rhoban@${HOST}"
 
 # Retrieving robot hostname
 ROBOT=$(ssh $HOST hostname)
