@@ -23,10 +23,6 @@
       "problemMatcher": {
         "base": "$gcc",
         "fileLocation": "absolute"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
       }
     },
     {
