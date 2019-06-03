@@ -142,7 +142,7 @@ cmd('init');
 msg('INIT', 'Press enter to run the walk');
 readline();
 cmd('walk');
-cmd('/moves/walk/armsState=2');
+cmd('/moves/arms/armsState=2');
 
 do {
   msg('TARE', 'Hold me in the air for the tare and press enter');
@@ -291,18 +291,18 @@ while (!$side) {
   $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
 }
 $compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
-echo ("Setting compass offset to $compassOffset");
-cmd('/localisation/field/CompassObservation/offset=' . $compassOffset);
-cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
+// echo ("Setting compass offset to $compassOffset");
+// cmd('/localisation/field/CompassObservation/offset=' . $compassOffset);
+// cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
 
 $grassDirection = $fields[$field][2];
 if ($grassDirection == $side) {
   msg('GRASS', "We are playing with the grass, loading strategy");
-  cmd('/moves/q_kick_controler/strategyFile=kickStrategy_with_grass.json');
+  cmd('/moves/mc_kick_controler/strategyFile=kickStrategy_with_grass.json');
   cmd('/strategy/grassOffset=180');
 } else {
   msg('GRASS', "We are playing against the grass, loading strategy");
-  cmd('/moves/q_kick_controler/strategyFile=kickStrategy_counter_grass.json');
+  cmd('/moves/mc_kick_controler/strategyFile=kickStrategy_counter_grass.json');
   cmd('/strategy/grassOffset=0');
 }
 cmd('reloadStrategy');
