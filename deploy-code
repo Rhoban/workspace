@@ -1,6 +1,7 @@
 #!/usr/bin/php
 <?php
 // Checking for chrpath
+system("mkdir -p .deploy");
 system('which chrpath > /dev/null', $ret);
 if ($ret != 0) {
     die("Error: you should have chrpath installed (apt-get install chrpath)\n");
