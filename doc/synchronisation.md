@@ -22,6 +22,16 @@
      allow 192.168.9.0/8
      rtcsync
      
+## Updating a slave configuration
+
+Stop current chronyd
+
+    sudo killall chronyd
+
+Restart chronyd
+
+    sudo chronyd
+     
 ## Monitoring
   From a slave, we can check the offset to master using 
   
@@ -29,13 +39,14 @@
     
   To monitor the offset between master and robots, the script
   [../tools/chrony_monitoring.py](../tools/chrony_monitoring.py) can be used.
+  The script shows the measured offset between the clocks in milliseconds.
   For example
   
     ./chrony_monitoring.py olive tom > /tmp/offsets.csv
     
-  and in an other terminal lunch gnuplot and type
+  and in an other terminal launch gnuplot and type
   
-    plot for [col=2:k] '/tmp/time.csv' using 0:col
+    plot for [col=2:k] '/tmp/offsets.csv' using 0:col
     
   where `k` is 1 plus the number of robots, so `k=3` for our example.
  
