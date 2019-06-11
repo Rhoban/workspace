@@ -16,7 +16,7 @@
      allow 192.168.9.0/8
      rtcsync
      
- the slaves configuration is
+  the slaves configuration is
  
      server master_ip maxdelay 0.005 minpoll 0 maxpoll 0
      allow 192.168.9.0/8
