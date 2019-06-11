@@ -1,15 +1,15 @@
-* Clock synchronisation between robots
-** Synchronisation
-  The clock synchronisation uses [[https://chrony.tuxfamily.org/][chrony]] which is a versatile implementation of
+# Clock synchronisation between robots
+## Synchronisation
+  The clock synchronisation uses  [chrony]<https://chrony.tuxfamily.org/chrony> which is a versatile implementation of
   the Network Time Protocol (NTP).
 
   Chrony should be installed in all the robots (slaves) and the server used as a reference (master) :
   
-    `sudo apt-get install chrony`
+    sudo apt-get install chrony
   
-  The configuration of chrony is done in the file /etc/chrony/chrony.conf.
-  The configuration for slaves is available in tools/chrony.conf.
-  For a local network 192.168.team_id.0/8, master configuration is
+  The configuration of chrony is done in the file `/etc/chrony/chrony.conf`.
+  The configuration for slaves is available in `tools/chrony.conf`.
+  For a local network `192.168.team_id.0/8`, master configuration is
   
      local stratum 8
      manual
@@ -22,19 +22,19 @@
      allow 192.168.9.0/8
      rtcsync
      
-** Monitoring
+## Monitoring
   From a slave, we can check the offset to master using 
   
-    `chronyc -n sources`
+    chronyc -n sources
     
   To monitor the offset between master and robots, the script `tools/chrony_monitoring.py`
   can be used. For example
   
-    `./chrony_monitoring.py olive tom > /tmp/offsets.csv`
+    ./chrony_monitoring.py olive tom > /tmp/offsets.csv
     
   and in an other terminal lunch gnuplot and type
   
-    `plot for [col=2:k] '/tmp/time.csv' using 0:col`
+    plot for [col=2:k] '/tmp/time.csv' using 0:col
     
   where `k` is 1 plus the number of robots, so `k=3` for our example.
  
