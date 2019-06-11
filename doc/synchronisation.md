@@ -1,14 +1,14 @@
 # Clock synchronisation between robots
 ## Synchronisation
-  The clock synchronisation uses  [chrony]<https://chrony.tuxfamily.org/chrony> which is a versatile implementation of
-  the Network Time Protocol (NTP).
+  The clock synchronisation uses [chrony]( https://chrony.tuxfamily.org/chrony )
+  which is a versatile implementation of the Network Time Protocol (NTP).
 
   Chrony should be installed in all the robots (slaves) and the server used as a reference (master) :
   
     sudo apt-get install chrony
   
   The configuration of chrony is done in the file `/etc/chrony/chrony.conf`.
-  The configuration for slaves is available in `tools/chrony.conf`.
+  The configuration for slaves is available in [../tools/chrony.conf](../tools/chrony.conf).
   For a local network `192.168.team_id.0/8`, master configuration is
   
      local stratum 8
@@ -27,8 +27,9 @@
   
     chronyc -n sources
     
-  To monitor the offset between master and robots, the script `tools/chrony_monitoring.py`
-  can be used. For example
+  To monitor the offset between master and robots, the script
+  [../tools/chrony_monitoring.py](../tools/chrony_monitoring.py) can be used.
+  For example
   
     ./chrony_monitoring.py olive tom > /tmp/offsets.csv
     
