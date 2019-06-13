@@ -300,3 +300,6 @@ you can edit a json configuration file (examples available in the
 
     rhoban_monitoring -m manager.json
 
+### Synchronising robot clocks
+
+Documentation: [doc/synchronisation.md](doc/synchronisation.md).
