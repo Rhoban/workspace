@@ -40,7 +40,7 @@ def question(phrase, message):
 
 def rhioCmd(cmd, host=default_host, display=True):
     result = systemOrRaise(["rhio", host, cmd])
-    if display:
+    if display and result != "":
         print(result)
     return result
 
@@ -48,22 +48,28 @@ def isHandled(host):
     return rhioCmd('/decision/handled', host) == "/decision/handled=true"
 
 def requestTare(host = default_host):
-    msg("TARE", "Hold me in the air and press enter")
+    msg("TARE", "Hold {:} in the air and press enter".format(host))
     sys.stdin.readline()
-    rhioCmd("tare", host)
+    result = rhioCmd("tare", host)
+    if "error" in tareResult:
+        if not question(TM_RED + "ERROR", 'Tare returned an error, continue anyway?'):
+            continue
     rhioCmd("rhalSaveConf rhal.json", host)
     
 
-def requestGyroTare():
+def requestGyroTare(host):
     while True:
-        msg('GYROTARE', 'Put me on the floor now and press enter')
+        msg('GYROTARE', 'Put {:} on the floor now and press enter'.format(host))
         sys.stdin.readline()
-        rhioCmd('rhalGyroTare', host)
+        result = rhioCmd('rhalGyroTare', host)
+        if "error" in result:
+            if not question(TM_RED + "ERROR", 'GyroTare returned an error, continue anyway?'):
+                continue
         rhioCmd('rhalSaveConf rhal.json', host)
 
         msg('CHECK', 'Checking the pressure')
         if isHandled(host):
-            if question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?'):
+            if question(TM_RED + "ERROR", 'Decision said I am handled when I should be on the floor, continue anyway?'):
                 break
         else:
             break
@@ -80,17 +86,17 @@ def defaultInit(host):
     """
     Launches init, walk and perform both tare and gyroTare on given host
     """
-    msg('INIT', 'Press enter to run init')
+    msg('INIT', 'Press enter to run init on ' + host)
     sys.stdin.readline()
     rhioCmd('init', host)
-    msg('INIT', 'Press enter to run walk')
+    msg('INIT', 'Press enter to run walk on ' + host)
     sys.stdin.readline()
     rhioCmd('walk', host)
     requestTare(host)
     requestGyroTare(host)
 
 def manualCustomReset(host):
-    msg("CUSTOM_RESET", "Performing a manual custom Reset")
+    msg("CUSTOM_RESET", "Performing a manual custom Reset for " + host)
     posX = askDouble("Enter x position [m]:")
     posY = askDouble("Enter y position [m]:")
     direction = askDouble("Enter robot orientation [deg]:")
