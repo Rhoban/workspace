@@ -48,13 +48,15 @@ def isHandled(host):
     return rhioCmd('/decision/handled', host) == "/decision/handled=true"
 
 def requestTare(host = default_host):
-    msg("TARE", "Hold {:} in the air and press enter".format(host))
-    sys.stdin.readline()
-    result = rhioCmd("tare", host)
-    if "error" in tareResult:
-        if not question(TM_RED + "ERROR", 'Tare returned an error, continue anyway?'):
-            continue
-    rhioCmd("rhalSaveConf rhal.json", host)
+    while True:
+        msg("TARE", "Hold {:} in the air and press enter".format(host))
+        sys.stdin.readline()
+        result = rhioCmd("tare", host)
+        if "Error" in result:
+            if not question(TM_RED + "ERROR", 'Tare returned an error, continue anyway?'):
+                continue
+        rhioCmd("rhalSaveConf rhal.json", host)
+        break
     
 
 def requestGyroTare(host):
@@ -62,7 +64,7 @@ def requestGyroTare(host):
         msg('GYROTARE', 'Put {:} on the floor now and press enter'.format(host))
         sys.stdin.readline()
         result = rhioCmd('rhalGyroTare', host)
-        if "error" in result:
+        if "Error" in result:
             if not question(TM_RED + "ERROR", 'GyroTare returned an error, continue anyway?'):
                 continue
         rhioCmd('rhalSaveConf rhal.json', host)

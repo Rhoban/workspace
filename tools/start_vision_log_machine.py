@@ -11,6 +11,7 @@ def setVariables(host, logDuration):
     rhioCmd('/moves/head/maxSpeed=60', host)
     rhioCmd('/moves/head/maxAcc=600', host)
     rhioCmd('/moves/head/minOverlap=20', host)
+    rhioCmd('/moves/head/maxPan=160', host)
     msg('AUTO', "Reducing walk limits")
     rhioCmd('/moves/walk/maxRotation=10', host)
     rhioCmd('/moves/walk/maxStep=0.06', host)
