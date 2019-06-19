@@ -22,6 +22,32 @@ def systemOrRaise(args):
     else:
         raise RuntimeError("Failed to execute system '" + str(args) + "' output: " + out_str)
 
+def sshCmd(host, cmd, timeout = 3):
+    """
+    Execute the requested command on the given robot and returns the output of the process
+    Raise a RuntimeError if ssh command failed
+    """
+    return systemOrRaise(["ssh","-o ConnectTimeout=3", "rhoban@" + host, cmd])
+
+def scpCmd(host, robot_path, local_path):
+    """
+    Execute the requested command on the given robot and returns the output of the process
+    Raise a RuntimeError if ssh command failed
+    """
+    systemOrRaise(["scp", "-r", "rhoban@" + host + ":" + robot_path, local_path])
+
+def checkFolder(host, path):
+    """
+    Raise a RuntimeError if folder 'path' on 'robot_no' does not exist
+    """
+    sshCmd(host, "[ -d " + path + " ]")
+
+def getRobotName(robot_no):
+    """
+    Raise a RuntimeError if it fails to retrieve the hostname
+    """
+    return sshCmd(robot_no, "hostname")
+    
 def msg(phase, msg):
     print("{:}{:}: {:}{:}\n".format(TM_BOLD,phase, msg, TM_END))
 
