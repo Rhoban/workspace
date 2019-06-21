@@ -33,18 +33,18 @@ msg('AUTO', "Slowing down scan speed");
 cmd('/moves/head/maxSpeed=20');
 
 msg('AUTO', "Configuring scan trajectory.");
-cmd('/moves/head/minOverlap=40');
-cmd('/moves/head/minTilt=-30');
-cmd('/moves/head/maxTilt=80');
-cmd('/moves/head/maxPan=150');
+cmd('/moves/head/minOverlap=45');
+cmd('/moves/head/minTilt=-40');
+cmd('/moves/head/maxTilt=100');
+cmd('/moves/head/maxPan=175');
 
 msg('AUTO', "Reducing framerate to 10 FPS");
 cmd('/Vision/source/FrameRate/absValue=10');
 
-msg('AUTO', "Increasing shutter to 10");
-cmd('/Vision/source/Shutter/absValue=10');
+msg('AUTO', "Increasing shutter to 6");
+cmd('/Vision/source/Shutter/absValue=6');
 
-msg('AUTO', "Reducing gain to 10");
+msg('AUTO', "Reducing gain to 0");
 cmd('/Vision/source/Gain/absValue=0');
 
 msg('FINAL', 'Press enter to activate head and start logging');
