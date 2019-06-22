@@ -66,6 +66,9 @@ if __name__ == "__main__":
     parser.add_argument("hosts", type=str,help="hostname", nargs="+")
     args = parser.parse_args()
 
+    nb_hosts = len(args.hosts)
+    if args.defaultBoundaries and not nb_hosts in defaultBoundaries:
+        raise RuntimeError("No default boundaries available for {:} hosts".format(nb_hosts))
     msg("SYNC_CHECK", "Checking time offsets with the robots")
     offsets = {}#[ms]
     max_offset = 0;#[ms]
@@ -79,15 +82,14 @@ if __name__ == "__main__":
     if args.init:
         for host in args.hosts:
             defaultInit(host)
-
     logDuration = askDouble("What is the required duration for log? [s]")
-    for host_idx in range(len(args.hosts)):
+    for host_idx in range(nb_hosts):
         host = args.hosts[host_idx]
         setVariables(host, logDuration)
         if args.customBoundaries:
             customBoundaries(host)
         elif args.defaultBoundaries:
-            updateBoundaries(host, default_boundaries[host_idx])
+            updateBoundaries(host, defaultBoundaries[nb_hosts][host_idx])
         else:
             printBoundaries(host)
         manualCustomReset(host)
