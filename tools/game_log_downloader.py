@@ -55,7 +55,7 @@ if __name__ == "__main__":
                      help="List the game logs available on the robot")
     cmd.add_argument("-c", "--check", type=str, metavar="PATH",
                      help="Check if a log exist")
-    cmd.add_argument("-d", "--download", type=str, nargs=2, metavar="LOG_PATH DST_PATH",
+    cmd.add_argument("-d", "--download", type=str, nargs=2, metavar="PATH",
                      help="Download a log from LOG_PATH to the folder DST_PATH")
     parser.add_argument("-m", "--manual", action="store_true",
                         help="Focus on manual logs")
@@ -71,8 +71,8 @@ if __name__ == "__main__":
         checkFolder(robot,args.check)
     elif args.download:
         if args.manual:
-            downloadGameLogs(robot, args.download[0], args.download[1])
-        else:
             downloadManualLogs(robot, args.download[0], args.download[1])
+        else:
+            downloadGameLogs(robot, args.download[0], args.download[1])
     else:
         print ("no command specified")
