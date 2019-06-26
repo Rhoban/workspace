@@ -329,6 +329,7 @@ readline();
 cmd('robocup');
 
 msg("\e[32mYODA", 'May the force be with you');
-echo "\n";
 
-?>
+msg("\e[32mREMINDER", 'Your robot is here:');
+echo "$fieldData\n";
+echo "\n";
