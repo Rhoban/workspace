@@ -309,12 +309,12 @@ cmd('reloadStrategy');
 $fieldInverted = ($side == 'l') ? 'true' : 'false';
 cmd('/teamplay/isFieldInverted=' . $fieldInverted);
 
-if (question("THROW-IN", "Should I perform throw-ins")) {
-  cmd('decision/throwInEnable=true');
-}
-else {
-  cmd('decision/throwInEnable=false');
-}
+// if (question("THROW-IN", "Should I perform throw-ins")) {
+//   cmd('decision/throwInEnable=true');
+// }
+// else {
+//   cmd('decision/throwInEnable=false');
+// }
 
 msg('DISK', "Checking robot space");
 echo `ssh rhoban@$host df -h /dev/sda2`;
