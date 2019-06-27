@@ -29,6 +29,9 @@ $logDuration = askDouble("What is the required duration for log? [s]");
 msg('AUTO', "Forcing the robot to scan for the ball");
 cmd('/moves/head/forceScanBall=1');
 
+msg('AUTO', "Disabling calibration");
+cmd('/model/useCalibration=false');
+
 msg('AUTO', "Slowing down scan speed");
 cmd('/moves/head/maxSpeed=20');
 
