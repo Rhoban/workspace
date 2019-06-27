@@ -57,22 +57,39 @@ if __name__ == "__main__":
                      help="Check if a log exist")
     cmd.add_argument("-d", "--download", type=str, nargs=2, metavar="PATH",
                      help="Download a log from LOG_PATH to the folder DST_PATH")
+    cmd.add_argument("--download-last",  type=str, metavar="PATH",
+                     help="Download log from env in differents robots, PATH is dst")
     parser.add_argument("-m", "--manual", action="store_true",
                         help="Focus on manual logs")
-    parser.add_argument("robot", type=str,help="robots hostnames")
+    parser.add_argument("robot", type=str,help="robots hostnames", nargs="+")
     args = parser.parse_args()
-    robot = args.robot
-    if args.list:
+    robot = args.robot[0]
+    nb_robots = len(args.robot)
+    if args.download_last :
         if args.manual:
-            print(listManualLogs(robot))
+            for rb in args.robot :
+                source = "env/" + rb + "/manual_logs"
+                downloadManualLogs(rb, source, args.download_last)
         else:
-            print(listGameLogs(robot))
-    elif args.check:
-        checkFolder(robot,args.check)
-    elif args.download:
-        if args.manual:
-            downloadManualLogs(robot, args.download[0], args.download[1])
-        else:
-            downloadGameLogs(robot, args.download[0], args.download[1])
+            for rb in args.robot :
+                source = "env/" + rb + "/game_logs"
+                downloadGameLogs(rb, source, args.download_last)
     else:
-        print ("no command specified")
+        if nb_robots != 1 :
+            print ("only option --download_last is avaible for multiple robot")
+        elif args.list:
+            if args.manual:
+                print(listManualLogs(robot))
+            else:
+                print(listGameLogs(robot))
+        elif args.check:
+            checkFolder(robot,args.check)
+        elif args.download:
+            if args.manual:
+                downloadManualLogs(robot, args.download[0], args.download[1])
+            else:
+                downloadGameLogs(robot, args.download[0], args.download[1])
+        else:
+            print ("no command specified")
+   
+            
