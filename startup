@@ -309,13 +309,14 @@ cmd('reloadStrategy');
 $fieldInverted = ($side == 'l') ? 'true' : 'false';
 cmd('/teamplay/isFieldInverted=' . $fieldInverted);
 
+/*
 if (question("THROW-IN", "Should I perform throw-ins")) {
   cmd('decision/throwInEnable=true');
 }
 else {
   cmd('decision/throwInEnable=false');
 }
-
+*/
 msg('DISK', "Checking robot space");
 echo `ssh rhoban@$host df -h /dev/sda2`;
 
@@ -328,6 +329,7 @@ readline();
 cmd('robocup');
 
 msg("\e[32mYODA", 'May the force be with you');
-echo "\n";
 
-?>
+msg("\e[32mREMINDER", 'Your robot is here:');
+echo "$fieldData\n";
+echo "\n";
