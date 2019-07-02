@@ -20,7 +20,7 @@ $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
 $ESSID = 'HUMANOID_FIELD_5ghz_'.strtoupper($field);
-$PASSWORD = 'Humanoid';
+$PASSWORD = 'humanoid';
 $teamId = $result[1];
 
 //Retrieve robot hostname
