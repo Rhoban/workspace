@@ -33,10 +33,6 @@ def setVariables(host, logDuration):
     rhioCmd('/moves/walk/maxRotation=10', host)
     rhioCmd('/moves/walk/maxStep=0.06', host)
     rhioCmd('/moves/walk/maxLateral=0.03', host)
-    # It might not be necessary, old problem was to have too much similar data to label manually
-    # Now, 40 fps should not require more human work
-    #msg('AUTO', "Reducing framerate to 25 FPS")
-    #rhioCmd('/Vision/source/FrameRate/absValue=25', host)
     msg('AUTO', "Reducing handledDelay")
     rhioCmd('decision/handledDelay=0.01', host)
     msg('AUTO', "Enabling odometryMode")
