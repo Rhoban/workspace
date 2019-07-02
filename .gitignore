@@ -16,3 +16,5 @@ robot_logs
 tags
 .vscode/ipch/
 vive_logs/
+cscope.out
+.vscode/cscope*
