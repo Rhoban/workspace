@@ -109,7 +109,7 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
 
   cmd('/referee/teamId=' . $teamId);
 } else {
-  $defaultTeamId = 9;
+  $defaultTeamId = 11;
   $r = cmd('referee/teamId');
   $readTeamId = intval(substr($r, strpos($r, '=') + 1));
   if ($readTeamId != $defaultTeamId) {
