@@ -7,10 +7,18 @@ import argparse
 # key: nb_robots
 # value: array with boundaries for each robot [minX maxX, minY maxY]
 boundariesNames = ["minX", "maxX", "minY", "maxY"]
-defaultBoundaries = { 4: [[-4, -0.5, -0.5,  2.5],
-                          [-4, -0.5, -2.5, -1.5],
-                          [0.5, 4.0, -0.5,  2.5],
-                          [0.5, 4.0, -2.5, -1.5]] }
+defaultBoundaries = { 3: [[-4, -1, -3,  3],
+                          [0, 4.0, -0.5,  2.5],
+                          [0, 4.0, -2.5, -1.5]],
+                      4: [[-4, -0.5, -0.5,  3],
+                          [-4, -0.5, -3, -1.5],
+                          [0.5, 4.0, -0.5,  3],
+                          [0.5, 4.0, -3, -1.5]],
+                      5: [[-4.5, -2.5, -1,  1],
+                          [-4, -2.5, -3, -0.5],
+                          [-4, -2.5, -0.5,  3],
+                          [0.5, 4.0, -3, -1.5],
+                          [0.5, 4.0, -3, -1.5]]}
 
 def setVariables(host, logDuration):
     msg('AUTO', "Setting all variables on " + host)
