@@ -5,11 +5,11 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 
 // Robots roles
 $roles = [
-  'olive' => 'B',
-  'nova' => 'B',
+  'olive' => 'D',
+  'nova' => 'C',
   'arya' => 'A',
-  'rush' => 'A',
-  'tom' => 'A'
+  'rush' => 'B',
+  'tom' => 'D'
 ];
 
 // Compass offsets and field settings
@@ -20,7 +20,11 @@ $roles = [
 // 3: ID of field (for visualCompass)
 $fields = [
   // Fields
-  'g' => [0, -180, 'l', 0]
+  'a' => [0, -180, 'r', 0], // kid size, artificial light
+  'b' => [0, -180, 'l', 0], // kid size, artificial light
+  'c' => [0, -180, 'r', 0], // kid size, artificial light
+  'd' => [0, -180, 'r', 0], // adult size, artificial light
+  'e' => [0, -180, 'l', 0], // kid size, natural light field
 ];
 
 $host = '10.0.0.1';
