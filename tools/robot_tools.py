@@ -42,11 +42,18 @@ def checkFolder(host, path):
     """
     sshCmd(host, "[ -d " + path + " ]")
 
-def getRobotName(robot_no):
+def checkFile(host, path):
+    """
+    Raise a RuntimeError if folder 'path' on 'robot_no' does not exist
+    """
+    sshCmd(host, "[ -f " + path + " ]")
+
+    
+def getRobotName(host):
     """
     Raise a RuntimeError if it fails to retrieve the hostname
     """
-    return sshCmd(robot_no, "hostname")
+    return sshCmd(host, "hostname")
     
 def msg(phase, msg):
     print("{:}{:}: {:}{:}\n".format(TM_BOLD,phase, msg, TM_END))
@@ -61,8 +68,8 @@ def prompt(phase, message, options):
             return answer
         print("{:}{:}You should answer one of the following: {:}{:}".format(TM_RED,TM_BOLD,options,TM_END))
 
-def question(phrase, message):
-    return prompt(phrase, message, ['y', 'n']) == 'y'
+def question(phase, message):
+    return prompt(phase, message, ['y', 'n']) == 'y'
 
 def rhioCmd(cmd, host=default_host, display=True):
     result = systemOrRaise(["rhio", host, cmd])

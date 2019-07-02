@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-
 import argparse
 import subprocess
 
@@ -15,7 +14,7 @@ def downloadGameLogs(host, game_log_path, dst):
     team_id = "team9"
     robot_path = dst + "/" + team_id + "/" + robot_name
     output_log_path = robot_path + "/output_log"
-    print("Checking existence of folder '" + game_log_path + "' on robot")
+    print("Checking existence of folder '" + game_log_path + "' on robot " + host)
     checkFolder(host, game_log_path)
     output_logs = game_log_path + "/*.log"
     systemOrRaise(["mkdir", "-p", output_log_path])
@@ -40,6 +39,37 @@ def downloadManualLogs(host, log_path, dst):
     print("Copying video logs from '" + video_logs + "'")
     scpCmd(host, video_logs, perception_path)
 
+def clearLog(host):
+    print("Removing log from env/game_logs")
+    output_log = sshCmd(host, "find env/"+getRobotName(host)+"/game_logs/ -name \"*.log\" ")
+    for log in output_log.split() :
+        if question("CLEAR_LOG", "Do you want to remove log " + log +" ?"):
+             sshCmd(host, "rm "+ log)
+
+    print("Removing log from env/manual_logs")
+    output_log = sshCmd(host, "ls env/"+getRobotName(host)+"/manual_logs/ ")
+    for log in output_log.split() :
+        if question("CLEAR_LOG", "Do you want to remove log " + log +" ?"):
+             sshCmd(host, "rm -rf env/"+getRobotName(host)+"manual_logs/"+ log + "/")  
+
+
+
+    print("Removing log from backup_env/")
+    output_log = sshCmd(host, "ls backup_env/ ")
+    for log in output_log.split() :
+        if question("CLEAR_LOG", "Do you want to remove log " + log +" ?"):
+             sshCmd(host, "rm -rf backup_env/"+ log + "/")  
+
+             
+
+def clearAllLog(host):
+    if question("CLEAR_LOG", "Do you want to remove log from env/ ?"):
+        sshCmd(host, "rm -rf env/game_logs/")
+        sshCmd(host, "rm -rf env/manual_logs/")
+    if question("CLEAR_LOG", "Do you want to remove log from backup_env/ ?"):
+        sshCmd(host, "rm -rf backup_env/")  
+    
+
     
 def listGameLogs(host):
     return sshCmd(host, "find . -name \"game_logs\" | xargs du -hs | sort -h")
@@ -61,19 +91,28 @@ if __name__ == "__main__":
                      help="Download log from env in differents robots, PATH is dst")
     parser.add_argument("-m", "--manual", action="store_true",
                         help="Focus on manual logs")
+    parser.add_argument("-r", "--remove-log", action="store_true",
+                        help="Remove logs  from LOG_PATH")
+    parser.add_argument("--all-log", action="store_true",
+                        help="Remove ALL logs  from LOG_PATH")
     parser.add_argument("robot", type=str,help="robots hostnames", nargs="+")
     args = parser.parse_args()
     robot = args.robot[0]
     nb_robots = len(args.robot)
     if args.download_last :
-        if args.manual:
-            for rb in args.robot :
-                source = "env/" + rb + "/manual_logs"
+        for rb in args.robot :
+            source = "env/" + getRobotName(rb) + "/manual_logs"
+            if args.manual:
                 downloadManualLogs(rb, source, args.download_last)
-        else:
-            for rb in args.robot :
-                source = "env/" + rb + "/game_logs"
+            else:
                 downloadGameLogs(rb, source, args.download_last)
+    elif args.remove_log:
+            for rb in args.robot :
+                print("removing log on " +getRobotName(rb))
+                if args.all_log :
+                    clearAllLog(rb)
+                else :
+                    clearLog(rb)
     else:
         if nb_robots != 1 :
             print ("only option --download_last is avaible for multiple robot")
@@ -89,6 +128,7 @@ if __name__ == "__main__":
                 downloadManualLogs(robot, args.download[0], args.download[1])
             else:
                 downloadGameLogs(robot, args.download[0], args.download[1])
+      
         else:
             print ("no command specified")
    
