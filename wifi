@@ -61,7 +61,9 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 `ssh rhoban@$remote sudo ifconfig $wiface up`;
 
 // Joining the ESSID
-//`ssh rhoban@$remote sudo iw dev $wiface scan | grep $ESSID`;
+// sleep(1);
+// echo "Scanning...\n";
+// echo `ssh rhoban@$remote sudo iw $wiface scan | grep $ESSID`;
 `ssh rhoban@$remote sudo iw $wiface connect $ESSID`;
 
 // Setting IP address
@@ -69,7 +71,8 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 
 // Connecting to WiFi
 `ssh rhoban@$remote "wpa_passphrase $ESSID $PASSWORD > /tmp/wpa.conf"`;
-`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
+// `ssh rhoban@$remote "echo \"\nap_scan=1\" >> /tmp/wpa.conf"`;
+`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dnl80211 -f/tmp/wpa.log -ddddd`;
 
 // Open Iran
 #`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.255.0`;
