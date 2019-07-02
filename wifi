@@ -19,7 +19,8 @@ function cmd($cmd) {
 $result = explode('=', cmd('/referee/teamId'));
 
 //Configuration
-$ESSID = 'Humanoid';
+$ESSID = 'HUMANOID_FIELD_5ghz_'.strtoupper($field);
+$PASSWORD = 'Humanoid';
 $teamId = $result[1];
 
 //Retrieve robot hostname
@@ -29,7 +30,7 @@ $hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
 $ip = null;
 
 // XXX: To update
-$ipPrefix = '192.168.9.';
+$ipPrefix = '192.168.11.';
 
 if ($hostname == 'olive') {
     $ip = $ipPrefix.'41';
@@ -67,7 +68,7 @@ echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m
 `ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.0.0`;
 
 // Connecting to WiFi
-`ssh rhoban@$remote "wpa_passphrase $ESSID Humanoid > /tmp/wpa.conf"`;
+`ssh rhoban@$remote "wpa_passphrase $ESSID $PASSWORD > /tmp/wpa.conf"`;
 `ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
 
 // Open Iran
