@@ -126,9 +126,8 @@ if (strtolower($field) == 'e') {
   echo "Setting vision values for natural light\n";
   cmd('/Vision/source/Shutter/absValue=2');
   cmd('/Vision/green/maxV=140');
-
   cmd('/localisation/field/RobotController/angleExploration=0.1');
-  cmd('/localisation/field/RobotController/posExploration=0.01');
+  cmd('/localisation/field/RobotController/posExploration=0.005');
 }
 
 while (true) {
