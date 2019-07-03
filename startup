@@ -6,7 +6,7 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 // Robots roles
 $roles = [
   'olive' => 'B',
-  'nova' => 'C',
+  'nova' => 'B',
   'arya' => 'A',
   'rush' => 'B',
   'tom' => 'D'
@@ -100,7 +100,7 @@ while (true) {
 }
 
 if (question('DROPIN', 'Is it a drop-in game?')) {
-  $teamLetter = prompt('DROPIN-ID', 'What team are we ?', ['a', 'b']);
+  $teamLetter = prompt('DROPIN-ID', 'What team are we (a: 31, b: 32) ?', ['a', 'b']);
   if ($teamLetter == 'a') {
     $teamId = 31;
   } else {
@@ -124,6 +124,7 @@ $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 
 if (strtolower($field) == 'e') {
   echo "Setting vision values for natural light\n";
+<<<<<<< HEAD
   cmd('/Vision/source/Shutter/absValue=1.5');
   cmd('/Vision/green/maxU=126');
   cmd('/Vision/green/maxV=167');
@@ -131,6 +132,12 @@ if (strtolower($field) == 'e') {
   cmd('/Vision/green/minU=111');
   cmd('/Vision/green/minV=115');
   cmd('/Vision/green/minY=48');
+=======
+  cmd('/Vision/source/Shutter/absValue=1.5');
+  cmd('/Vision/green/maxV=140');
+  cmd('/localisation/field/RobotController/angleExploration=0.1');
+  cmd('/localisation/field/RobotController/posExploration=0.005');
+>>>>>>> 9ca9219b2a740017edee269d9da8f445469fe933
 }
 
 while (true) {
