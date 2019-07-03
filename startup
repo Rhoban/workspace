@@ -5,7 +5,7 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 
 // Robots roles
 $roles = [
-  'olive' => 'D',
+  'olive' => 'B',
   'nova' => 'C',
   'arya' => 'A',
   'rush' => 'B',
@@ -121,6 +121,12 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
 }
 
 $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
+
+if (strtolower($field) == 'e') {
+  echo "Setting vision values for natural light\n";
+  cmd('/Vision/source/Shutter/absValue=2');
+  cmd('/Vision/green/maxV=140');
+}
 
 while (true) {
   if (question('WIFI', 'Do you want to run the wifi script?')) {
