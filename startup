@@ -5,11 +5,11 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 
 // Robots roles
 $roles = [
-  'olive' => 'B',
-  'nova' => 'B',
-  'arya' => 'A',
-  'rush' => 'B',
-  'tom' => 'D'
+  'olive' => 'A', # Robot 1
+  'nova' => 'B',  # Robot 2
+  'arya' => 'C',  # Robot 3
+  'tom' => 'D',   # Robot 4
+  'rush' => 'B'   # Robot 5
 ];
 
 // Compass offsets and field settings
