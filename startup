@@ -9,7 +9,7 @@ $roles = [
   'nova' => 'B',  # Robot 2
   'arya' => 'C',  # Robot 3
   'tom' => 'D',   # Robot 4
-  'rush' => 'B'   # Robot 5
+  'rush' => 'D'   # Robot 5
 ];
 
 // Compass offsets and field settings
@@ -236,7 +236,7 @@ $positions = array(
     1.0
   ],
   'C' => [
-    -2.5, -3.1, 90,
+    -3, -3.1, 90,
     -1.5, -1.5,
     -2.5,  1.5, 90,
     -2.5, -1.5, -90,
