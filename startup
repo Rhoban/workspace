@@ -154,6 +154,9 @@ while (true) {
   }
 }
 
+msg('FILTER', 'Setting referee filter to ignore packets coming from ip != 192.168.1.1');
+cmd('/referee/ipFilter=192.168.1.1');
+
 msg('INIT', 'Press enter to run init');
 readline();
 cmd('init');
