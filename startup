@@ -7,8 +7,8 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 $roles = [
   'olive' => 'A', # Robot 1
   'nova' => 'B',  # Robot 2
-  'arya' => 'C',  # Robot 3
-  'tom' => 'D',   # Robot 4
+  'arya' => 'B',  # Robot 3
+  'tom' => 'A',   # Robot 4
   'rush' => 'D'   # Robot 5
 ];
 
@@ -124,15 +124,19 @@ $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 
 if (strtolower($field) == 'e') {
   echo "Setting vision values for natural light\n";
-  prompt('ROI', 'Did you manage to fix this ROIs thing to 16?', ['yes', 'no', 'what?']);
-  cmd('/Vision/green/maxU=126');
-  cmd('/Vision/green/maxV=167');
-  cmd('/Vision/green/maxY=140');
-  cmd('/Vision/green/minU=111');
-  cmd('/Vision/green/minV=115');
-  cmd('/Vision/green/minY=48');
-  cmd('/Vision/source/Shutter/absValue=1.5');
-  cmd('/Vision/green/maxV=140');
+
+  cmd('/Vision/source/Shutter/absValue=1');
+
+  cmd('/Vision/roiRandomizer/maxROI=16');
+  cmd('/Vision/ballByII/maxRois=16');
+
+  cmd('/Vision/green/maxU=143');
+  cmd('/Vision/green/maxV=127');
+  cmd('/Vision/green/maxY=169');
+  cmd('/Vision/green/minU=96');
+  cmd('/Vision/green/minV=101');
+  cmd('/Vision/green/minY=34');
+
   cmd('/localisation/field/RobotController/angleExploration=0.1');
   cmd('/localisation/field/RobotController/posExploration=0.005');
 }
