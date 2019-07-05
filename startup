@@ -124,6 +124,7 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
 
 if ($isDropin) {
   $field = 'e';
+  msg('FIELD', 'Auto-assigning field to E since it is a drop-in');
 } else {
   $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
 }
