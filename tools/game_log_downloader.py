@@ -101,10 +101,11 @@ if __name__ == "__main__":
     nb_robots = len(args.robot)
     if args.download_last :
         for rb in args.robot :
-            source = "env/" + getRobotName(rb) + "/manual_logs"
             if args.manual:
+                source = "env/" + getRobotName(rb) + "/manual_logs"
                 downloadManualLogs(rb, source, args.download_last)
             else:
+                source = "env/" + getRobotName(rb) + "/game_logs"
                 downloadGameLogs(rb, source, args.download_last)
     elif args.remove_log:
             for rb in args.robot :
