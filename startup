@@ -99,7 +99,9 @@ while (true) {
   }
 }
 
+$isDropin = false;
 if (question('DROPIN', 'Is it a drop-in game?')) {
+  $isDropin = true;
   $teamLetter = prompt('DROPIN-ID', 'What team are we (a: 31, b: 32) ?', ['a', 'b']);
   if ($teamLetter == 'a') {
     $teamId = 31;
@@ -120,12 +122,16 @@ if (question('DROPIN', 'Is it a drop-in game?')) {
   }
 }
 
-$field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
+if ($isDropin) {
+  $field = 'e';
+} else {
+  $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
+}
 
 if (strtolower($field) == 'e') {
   echo "Setting vision values for natural light\n";
 
-  cmd('/Vision/source/Shutter/absValue=1');
+  cmd('/Vision/source/Shutter/absValue=0.3');
 
   cmd('/Vision/roiRandomizer/maxROI=16');
   cmd('/Vision/ballByII/maxRois=16');
@@ -139,6 +145,8 @@ if (strtolower($field) == 'e') {
 
   cmd('/localisation/field/RobotController/angleExploration=0.1');
   cmd('/localisation/field/RobotController/posExploration=0.005');
+
+  cmd('/moves/head/maxSpeed=240');
 }
 
 while (true) {
