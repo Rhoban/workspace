@@ -7,8 +7,8 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 $roles = [
   'olive' => 'A', # Robot 1
   'nova' => 'B',  # Robot 2
-  'arya' => 'B',  # Robot 3
-  'tom' => 'A',   # Robot 4
+  'arya' => 'C',  # Robot 3
+  'tom' => 'D',   # Robot 4
   'rush' => 'D'   # Robot 5
 ];
 
