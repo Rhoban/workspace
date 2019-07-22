@@ -15,7 +15,7 @@ echo "Killing KidSize on " . $remote;
 `ssh rhoban@$remote ./env/stop.sh`;
 
 // Parameters
-$binary = 'devel_release/lib/kid_size/KidSize';
+$binaries = array('devel_release/lib/kid_size/KidSize','devel_release/lib/RhIOShell/rhio');
 $targetHost = 'rhoban@'.$remote;
 $targetDir = '/home/rhoban/catkin_rel/';
 
@@ -55,30 +55,32 @@ function smartCopy($filePattern){
 // Libraries
 echo "* Preparing system libraries...\n";
 
-$out = `ldd $binary|grep -iv "Not found|grep -iv "`;
-
-$lines = explode("\n", trim($out));
-
-foreach ($lines as $line) {
-    $parts = explode(' ', trim($line));
-    if (count($parts) > 3) {
-        $lib = $parts[2];
-        if (trim($lib)) {
-            if (strstr($lib, 'deps') || strstr($lib, 'home')) {
-                `cp $lib .deploy/`;
-            }
-            else {
-                smartCopy($lib);
+foreach ($binaries as $binary) {
+    $out = `ldd $binary|grep -iv "Not found|grep -iv "`;
+    
+    $lines = explode("\n", trim($out));
+    
+    foreach ($lines as $line) {
+        $parts = explode(' ', trim($line));
+        if (count($parts) > 3) {
+            $lib = $parts[2];
+            if (trim($lib)) {
+                if (strstr($lib, 'deps') || strstr($lib, 'home')) {
+                    `cp $lib .deploy/`;
+                }
+                else {
+                    smartCopy($lib);
+                }
             }
         }
     }
+    `cp $binary .deploy/`;
+    $binaryName = basename($binary);
+    `chrpath --replace $targetDir .deploy/$binaryName`;
 }
 
 
 // Deploying
 echo "* Sending files...\n";
-`cp $binary .deploy/`;
-$binaryName = basename($binary);
-`chrpath --replace $targetDir .deploy/$binaryName`;
 `rsync --delete -av --info=flist2,name,progress .deploy/ $targetHost:$targetDir`;
 
