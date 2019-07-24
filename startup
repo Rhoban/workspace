@@ -5,11 +5,11 @@ setlocale(LC_NUMERIC, "en_US.UTF-8");
 
 // Robots roles
 $roles = [
-  'olive' => 'A', # Robot 1
-  'nova' => 'B',  # Robot 2
-  'arya' => 'C',  # Robot 3
-  'tom' => 'D',   # Robot 4
-  'rush' => 'B'   # Robot 5
+  'olive' => 'B', # Robot 1
+  'nova' => 'A',  # Robot 2
+  'arya' => 'D',  # Robot 3
+  'tom' => 'A',   # Robot 4
+  'rush' => 'C'   # Robot 5
 ];
 
 // Compass offsets and field settings
@@ -20,11 +20,12 @@ $roles = [
 // 3: ID of field (for visualCompass)
 $fields = [
   // Fields
-  'a' => [0, -180, 'r', 0], // kid size, artificial light
+  'g' => [0, -180, 'r', 0], // kid size, artificial light
   'b' => [0, -180, 'l', 0], // kid size, artificial light
   'c' => [0, -180, 'r', 0], // kid size, artificial light
   'd' => [0, -180, 'r', 0], // adult size, artificial light
   'e' => [0, -180, 'l', 0], // kid size, natural light field
+  't' => [0, -180, 'l', 0], // kid size, natural light field
 ];
 
 $host = '10.0.0.1';
@@ -167,8 +168,8 @@ while (true) {
   }
 }
 
-msg('FILTER', 'Setting referee filter to ignore packets coming from ip != 192.168.1.1');
-cmd('/referee/ipFilter=192.168.1.1');
+// msg('FILTER', 'Setting referee filter to ignore packets coming from ip != 192.168.1.1');
+// cmd('/referee/ipFilter=192.168.1.1');
 
 msg('INIT', 'Press enter to run init');
 readline();
