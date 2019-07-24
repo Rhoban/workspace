@@ -71,11 +71,17 @@ def clearAllLog(host):
     
 
     
-def listGameLogs(host):
-    return sshCmd(host, "find . -name \"game_logs\" | xargs du -hs | sort -h")
+def listGameLogs(host, size_sort):
+    cmd = "find . -name \"game_logs\" | sort | xargs du -hs"
+    if size_sort:
+        cmd += " | sort -h"
+    return sshCmd(host, cmd)
 
-def listManualLogs(host):
-    return sshCmd(host, "find . -name \"manual_logs\" | xargs du -hs | sort -h")
+def listManualLogs(host, size_sort):
+    cmd = "find . -name \"manual_logs\" | sort | xargs du -hs"
+    if size_sort:
+        cmd += " | sort -h"
+    return sshCmd(host, cmd)
 
 
 if __name__ == "__main__":
@@ -95,6 +101,8 @@ if __name__ == "__main__":
                         help="Remove logs  from LOG_PATH")
     parser.add_argument("--all-log", action="store_true",
                         help="Remove ALL logs  from LOG_PATH")
+    parser.add_argument("--sort-size", action="store_true",
+                        help="Sort all logs by size when listing")
     parser.add_argument("robot", type=str,help="robots hostnames", nargs="+")
     args = parser.parse_args()
     robot = args.robot[0]
@@ -119,9 +127,9 @@ if __name__ == "__main__":
             print ("only option --download_last is avaible for multiple robot")
         elif args.list:
             if args.manual:
-                print(listManualLogs(robot))
+                print(listManualLogs(robot, args.sort_size))
             else:
-                print(listGameLogs(robot))
+                print(listGameLogs(robot, args.sort_size))
         elif args.check:
             checkFolder(robot,args.check)
         elif args.download:
