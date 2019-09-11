@@ -9,7 +9,7 @@ class GitCommand extends Command
 
     public function getDescription()
     {
-        return array('Run the build');
+        return array('Run a git command on each repositories');
     }
 
     protected function retryCmd($title, $cmd)
