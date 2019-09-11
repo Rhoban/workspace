@@ -28,7 +28,5 @@ class SetupCommand extends Command
         OS::run('catkin config --profile debug -x _debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
         OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
         OS::run('catkin config --profile release_linter -x _release_linter --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx"');
-        OS::run('catkin config --profile novision -x _nv_release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-msse2 -mavx" -DBUILD_KID_SIZE_VISION=OFF');
-        OS::run('catkin config --profile novision_debug -x _nv_debug --cmake-args -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-msse2 -mavx" -DBUILD_KID_SIZE_VISION=OFF');
     }
 }
