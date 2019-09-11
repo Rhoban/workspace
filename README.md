@@ -4,17 +4,13 @@
 
 ### TODO: Update of the README
 
-- Choose the recommended distribution for next year (18.04?)
-- Update dependencies (moving to OpenCV3)
-  - Currently nonfree of OpenCV3 is not supported in 18.04
+- Add OpenCV3 install with DNN support in instructions
 - Change install commands for rhoban developers (use private repositories)
-- Is 'workspace' only for 'kid_size' or not?
-  - To be discussed
 
 ### Recommended Operating System
 
 The recommended operating system to run this version of the software is `Ubuntu
-16.04 Xenial Xerus` using other OS might result on issues with some of the
+18.04 Bionic Beaver` using other OS might result on issues with some of the
 packages required.
 
 ### Installing APT dependencies
@@ -47,7 +43,7 @@ field, choose any name you want and validate the new key.
 
 Clone the latest stable release of `workspace` repository and move to it:
 
-    git clone -b final_2018 https://github.com/rhoban/workspace.git
+    git clone -b public_2019 https://github.com/rhoban/workspace.git
     cd workspace
 
 Then, run the setup:
