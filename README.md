@@ -2,11 +2,6 @@
 
 ## Setup of the system
 
-### TODO: Update of the README
-
-- Add OpenCV3 install with DNN support in instructions
-- Change install commands for rhoban developers (use private repositories)
-
 ### Recommended Operating System
 
 The recommended operating system to run this version of the software is `Ubuntu
@@ -234,6 +229,11 @@ classification will be stored in file `classification_data.tar.gz` and the
 images with the position of the objects will be stored in
 `attention_data.tar.gz`.
 
+#### Labelling videos
+
+This procedure is still evolving yet and will be made public along with data
+soon.
+
 ### Using PyBullet viewer
 
 The code allowing to display the robot with `pybullet` can be cloned outside of workspace:
@@ -276,3 +276,11 @@ you can edit a json configuration file (examples available in the
 ### Synchronising robot clocks
 
 Documentation: [doc/synchronisation.md](doc/synchronisation.md).
+
+### Training new DNN
+
+The code used to train multi-class DNN classifiers is independent from workspace
+and can be found on:
+
+- [https://www.github.com/rhoban/tf_deep_vision_public](rhoban/tf_deep_vision_public) for use
+- [https://www.github.com/rhoban/tf_deep_vision](rhoban/tf_deep_vision) for rhoban developers
