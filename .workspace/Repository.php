@@ -69,11 +69,8 @@ class Repository
             $remotes['origin'] = 'ssh://hg@bitbucket.org/'.$this->name;
         } else {
             $remotes['origin'] = 'git@'.$this->host.':'.$this->name.'.git';
-            $remotes['https'] = 'https://'.$this->host.'/'.$this->name.'.git';
+            // $remotes['https'] = 'https://'.$this->host.'/'.$this->name.'.git';
         }
-
-        // Custom fithub remote
-        $remotes['fithub'] = 'git@fithub:'.$this->name.'.git';
 
         return $remotes;
     }
