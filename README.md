@@ -27,7 +27,43 @@ First of all, you will need to install required packages:
 ### Installing catkin
 
     sudo pip install -U catkin_tools mock
+
+### Installing OpenCV with DNN support
+
+Rhoban code uses a specific version of OpenCV with DNN supports which is not
+available through package manager on the specified version of Ubuntu.
+
+To install the proper version of OpenCV, use the following procedure:
+
+    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv.git
+    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv_contrib.git
+
+Then build opencv with contrib support:
+
+     cd opencv && mkdir build && cd build
+     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
+           -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -D WITH_GTK=ON ..
+     make -j
+     sudo make install
+
+### Installing FlyCapture dependency
+
+To use *BlackFly* cameras from *FLIR*, you have to install their software. First
+clone this repository outside of the workspace folder:
+
+    git clone https://github.com/RhobanDeps/flycapture.git
+
+And run the install script:
+
+    cd flycapture
+    sudo ./install_flycapture.sh
     
+Maybe there will be issues with apt packages, in this case, run:
+
+    sudo apt --fix-broken install
+
+And try again (you might need to repeat the last step 2 or 3 times)
+
 ### Setting up your Github account with your public key
 
 Since the `workspace` manager handle dozens of repositories at once, it is much
@@ -39,9 +75,9 @@ Sign in on your GitHub account and go to Settings, and then "SSH and GPG
 keys". Click "New SSH key" and copy the content of `.ssh/id_rsa.pub` in the key
 field, choose any name you want and validate the new key.
 
-### Setting up the workspace
+### Setting up the workspace (user)
 
-Clone the latest stable release of `workspace` repository and move to it:
+Clone the latest public release of `workspace` repository and move to it:
 
     git clone -b public_2019 https://github.com/rhoban/workspace.git
     cd workspace
@@ -50,59 +86,37 @@ Then, run the setup:
 
     ./workspace setup
 
-You can then install the latest stable release of all the rhoban source code:
-Note: You should make a fork of rhoban/environments_public in order to have
-the configuration for your own robots.
+You can then install the latest public release of all the rhoban source code:
 
-    ./workspace install rhoban/hl_kid_public.git
-    ./workspace install rhoban/environments_public.git
-    ./workspace install rhoban/monitoring_robocup.git
-    ./workspace git checkout final_2018
-    ln -sf src/rhoban/environments_public env
+    ./workspace install rhoban/kid_size_public.git
+    ./workspace install rhoban/env_public.git
+    ./workspace install rhoban/qt_monitoring.git
+    ./workspace git checkout public_2019
+    ln -sf src/rhoban/env_public env
 
-Some symbolic links should be modified in env/fake.
-"default_robot" should be change with one of the robot folder name:
+Notes:
 
-    ln -sf ../default_robot/kick_classic.json env/fake
-    ln -sf ../default_robot/kick_small.json env/fake
-    ln -sf ../default_robot/kick_lateral.json env/fake
-    ln -sf ../default_robot/KickModelCollection.json env/fake
-    ln -sf ../default_robot/VCM.json env/fake
-    ln -sf ../default_robot/sigmaban.urdf env/fake
-    ln -sf ../../../rhoban/model/Data/font.ttf env/fake
+- You should make a fork of rhoban/env_public in order to have the configuration
+for your own robots.
+- While installing, optional packages will be proposed, you can use the default
+option for all of them
 
-### Installing OpenCV with DNN support
+### Setting up the workspace (rhoban developer)
 
-From home directory
+Clone the latest release of `workspace` repository and move to it:
 
-    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv.git
-    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv_contrib.git
+    git clone https://github.com/rhoban/workspace.git
+    cd workspace
 
-Then build opencv with contrib support
+Then, run the setup:
 
-     cd opencv && mkdir build && cd build
-     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
-           -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -D WITH_GTK=ON ..
-     make -j
-     sudo make install
+    ./workspace setup
 
-### Installing FlyCapture dependency
+You can then install the latest public release of all the rhoban source code:
 
-To use *BlackFly* cameras from *FLIR*, you have to install their software. First
-clone this repository:
-
-    git clone https://github.com/RhobanDeps/flycapture.git
-    
-And run the install script:
-
-    cd flycapture
-    sudo ./install_flycapture.sh
-    
-Maybe there will be issues with apt packages, in this case, run:
-
-    sudo apt --fix-broken install
-    
-And try again (you might need to repeat the last step 2 or 3 times)
+    ./workspace install rhoban/kid_size.git
+    ./workspace install rhoban/environments.git
+    ./workspace install rhoban/qt_monitoring.git
 
 ### Installing RhIO Shell
 
@@ -161,25 +175,6 @@ This will remotely run the program on the robot
 
     rhio 10.0.0.1
     
-### Saving logs with MonitoringRoboCup
-
-Simply place a terminal with the location in which you want to save the log and run:
-
-    MonitoringRoboCup
-
-This will save all the content in a file named `monitoring.log` and if a webcam
-is connected, it will also save images in the folder.
-
-Note: If a file named `monitoring.log` exists in the folder, `MonitoringRoboCup`
-will crash rather than overwritting current log. If you want to ecrase current
-log, just remove the file `monitoring.log` to allow the program to start.
-
-### Replaying logs with MonitoringRoboCup
-
-Move to the folder containing the `monitoring.log` file and run:
-
-    MonitoringRoboCup monitoring.log
-
 ## Workspace commands
 
 To pull all the repositories:
