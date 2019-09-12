@@ -90,7 +90,6 @@ You can then install the latest public release of all the rhoban source code:
 
     ./workspace install rhoban/kid_size_public.git
     ./workspace install rhoban/env_public.git
-    ./workspace install rhoban/qt_monitoring.git
     ./workspace git checkout public_2019
     ln -sf src/rhoban/env_public env
 
@@ -116,7 +115,6 @@ You can then install the latest public release of all the rhoban source code:
 
     ./workspace install rhoban/kid_size.git
     ./workspace install rhoban/environments.git
-    ./workspace install rhoban/qt_monitoring.git
 
 ### Installing RhIO Shell
 
@@ -131,50 +129,6 @@ Run this command to add `rhio` to your `$PATH`:
 Don't forget to re-run the shell to have the change, you should then be able to
 run the `rhio` command.
 
-### Installing RoboCup monitoring software
-
-You can now compile the RoboCup monitoring software:
-
-    ./workspace build monitoring_robocup
-    
-Run this command to add `MonitoringRobocup` to your `$PATH`:
-
-    echo alias "MonitoringRoboCup=\"\$PWD/devel_release/lib/monitoring_robocup/MonitoringRoboCup\"" >> ~/.bashrc
-    
-Don't forget to re-run the shell to have the change, you should then be able to
-run the `MonitoringRoboCup` command.
-
-## Basic commands
-
-    
-### Compiling the robot program (KidSize)
-
-Run the following to build the program:
-
-    ./workspace build kid_size
-    
-### Communicating with the robot
-
-Our robots communicate with the `10.0.0.1` ip address, so you need to configure your computer to a compatible static address like `10.0.0.2`
-
-It is strongly recommended that you add your private key to the robot. By copying the content of `.ssh/id_rsa.pub` in the `.ssh/authorized_keys` inside the robot.
-    
-### Deploying the program to the robot
-
-This will deploy the program on the robot:
-    
-    ./deploy
-    
-### Running the program on the robot
-
-This will remotely run the program on the robot
-
-    ./run
-    
-### Connecting to the robot with rhio
-
-    rhio 10.0.0.1
-    
 ## Workspace commands
 
 To pull all the repositories:
@@ -197,7 +151,7 @@ To build just a specific package:
 
     ./workspace build RhIOShell
 
-## Dependencies
+### Workspace dependencies
 
 In `packages.xml`, you can annotate the repositories:
 
@@ -215,6 +169,36 @@ Here, a full repository name is used, and the dependency is tagged `optional`. T
 the user will be asked if he wants to install the dependency. You can also use `recommend`, that
 would do the same, except that the default choice will be yes instead of no.
 
+## Rhoban basic commands
+
+### Compiling the robot program (KidSize)
+
+Run the following to build the program:
+
+    ./workspace build kid_size
+
+### Communicating with the robot
+
+Our robots communicate with the `10.0.0.1` ip address, so you need to configure your computer to a compatible static address like `10.0.0.2`
+
+It is strongly recommended that you add your private key to the robot. By copying the content of `.ssh/id_rsa.pub` in the `.ssh/authorized_keys` inside the robot.
+
+### Deploying the program to the robot
+
+This will deploy the program on the robot:
+
+    ./deploy
+
+### Running the program on the robot
+
+This will remotely run the program on the robot
+
+    ./run
+
+### Connecting to the robot with rhio
+
+    rhio 10.0.0.1
+
 ### Working on robot logs
 
 All of this commands have to be issued while located in the `env/fake` folder.
@@ -223,7 +207,7 @@ All of this commands have to be issued while located in the `env/fake` folder.
 
 In order to work with a specific log, use:
 
-   ./prepare.py <path_to_log>
+    ./prepare.py <path_to_log>
 
 This command also set the serial_number of the tracker of the robot if available
 in the `metadata.json` file.
