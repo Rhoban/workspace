@@ -91,6 +91,10 @@ You can then install the latest public release of all the rhoban source code:
     ./workspace install:public_2019 rhoban/kid_size_public.git
     ./workspace install:public_2019 rhoban/env_public.git
 
+In order to use the latest public release for all repositories, each time a
+`./workspace install` command is specified, rather use:
+`./workspace install:public_2019`
+
 Notes:
 
 - You should make a fork of `rhoban/env_public` in order to have the configuration
