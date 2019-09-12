@@ -87,7 +87,7 @@ class Repository
         return $this->name;
     }
 
-    public function install()
+    public function install($tag = 'master')
     {
         $fast = getenv('GIT_FAST');
         $args = '';
@@ -102,11 +102,23 @@ class Repository
             die();
         }
 
+        $has_tag = strcmp($tag,'master') != 0;
+        if ($has_tag) {
+            // Silently using checkout to branch/tag $tag
+            $command = "cd src/".$this->getTarget()." && git checkout -q ".$tag;
+            $r = OS::run($command);
+            if ($r != 0) {
+                Terminal::error("Unable to checkout tag/branch: '".$tag."'");
+            }
+        }
+
         if (!$fast) {
             OS::run("cd $this->directory; git remote set-branches origin '*'");
             OS::run("cd $this->directory; git fetch");
             $this->updateRemotes();
-            $this->setUpstream('origin');
+            if (!$has_tag) {
+                $this->setUpstream('origin');
+            }
         }
     }
 

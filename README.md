@@ -88,14 +88,12 @@ Then, run the setup:
 
 You can then install the latest public release of all the rhoban source code:
 
-    ./workspace install rhoban/kid_size_public.git
-    ./workspace install rhoban/env_public.git
-    ./workspace git checkout public_2019
-    ln -sf src/rhoban/env_public env
+    ./workspace install:public_2019 rhoban/kid_size_public.git
+    ./workspace install:public_2019 rhoban/env_public.git
 
 Notes:
 
-- You should make a fork of rhoban/env_public in order to have the configuration
+- You should make a fork of `rhoban/env_public` in order to have the configuration
 for your own robots.
 - While installing, optional packages will be proposed, you can use the default
 option for all of them
@@ -116,18 +114,14 @@ You can then install the latest public release of all the rhoban source code:
     ./workspace install rhoban/kid_size.git
     ./workspace install rhoban/environments.git
 
-### Installing RhIO Shell
+### Adding Rhoban binaries to your path
 
-You can now compile the RhIO Shell:
+Run this command to add all rhoban binaries to your `$PATH`:
 
-    ./workspace build RhIOShell
+    echo export "PATH=\"\$PATH:$PWD/bin\"" >> ~/.bashrc
     
-Run this command to add `rhio` to your `$PATH`:
-
-    echo export "PATH=\"\$PATH:$PWD/devel_release/lib/RhIOShell/\"" >> ~/.bashrc
-    
-Don't forget to re-run the shell to have the change, you should then be able to
-run the `rhio` command.
+Don't forget to re-run the shell to have the change applied. Once you build the
+rhoban tools, you should be able to use them without specifying the full path.
 
 ## Workspace commands
 

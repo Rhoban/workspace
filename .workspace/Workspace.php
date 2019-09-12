@@ -82,7 +82,12 @@ class Workspace
 
     protected $installed = array();
 
-    public function install($address)
+    /**
+     * address: can either be simply a repository address (no space allowed) or a chain
+     * [optional|recommend] git_address
+     * tag: 
+     */
+    public function install($address, $tag = 'master')
     {
         $parts = explode(' ', $address);
         $prefix = null;
@@ -97,6 +102,7 @@ class Workspace
         $name = $repository->getName();
         $directory = $repository->getDirectory();
 
+        // If repository is already installed, nothing to be done
         if (isset($this->installed[$name])) {
             return;
         }
@@ -115,11 +121,12 @@ class Workspace
           Terminal::error("* Not installing $name\n");
           return;
         }
-        $this->installed[$name] = false;
 
+        // If this would not overwrite an existing folder, install directory
+        $this->installed[$name] = false;
         if (!is_dir($repository->getDirectory())) {
             Terminal::success("* Installing $name in $directory\n");
-            $repository->install();
+            $repository->install($tag);
             $this->updatePackages();
         } else {
             Terminal::info("* Repository $name already installed\n");
@@ -135,7 +142,7 @@ class Workspace
             }
         }
         foreach ($toInstall as $install) {
-            $this->install($install);
+            $this->install($install, $tag);
         }
     }
 
