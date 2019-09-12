@@ -72,6 +72,14 @@ field, choose any name you want and validate the new key.
 
 ### Setting up the workspace (user)
 
+The latest public release of _Rhoban_ source code is tagged under different
+repositories under the tag `public_2019` this tag is based on the code we
+used during the final of the RoboCup 2019 with the following modifications:
+
+- Showing who is the captain in Monitoring Software
+- Solving several issues regarding DNN training and use
+- Publishing improved DNN
+
 Clone the latest public release of `workspace` repository and move to it:
 
     git clone -b public_2019 https://github.com/rhoban/workspace.git
