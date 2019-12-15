@@ -28,6 +28,10 @@ First of all, you will need to install required packages:
 Rhoban code uses a specific version of OpenCV with DNN supports which is not
 available through package manager on the specified version of Ubuntu.
 
+You may have to install the following packages :
+
+	sudo apt-get install libavcodec-dev libavformat-dev libavdevice-dev
+
 To install the proper version of OpenCV, use the following procedure:
 
     git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv.git
