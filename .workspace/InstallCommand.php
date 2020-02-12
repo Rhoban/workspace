@@ -19,13 +19,21 @@ class InstallCommand extends Command
 
     public function run(array $args)
     {
+        $tag = "master";
+        if ($this->flags) {
+            if (count($this->flags) > 1) {
+                Terminal::error("This only support one flag");
+                return 1;
+            }
+            $tag = $this->flags[0];
+        }
         if ($args) {
             foreach ($args as $arg) {
-                $this->workspace->install($arg);
+                $this->workspace->install($arg, $tag);
             }
         } else {
             foreach ($this->workspace->getRepositories() as $repository) {
-                $this->workspace->install($repository->getName());
+                $this->workspace->install($repository->getName(), $tag);
             }
         }
     }
