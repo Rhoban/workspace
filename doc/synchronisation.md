@@ -20,6 +20,7 @@
  
      server master_ip maxdelay 0.005 minpoll 0 maxpoll 0
      allow 192.168.9.0/8
+     makestep 0.01 3
      rtcsync
      
 ## Updating a slave configuration
