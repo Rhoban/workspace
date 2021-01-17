@@ -5,7 +5,7 @@
 ### Recommended Operating System
 
 The recommended operating system to run this version of the software is `Ubuntu
-18.04 Bionic Beaver` using other OS might result on issues with some of the
+20.04 Focal Fossa` using other OS might result on issues with some of the
 packages required.
 
 ### Installing APT dependencies
@@ -13,55 +13,25 @@ packages required.
 First of all, you will need to install required packages:
 
     sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev\
-        php php-cli php-xml libv4l-dev gnuplot5-qt \
-        python-pip python-empy python-setuptools python-nose chrpath ffmpeg libudev-dev \
+        php php-cli php-xml libv4l-dev gnuplot-qt \
+        python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
-		    libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
-        qt5-default qtmultimedia5-dev libqt5webkit5
+		libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
+        qt5-default qtmultimedia5-dev libqt5webkit5-dev
         
 ### Installing catkin
 
-    sudo pip install -U catkin_tools mock
+    sudo pip3 install -U mock
+    sudo pip3 install git+https://github.com/catkin/catkin_tools.git
 
 ### Installing OpenCV with DNN support
 
-Rhoban code uses a specific version of OpenCV with DNN supports which is not
-available through package manager on the specified version of Ubuntu.
+Ubuntu 20.04 has native package of OpenCV 4.2.0 which supports DNN.
 
-You may have to install the following packages :
+### Installing FlyCapture dependency (DEPRECATED)
 
-	sudo apt-get install libavcodec-dev libavformat-dev libavdevice-dev
-
-To install the proper version of OpenCV, use the following procedure:
-
-    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv.git
-    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv_contrib.git
-
-Then build opencv with contrib support:
-
-     cd opencv && mkdir build && cd build
-     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
-           -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -D WITH_GTK=ON ..
-     make -j
-     sudo make install
-
-### Installing FlyCapture dependency
-
-To use *BlackFly* cameras from *FLIR*, you have to install their software. First
-clone this repository outside of the workspace folder:
-
-    git clone https://github.com/RhobanDeps/flycapture.git
-
-And run the install script:
-
-    cd flycapture
-    sudo ./install_flycapture.sh
-    
-Maybe there will be issues with apt packages, in this case, run:
-
-    sudo apt --fix-broken install
-
-And try again (you might need to repeat the last step 2 or 3 times)
+**NOTE: Flycapture is going to be discontinued and is not maintained for Ubuntu
+20.04, building support for FLIR camera will require to move to Spinnaker SDK.**
 
 ### Setting up your Github account with your public key
 
@@ -75,6 +45,8 @@ keys". Click "New SSH key" and copy the content of `.ssh/id_rsa.pub` in the key
 field, choose any name you want and validate the new key.
 
 ### Setting up the workspace (user)
+
+**This part is not for Rhoban Developers**
 
 The latest public release of _Rhoban_ source code is tagged under different
 repositories under the tag `public_2019` this tag is based on the code we
