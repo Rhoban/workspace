@@ -17,7 +17,7 @@ First of all, you will need to install required packages:
         python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
 		libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
-        qt5-default qtmultimedia5-dev libqt5webkit5-dev
+        qt5-default qtmultimedia5-dev libqt5webkit5-dev libopencv-dev libeigen-dev
         
 ### Installing catkin
 
