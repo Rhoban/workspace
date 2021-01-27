@@ -17,7 +17,7 @@ First of all, you will need to install required packages:
         python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
 		libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
-        qt5-default qtmultimedia5-dev libqt5webkit5-dev libopencv-dev libeigen-dev
+        qt5-default qtmultimedia5-dev libqt5webkit5-dev libopencv-dev libeigen3-dev
         
 ### Installing catkin
 
@@ -179,6 +179,13 @@ This will remotely run the program on the robot
 ### Working on robot logs
 
 All of this commands have to be issued while located in the `env/fake` folder.
+
+#### Choosing the vision configuration
+
+A preliminary step to run the vision system on logs is to choose the
+configuration file. An example is:
+
+    ln -s ../common/vision_filters/all_fake.json vision_config.json
 
 #### Preparing a log environment
 
