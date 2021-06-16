@@ -19,7 +19,7 @@ $binaries = array('devel_release/lib/kid_size/KidSize','devel_release/lib/RhIOSh
 $targetHost = 'rhoban@'.$remote;
 $targetDir = '/home/rhoban/catkin_rel/';
 
-$libBlackList=array("libpthread.","libstdc","libm.","libgcc","libc.","libdl-","libdl.");
+$libBlackList=array("libpthread.","libstdc","libm.","libgcc","libc.","libdl-","libdl.", "librt");
 
 
 function smartCopyFile($filename){
