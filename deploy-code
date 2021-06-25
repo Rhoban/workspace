@@ -8,7 +8,7 @@ CURRENT_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # parameters
 BINARIES = [ "KidSize", "rhio", "rhal" ]
-BLASK_LIST = [ "libpthread.","libdl","librt" ]
+BLACK_LIST = [ "libpthread.", "libstdc", "libm.", "libgcc", "libc.", "libdl-", "libdl.", "librt"  ]
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(prog='deploy-code', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -26,31 +26,32 @@ if __name__ == "__main__":
 
   # Killing server on host
   print("* Killing KidSize on " + args.remote)
-  os.system('ssh rhoban@$remote ./env/stop.sh')
+  os.system(f'ssh rhoban@{args.remote} ./env/stop.sh')
 
   # Scan binaries and add shared libraries
   for binary in args.exported_binaries:
-    print(f"Add {binary}")
-    # symlink each binary in the deploy dir 
-    if not os.path.exists(f"{args.deploy_dir}/{binary}"):
-      print(f"PATH: {args.deploy_dir}/{binary}")
-      os.symlink(f"{args.bin_dir}/{binary}", f"{args.deploy_dir}/{binary}")
-    # search all shared library and symlink them in the deploy dir
-    output = subprocess.check_output(f'ldd {args.bin_dir}/{binary} | grep -iv \"Not found\"', shell=True).splitlines()
+    if os.path.exists(f'{args.bin_dir}/{binary}'):
+      print(f"Add {binary}")
+      # symlink each binary in the deploy dir 
+      if not os.path.islink(f"{args.deploy_dir}/{binary}"):
+        #print(f"PATH: {args.deploy_dir}/{binary}")
+        os.symlink(f"{args.bin_dir}/{binary}", f"{args.deploy_dir}/{binary}")
+      # search all shared library and symlink them in the deploy dir
+      output = subprocess.check_output(f'ldd {args.bin_dir}/{binary} | grep -iv \"Not found\"', shell=True).splitlines()
 
-    for l in output:
-      l = l.decode("utf-8")
-      for elem in BLASK_LIST:
-        if l.find(elem) != -1:
-          print(f"Ignore {l}")
+      for l in output:
+        l = l.decode("utf-8")
+        index = l.find('=> /')
+        if index == -1 :
           continue
-      index = l.find('=> /')
-      if index == -1 :
-        continue
-      shared_lib_path = (l[index+3:].split(' ')[0]) 
-      shared_lib_name = shared_lib_path.split('/')[-1]
-      if not os.path.exists(f"{args.deploy_dir}/{shared_lib_name}"):
-        os.symlink(f"{shared_lib_path}", f"{args.deploy_dir}/{shared_lib_name}")
+        shared_lib_path = (l[index+3:].split(' ')[0]) 
+        shared_lib_name = shared_lib_path.split('/')[-1]
+        for prefix in BLACK_LIST:
+          if shared_lib_name.startswith(prefix):
+            print(f"Ignore {l}")
+            continue
+        if not os.path.exists(f"{args.deploy_dir}/{shared_lib_name}"):
+          os.symlink(f"{shared_lib_path}", f"{args.deploy_dir}/{shared_lib_name}")
 
   # Deploying
   print("* Sending files...\n")
