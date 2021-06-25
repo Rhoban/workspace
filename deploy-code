@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
   # Killing server on host
   print("* Killing KidSize on " + args.remote)
-  os.system(f'ssh rhoban@{args.remote} ./env/stop.sh')
+  # os.system(f'ssh rhoban@{args.remote} ./env/stop.sh')
 
   # Scan binaries and add shared libraries
   for binary in args.exported_binaries:
@@ -46,12 +46,16 @@ if __name__ == "__main__":
           continue
         shared_lib_path = (l[index+3:].split(' ')[0]) 
         shared_lib_name = shared_lib_path.split('/')[-1]
+        ignore = False
         for prefix in BLACK_LIST:
           if shared_lib_name.startswith(prefix):
+            ignore = True
+        
+        if ignore:
             print(f"Ignore {l}")
-            continue
-        if not os.path.exists(f"{args.deploy_dir}/{shared_lib_name}"):
-          os.symlink(f"{shared_lib_path}", f"{args.deploy_dir}/{shared_lib_name}")
+        else:
+          if not os.path.exists(f"{args.deploy_dir}/{shared_lib_name}"):
+            os.symlink(f"{shared_lib_path}", f"{args.deploy_dir}/{shared_lib_name}")
 
   # Deploying
   print("* Sending files...\n")
