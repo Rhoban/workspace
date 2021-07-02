@@ -16,7 +16,7 @@ if __name__ == "__main__":
   parser.add_argument('remote', nargs='?', help='Remote address', default="10.0.0.1")
   parser.add_argument('-d', '--deploy_dir', help='Deploy directory', default=".deploy")
   parser.add_argument('-b', '--bin_dir', help='Binary directory', default=CURRENT_FILE_DIR + "/build/bin")
-  parser.add_argument('-e', '--exported_binaries', nargs="+", help='Binaries to be export', default=[], type=list)
+  parser.add_argument('-e', '--exported_binaries', nargs="+", help='Binaries to be export', default=[])
   parser.add_argument('-t', '--target_dir', help='Target directory', default='/home/rhoban/catkin_rel')
   parser.add_argument('-u','--ubuntu_20_04', help='Ubuntu 20.04 deploy', action='store_true')
   args = parser.parse_args()
