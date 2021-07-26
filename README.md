@@ -12,9 +12,9 @@ packages required.
 
 First of all, you will need to install required packages:
 
-    sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev\
-        php php-cli php-xml libv4l-dev gnuplot5-qt \
-        python-pip python-empy python-setuptools python-nose chrpath ffmpeg libudev-dev \
+    sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev \
+        php php-cli php-xml libv4l-dev gnuplot-qt \
+        python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
 		    libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
         qt5-default qtmultimedia5-dev libqt5webkit5
