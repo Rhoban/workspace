@@ -17,34 +17,9 @@ First of all, you will need to install required packages:
         python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev \
         libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
 		    libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
-        qt5-default qtmultimedia5-dev libqt5webkit5
-        
-### Installing catkin
-
-    sudo pip install -U catkin_tools mock
-
-### Installing OpenCV with DNN support
-
-Rhoban code uses a specific version of OpenCV with DNN supports which is not
-available through package manager on the specified version of Ubuntu.
-
-You may have to install the following packages :
-
-	sudo apt-get install libavcodec-dev libavformat-dev libavdevice-dev
-
-To install the proper version of OpenCV, use the following procedure:
-
-    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv.git
-    git clone --branch 3.2.0 --depth 1 https://github.com/opencv/opencv_contrib.git
-
-Then build opencv with contrib support:
-
-     cd opencv && mkdir build && cd build
-     cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
-           -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules -D WITH_GTK=ON ..
-     make -j
-     sudo make install
-
+        qt5-default qtmultimedia5-dev libqt5webkit5 \
+        libopencv-dev liburdfdom-dev
+    
 ### Installing FlyCapture dependency
 
 To use *BlackFly* cameras from *FLIR*, you have to install their software. First
@@ -65,7 +40,7 @@ And try again (you might need to repeat the last step 2 or 3 times)
 
 ### Setting up your Github account with your public key
 
-Since the `workspace` manager handle dozens of repositories at once, it is much
+Since the `wks` manager handle dozens of repositories at once, it is much
 more convenient to use SSH keys.  If you don't have a one, generate one using:
 
     ssh-keygen -t rsa
@@ -74,62 +49,28 @@ Sign in on your GitHub account and go to Settings, and then "SSH and GPG
 keys". Click "New SSH key" and copy the content of `.ssh/id_rsa.pub` in the key
 field, choose any name you want and validate the new key.
 
-### Setting up the workspace (user)
-
-The latest public release of _Rhoban_ source code is tagged under different
-repositories under the tag `public_2019` this tag is based on the code we
-used during the final of the RoboCup 2019 with the following modifications:
-
-- Showing who is the captain in Monitoring Software
-- Solving several issues regarding DNN training and use
-- Publishing improved DNN
-
-Clone the latest public release of `workspace` repository and move to it:
-
-    git clone -b public_2019 https://github.com/rhoban/workspace.git
-    cd workspace
-
-Then, run the setup:
-
-    ./workspace setup
-
-You can then install the latest public release of all the rhoban source code:
-
-    ./workspace install:public_2019 rhoban/kid_size_public.git
-    ./workspace install:public_2019 rhoban/env_public.git
-
-In order to use the latest public release for all repositories, each time a
-`./workspace install` command is specified, rather use:
-`./workspace install:public_2019`
-
-Notes:
-
-- You should make a fork of `rhoban/env_public` in order to have the configuration
-for your own robots.
-- While installing, optional packages will be proposed, you can use the default
-option for all of them
-
 ### Setting up the workspace (rhoban developer)
 
-Clone the latest release of `workspace` repository and move to it:
+First, install `wks`:
 
-    git clone https://github.com/rhoban/workspace.git
-    cd workspace
+    pip install wks
 
-Then, run the setup:
+And then run:
 
-    ./workspace setup
+    wks install rhoban/kid_size#wks
 
-You can then install the latest public release of all the rhoban source code:
+This will install the upstream repositories. You can now build using:
 
-    ./workspace install rhoban/kid_size.git
-    ./workspace install rhoban/environments.git
+    wks build
+
 
 ### Adding Rhoban binaries to your path
 
+Binaries are built in `build/bin`.
+
 Run this command to add all rhoban binaries to your `$PATH`:
 
-    echo export "PATH=\"\$PATH:$PWD/bin\"" >> ~/.bashrc
+    echo export "PATH=\"\$PATH:$PWD/build/bin\"" >> ~/.bashrc
     
 Don't forget to re-run the shell to have the change applied. Once you build the
 rhoban tools, you should be able to use them without specifying the full path.
@@ -138,41 +79,23 @@ rhoban tools, you should be able to use them without specifying the full path.
 
 To pull all the repositories:
 
-    ./workspace pull
+    wks pull
 
 To build:
 
-    ./workspace build
+    wks build
 
-To build (debug):
-
-    ./workspace build:debug
-
-Listing packages:
-
-    ./workspace packages
+To build (debug), manually create a `build_debug` directory and simply run `cmake ../src`,
+then edit the proper CMakeCache variables using `ccmake .` to set the build type to `DEBUG`.
 
 To build just a specific package:
 
-    ./workspace build RhIOShell
+    wks build [package]
 
 ### Workspace dependencies
 
-In `packages.xml`, you can annotate the repositories:
-
-```xml
-    <build_depend>model</build_depend> <!-- rhobanproject/model -->
-```
-
-By default, this will use GitHub, you can also use complete repo names
-
-```xml
-    <build_depend>csa_mdp_experiments</build_depend> <!-- optional git@bitbucket.org:rhoban/csa_mdp_experiments.git -->
-```
-
-Here, a full repository name is used, and the dependency is tagged `optional`. This means that
-the user will be asked if he wants to install the dependency. You can also use `recommend`, that
-would do the same, except that the default choice will be yes instead of no.
+Have a look at [wks documentation](https://github.com/rhoban/wks#wks-simple-cmake-workspace-manager) for
+more details about how dependencies are handled.
 
 ## Rhoban basic commands
 
@@ -180,7 +103,7 @@ would do the same, except that the default choice will be yes instead of no.
 
 Run the following to build the program:
 
-    ./workspace build kid_size
+    wks build KidSize
 
 ### Communicating with the robot
 
