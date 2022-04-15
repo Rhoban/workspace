@@ -18,4 +18,5 @@ tags
 vive_logs/
 cscope.out
 .vscode/cscope*
+.vscode/c_cpp_properties.json
 docker

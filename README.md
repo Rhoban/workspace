@@ -1,4 +1,4 @@
-# catkin workspace with packages manager
+# Rhoban's workspace for Kid Size league
 
 ## Setup of the system
 
@@ -57,7 +57,7 @@ First, install `wks`:
 
 And then run:
 
-    wks install rhoban/kid_size#wks
+    wks install rhoban/kid_size
 
 This will install the upstream repositories. You can now build using:
 
