@@ -1,8 +1,0 @@
-#!/usr/bin/php
-<?php
-
-include(__DIR__ . '/.workspace/autoload.php');
-
-array_shift($argv);
-$workspace = new Workspace(__DIR__);
-$workspace->run($argv);
