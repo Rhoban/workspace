@@ -8,7 +8,7 @@ CURRENT_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # parameters
 BINARIES = [ "KidSize", "rhio", "rhal" ]
-BLACK_LIST = [ "libpthread.", "libstdc", "libm.", "libgcc", "libc.", "libdl-", "libdl.", "librt"  ]
+BLACK_LIST = [ "libpthread.", "libstdc", "libm.", "libgcc", "libc.", "libdl-", "libdl.", "librt", "libopenvino"  ]
 BLACK_LIST_UBUNTU_20_04 = [ "libpthread.", "libdl-", "libdl.", "librt"  ]
 
 if __name__ == "__main__":
