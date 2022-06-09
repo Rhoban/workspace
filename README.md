@@ -38,6 +38,14 @@ Maybe there will be issues with apt packages, in this case, run:
 
 And try again (you might need to repeat the last step 2 or 3 times)
 
+### Installing OpenVINO
+
+Install OpenVINO for Ubuntu:
+https://docs.openvino.ai/latest/openvino_docs_install_guides_installing_openvino_linux.html#doxid-openvino-docs-install-guides-installing-openvino-linux
+
+Don't forget to install dependencies, drivers, and add setupvars.sh to your bashrc.
+
+
 ### Setting up your Github account with your public key
 
 Since the `wks` manager handle dozens of repositories at once, it is much
