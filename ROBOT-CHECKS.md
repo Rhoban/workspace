@@ -13,6 +13,10 @@
 - Run `view /Vision/TaggedImg`, check that the (blue) horizon line is properly positionned.
   You can have a look at a goal post, the horizon line should be at the same height that the robot if it was there.
 
+## Perception check
+
+- Run `view /Vision/yolo/out`, check that the objects are well detected.
+
 ## Ball position check
 
 - Run `init`, `walk` and `/moves/head/disabled=0`, put a ball at robot's feet, it should watch it.
