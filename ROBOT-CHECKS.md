@@ -4,6 +4,10 @@
 
 - Set the robot to `init` and check for misalignments and important backlashes
 
+## Camera focus check
+
+- Check that the camera focus is not blurry with `view /Vision/TaggedImg`.
+
 ## Horizon line check
 
 - Run `view /Vision/TaggedImg`, check that the (blue) horizon line is properly positionned.
@@ -36,3 +40,6 @@
   the jauges and check that it is moving positively
 - Do the same for right foot in `/lowlevel/right_pressure`
 
+## Global integration test
+
+- The robot should be able to score a goal by walking from the middle of the field to the ball and kick.
