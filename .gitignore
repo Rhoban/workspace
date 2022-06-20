@@ -20,3 +20,4 @@ cscope.out
 .vscode/cscope*
 .vscode/c_cpp_properties.json
 docker
+tools/vision_logs/*
