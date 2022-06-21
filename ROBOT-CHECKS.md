@@ -4,6 +4,10 @@
 
 - Set the robot to `init` and check for misalignments and important backlashes
 
+## Check piano wires
+
+- They should not be bent, head should not hit the ground when the robot fall
+
 ## Camera focus check
 
 - Check that the camera focus is not blurry with `view /Vision/TaggedImg`.
