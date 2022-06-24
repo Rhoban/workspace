@@ -187,26 +187,26 @@ do {
   $error = (strstr(strtolower($result), 'error') !== false);
 } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
 
-while (true) {
-  do {
-    msg('GYROTARE', 'Put me on the floor now and press enter');
-    readline();
-    $result = cmd('rhalGyroTare');
-    $error = (strstr(strtolower($result), 'error') !== false);
-  } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+// while (true) {
+//   do {
+//     msg('GYROTARE', 'Put me on the floor now and press enter');
+//     readline();
+//     $result = cmd('rhalGyroTare');
+//     $error = (strstr(strtolower($result), 'error') !== false);
+//   } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
 
 
-  cmd('rhalSaveConf rhal.json');
+//   cmd('rhalSaveConf rhal.json');
 
-  msg('CHECK', 'Checking the pressure');
-  if (isHandled()) {
-    if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
-      break;
-    }
-  } else {
-    break;
-  }
-}
+//   msg('CHECK', 'Checking the pressure');
+//   if (isHandled()) {
+//     if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
+//       break;
+//     }
+//   } else {
+//     break;
+//   }
+// }
 
 while (true) {
   msg('CHECK', 'Checking vision status');
