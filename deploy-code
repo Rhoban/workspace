@@ -1,85 +1,74 @@
 #!/usr/bin/env python3
 
-import os 
+import os
 import argparse
 import subprocess
-
-def yes_no(question:str):
-  answers = {"yes": True, "no": False}
-  possibilities = ",".join(answers.keys())
-  while True:
-    print("\n")
-    answer = input(f"{question} ({possibilities}): ")
-    if answer in answers:
-      return answers[answer]
-    else:
-      print(f"Possible answers are: {possibilities}")
+from utils import yes_no
 
 CURRENT_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # parameters
-BINARIES = [ "KidSize", "rhio", "rhal" ]
-BLACK_LIST = [ "libpthread.", "libstdc", "libm.", "libgcc", "libc.", "libdl-", "libdl.", "librt", "libopenvino"  ]
-BLACK_LIST_UBUNTU_20_04 = [ "libpthread.", "libdl-", "libdl.", "librt"  ]
+BINARIES = ["KidSize", "rhio", "rhal"]
+BLACK_LIST = ["libpthread.", "libstdc", "libm.", "libgcc", "libc.", "libdl-", "libdl.", "librt", "libopenvino"]
+BLACK_LIST_UBUNTU_20_04 = ["libpthread.", "libdl-", "libdl.", "librt"]
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(prog='deploy-code', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-  parser.add_argument('remote', nargs='?', help='Remote address', default="10.0.0.1")
-  parser.add_argument('-d', '--deploy_dir', help='Deploy directory', default=".deploy")
-  parser.add_argument('-b', '--bin_dir', help='Binary directory', default=CURRENT_FILE_DIR + "/build/bin")
-  parser.add_argument('-e', '--exported_binaries', nargs="+", help='Binaries to be export', default=[])
-  parser.add_argument('-t', '--target_dir', help='Target directory', default='/home/rhoban/binaries')
-  parser.add_argument('-u','--ubuntu_20_04', help='Ubuntu 20.04 deploy', action='store_true')
-  args = parser.parse_args()
+    parser = argparse.ArgumentParser(prog="deploy-code", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("remote", nargs="?", help="Remote address", default="10.0.0.1")
+    parser.add_argument("-d", "--deploy_dir", help="Deploy directory", default=".deploy")
+    parser.add_argument("-b", "--bin_dir", help="Binary directory", default=CURRENT_FILE_DIR + "/build/bin")
+    parser.add_argument("-e", "--exported_binaries", nargs="+", help="Binaries to be export", default=[])
+    parser.add_argument("-t", "--target_dir", help="Target directory", default="/home/rhoban/binaries")
+    parser.add_argument("-u", "--ubuntu_20_04", help="Ubuntu 20.04 deploy", action="store_true")
+    args = parser.parse_args()
 
-  args.exported_binaries += BINARIES
+    args.exported_binaries += BINARIES
 
-  cmake_cache = open('build/CMakeCache.txt', 'r')
-  cmake_cache_lines = cmake_cache.read().split("\n")
-  cmake_cache.close()
-  if len(list(filter(lambda l: l.startswith("CMAKE_BUILD_TYPE:STRING=Release"), cmake_cache_lines))) != 1:
-    if not yes_no("WARNING: It appear that you didn't build in RELEASE mode, deploy anyway? "):
-      exit(1)
+    cmake_cache = open("build/CMakeCache.txt", "r")
+    cmake_cache_lines = cmake_cache.read().split("\n")
+    cmake_cache.close()
+    if len(list(filter(lambda l: l.startswith("CMAKE_BUILD_TYPE:STRING=Release"), cmake_cache_lines))) != 1:
+        if not yes_no("WARNING: It appear that you didn't build in RELEASE mode, deploy anyway? "):
+            exit(1)
 
-  if not os.path.exists(args.deploy_dir):
-    os.mkdir(args.deploy_dir)
+    if not os.path.exists(args.deploy_dir):
+        os.mkdir(args.deploy_dir)
 
-  # Killing server on host
-  print("* Killing KidSize on " + args.remote)
-  os.system(f'ssh rhoban@{args.remote} ./env/stop.sh')
+    # Killing server on host
+    print("* Killing KidSize on " + args.remote)
+    os.system(f"ssh rhoban@{args.remote} ./env/stop.sh")
 
-  # Scan binaries and add shared libraries
-  for binary in args.exported_binaries:
-    if os.path.exists(f'{args.bin_dir}/{binary}'):
-      print(f"Add {binary}")
-      # symlink each binary in the deploy dir 
-      if not os.path.islink(f"{args.deploy_dir}/{binary}"):
-        #print(f"PATH: {args.deploy_dir}/{binary}")
-        os.symlink(f"{args.bin_dir}/{binary}", f"{args.deploy_dir}/{binary}")
-      # search all shared library and symlink them in the deploy dir
-      output = subprocess.check_output(f'ldd {args.bin_dir}/{binary} | grep -iv \"Not found\"', shell=True).splitlines()
+    # Scan binaries and add shared libraries
+    for binary in args.exported_binaries:
+        if os.path.exists(f"{args.bin_dir}/{binary}"):
+            print(f"Add {binary}")
+            # symlink each binary in the deploy dir
+            if not os.path.islink(f"{args.deploy_dir}/{binary}"):
+                # print(f"PATH: {args.deploy_dir}/{binary}")
+                os.symlink(f"{args.bin_dir}/{binary}", f"{args.deploy_dir}/{binary}")
+            # search all shared library and symlink them in the deploy dir
+            output = subprocess.check_output(f'ldd {args.bin_dir}/{binary} | grep -iv "Not found"', shell=True).splitlines()
 
-      for l in output:
-        l = l.decode("utf-8")
-        index = l.find('=> /')
-        if index == -1 :
-          continue
-        shared_lib_path = (l[index+3:].split(' ')[0]) 
-        shared_lib_name = shared_lib_path.split('/')[-1]
-        ignore = False
+            for l in output:
+                l = l.decode("utf-8")
+                index = l.find("=> /")
+                if index == -1:
+                    continue
+                shared_lib_path = l[index + 3 :].split(" ")[0]
+                shared_lib_name = shared_lib_path.split("/")[-1]
+                ignore = False
 
-        black_list_used = BLACK_LIST if not args.ubuntu_20_04 else BLACK_LIST_UBUNTU_20_04 
-        for prefix in black_list_used:
-          if shared_lib_name.startswith(prefix):
-            ignore = True
-        
-        if ignore:
-            print(f"Ignore {l}")
-        else:
-          if not os.path.exists(f"{args.deploy_dir}/{shared_lib_name}"):
-            os.symlink(f"{shared_lib_path}", f"{args.deploy_dir}/{shared_lib_name}")
+                black_list_used = BLACK_LIST if not args.ubuntu_20_04 else BLACK_LIST_UBUNTU_20_04
+                for prefix in black_list_used:
+                    if shared_lib_name.startswith(prefix):
+                        ignore = True
 
-  # Deploying
-  print("* Sending files...\n")
-  os.system(f"rsync --delete -avzhL --info=flist2,name,progress {args.deploy_dir}/ rhoban@{args.remote}:{args.target_dir}")
+                if ignore:
+                    print(f"Ignore {l}")
+                else:
+                    if not os.path.exists(f"{args.deploy_dir}/{shared_lib_name}"):
+                        os.symlink(f"{shared_lib_path}", f"{args.deploy_dir}/{shared_lib_name}")
 
+    # Deploying
+    print("* Sending files...\n")
+    os.system(f"rsync --delete -avzhL --info=flist2,name,progress {args.deploy_dir}/ rhoban@{args.remote}:{args.target_dir}")

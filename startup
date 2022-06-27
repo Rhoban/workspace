@@ -81,8 +81,8 @@ else:
     field: str = question_answers(f"[FIELD] What field are we playing on ?", list(fields.keys()))
 
 if yes_no("[WIFI] Do you want to run the WiFi script ?"):
-    # XXX: To check
-    os.system("./wifi")
+    network_name: str = f"field_{field}"
+    os.system(f"./wifi {ip} {network_name}")
 
 # Checking for the Game Controller to be seen by the robot
 while True:
@@ -183,7 +183,7 @@ field_view_l: str = """
                                                  
 """
 
-field_view:str = field_view_r if side == 'r' else field_view_l
+field_view: str = field_view_r if side == "r" else field_view_l
 
 # Setting the background to be green
 field_view = Back.GREEN + Fore.WHITE + field_view + Style.RESET_ALL
@@ -195,7 +195,7 @@ else:
     role: str = question_answers("[ROLE] What is this robot role ?", list(positions.keys()))
 
 
-field_view = field_view.replace(role, Fore.BLACK +Style.BRIGHT + role + Style.NORMAL + Fore.WHITE)
+field_view = field_view.replace(role, Fore.BLACK + Style.BRIGHT + role + Style.NORMAL + Fore.WHITE)
 
 # Goal keeper / free kicker
 is_goal_keeper: int = 1 if role == "D" else 0
