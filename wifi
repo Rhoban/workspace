@@ -1,107 +1,30 @@
-#!/usr/bin/php
-<?php
+#!/usr/bin/env python3
+import sys
+import glob
+from utils import *
 
-if (count($argv) < 2) {
-    die("Usage: ./wifi field [host]\n");
-}
+configs = glob.glob("env/wifi_networks/*.yaml")
+config_names = [".".join(config.split("/")[-1].split(".")[:-1]) for config in configs]
+ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
 
-// Remote host
-$field = $argv[1];
-$remote = isset($argv[2]) ? $argv[2] : '10.0.0.1';
-$wiface = 'wlan0';
+if len(sys.argv) < 3:
+    while True:
+        print("")
+        bright("Configuration available: ")
+        for config in config_names:
+            bright(f"* {config}")
 
-function cmd($cmd) {
-    global $remote;
-    $result = trim(`rhio $remote $cmd`);
-    return $result;
-}
+        print("")
+        bright("Enter the desired configuration:")
+        config: str = input()
 
-$result = explode('=', cmd('/referee/teamId'));
+        if config in config_names:
+            break
+else:
+    config: str = sys.argv[2]
 
-//Configuration
-$ESSID = 'HUMANOID_FIELD_5ghz_'.strtoupper($field);
-$PASSWORD = 'humanoid';
-$teamId = $result[1];
+bright(f"[WIFI] Deploying WiFi configuration {config} to the {ip}")
 
-//Retrieve robot hostname
-$hostname = trim(`ssh rhoban@$remote cat /etc/hostname`);
-
-//Set ip address
-$ip = null;
-
-// XXX: To update
-$ipPrefix = '192.168.11.';
-
-if ($hostname == 'olive') {
-    $ip = $ipPrefix.'41';
-} else if ($hostname == 'nova') {
-    $ip = $ipPrefix.'42';
-} else if ($hostname == 'arya') {
-    $ip = $ipPrefix.'43';
-} else if ($hostname == 'tom') {
-    $ip = $ipPrefix.'44';
-} else if ($hostname == 'rush') {
-    $ip = $ipPrefix.'45';
-} else {
-    echo "\e[31mUnknown hostname:\e[m $hostname\n";
-    die;
-}
-
-echo "Connecting \e[1m$hostname\e[m to wifi \e[1m$ESSID\e[m with IP \e[1m$ip\e[m (TeamId: \e[1m$teamId\e[m)\n";
-
-//Wifi magic
-`ssh rhoban@$remote sudo killall -2 ping 2> /dev/null`;
-
-// Be sure wpa supplicant is killed
-`ssh rhoban@$remote sudo killall -2 wpa_supplicant 2> /dev/null`;
-`ssh rhoban@$remote sudo killall -9 wpa_supplicant 2> /dev/null`;
-
-// Down then upping the interface
-`ssh rhoban@$remote sudo ifconfig $wiface down`;
-`ssh rhoban@$remote sudo ifconfig $wiface up`;
-
-// Joining the ESSID
-// sleep(1);
-// echo "Scanning...\n";
-// echo `ssh rhoban@$remote sudo iw $wiface scan | grep $ESSID`;
-`ssh rhoban@$remote sudo iw $wiface connect $ESSID`;
-
-// Setting IP address
-`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.0.0`;
-
-// Connecting to WiFi
-`ssh rhoban@$remote "wpa_passphrase $ESSID $PASSWORD > /tmp/wpa.conf"`;
-// `ssh rhoban@$remote "echo \"\nap_scan=1\" >> /tmp/wpa.conf"`;
-`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dnl80211 -f/tmp/wpa.log -ddddd`;
-
-// Open Iran
-#`ssh rhoban@$remote sudo ifconfig $wiface $ip netmask 255.255.255.0`;
-#`ssh rhoban@$remote sudo ifconfig wlan0 $ip netmask 255.255.255.0`;
-//`ssh rhoban@$remote "wpa_passphrase $ESSID humanoidrobot > /tmp/wpa.conf"`;
-// OPen IRAN
-#`ssh rhoban@$remote "wpa_passphrase $ESSID Humanoid2018 > /tmp/wpa.conf"`;
-#`ssh rhoban@$remote sudo wpa_supplicant -B -i$wiface -c/tmp/wpa.conf -Dwext`;
-sleep(3);
-
-//Check to ping to router twice
-echo "Check wifi by pinging router:\n";
-$checkPing = `ssh rhoban@$remote ping -W 1 -n -c 2 192.168.1.1`;
-
-if (strpos($checkPing, '2 received, 0% packet loss')) {
-    echo "\e[1mOK. Network is ready.\e[m\n";
-} else {
-    echo "\e[31mNetwork configuration failed:\e[m\n$checkPing\n";
-    die;
-}
-
-//Check if RhobanServer listen to the referee
-$isServerRunning = `ssh rhoban@$remote ps aux | grep -v "grep" | grep "RhobanServer"`;
-if (strpos($isServerRunning, 'RhobanServer')) {
-    echo "RhobanServer is running. Check referee state:\n";
-    $result = trim(`rhio $remote /referee/state`);
-    echo "$result\n";
-} else {
-    echo "RhobanServer is not running.\n";
-    die;
-}
-
+os.system(f"scp env/wifi_networks/{config}.yaml rhoban@{ip}:/tmp/wifi.yaml")
+os.system(f"ssh rhoban@{ip} sudo cp /tmp/wifi.yaml /etc/netplan/00-installer-config-wifi.yaml")
+os.system(f"ssh rhoban@{ip} sudo netplan apply")
