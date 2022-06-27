@@ -23,7 +23,7 @@ if len(sys.argv) < 3:
 else:
     config: str = sys.argv[2]
 
-bright(f"[WIFI] Deploying WiFi configuration {config} to the {ip}")
+bright(f"[WIFI] Deploying WiFi configuration {config} to {ip}")
 
 os.system(f"scp env/wifi_networks/{config}.yaml rhoban@{ip}:/tmp/wifi.yaml")
 os.system(f"ssh rhoban@{ip} sudo cp /tmp/wifi.yaml /etc/netplan/00-installer-config-wifi.yaml")
