@@ -1,371 +1,240 @@
-#!/usr/bin/php
-<?php
+#!/usr/bin/env python3
+import sys
+import os
+import re
+from utils import *
 
-setlocale(LC_NUMERIC, "en_US.UTF-8");
+# Expected team ID for games
+expected_team_id: int = 11
 
-// Robots roles
-$roles = [
-  'olive' => 'B', # Robot 1
-  'nova' => 'A',  # Robot 2
-  'arya' => 'D',  # Robot 3
-  'tom' => 'A',   # Robot 4
-  'rush' => 'C'   # Robot 5
-];
+# Expected team ID for drop-in games
+drop_in_ids: dict = {"a": 31, "b": 32}
+drop_in_field = None
 
-// Compass offsets and field settings
-// left -> 0 ||| right -> 1
-// 0: compassOffset with grass
-// 1: compassOffset without grass
-// 2: grass direction (left or right according to manutention table)
-// 3: ID of field (for visualCompass)
-$fields = [
-  // Fields
-  'g' => [0, -180, 'r', 0], // kid size, artificial light
-  'b' => [0, -180, 'l', 0], // kid size, artificial light
-  'c' => [0, -180, 'r', 0], // kid size, artificial light
-  'd' => [0, -180, 'r', 0], // adult size, artificial light
-  'e' => [0, -180, 'l', 0], // kid size, natural light field
-  't' => [0, -180, 'l', 0], // kid size, natural light field
-];
+# Fields
+# - l/r: grass orientation
+fields = {"r": ["r"]}
 
-$host = '10.0.0.1';
-if (count($argv) >= 2) {
-  $host = $argv[1];
+# Positions
+positions: dict = {
+    "A": [
+        [-0.75, 3.1, -90],  # Start pos
+        [2.5, 1.0, 0],  # Patrol1
+        [-1.50, 1.0, 180],  # Patrol2
+    ],
+    "B": [
+        [-0.75, -3.1, 90],
+        [2.5, -1.0, 0],
+        [-1.5, -1.0, 180],
+    ],
+    "C": [
+        [-3, -3.1, 90],
+        [-2.5, 1.5, 90],
+        [-2.5, -1.5, -90],
+    ],
+    "D": [
+        [-3.5, 3.1, -90],
+        [0, 0, 0],
+        [0, 0, 0],
+    ],
 }
 
-function msg($phase, $msg)
-{
-  echo "\n\e[1m$phase: $msg\e[m\n";
-}
-function prompt($phase, $msg, array $possibilities)
-{
-  $pos = implode(', ', $possibilities);
-  while (true) {
-    echo "\n\e[1m$phase: $msg\e[m (" . $pos . ")\n";
-    echo "> ";
-    flush();
-    $m = strtolower(trim(readline()));
-    if (in_array($m, $possibilities)) {
-      return $m;
-    }
-    echo "\e[1;31mYou should answer one of the following: " . $pos . "\e[m\n";
-  }
-}
-function question($phrase, $msg)
-{
-  return prompt($phrase, $msg, ['y', 'n']) == 'y';
-}
-function cmd($cmd, $display = true)
-{
-  global $host;
-  $result = trim(`rhio $host $cmd`);
-  if ($display) echo "$result\n";
-  return $result;
-}
-function isHandled()
-{
-  $r = cmd('/decision/handled');
+# Default roles
+roles: dict = {"olive": "B", "nova": "A", "arya": "D", "tom": "A", "rush": "C"}
 
-  return $r == '/decision/handled=true';
-}
+# Retrieving ip and hostname
+ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
+hostname: str = rhio_get_value(ip, "/server/hostname")
 
-function isVisionOk()
-{
-  $r = explode('=', cmd('/Vision/lastUpdate'));
-  if (count($r) > 1) {
-    $r = $r[1];
-  } else {
-    echo "Failed to read vision last update";
-    return false;
-  }
-  // Vision is ok if last update is more recent than 200 ms
-  return floatval($r) < 200;
-}
+bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
-$hostname = explode('=', cmd('/server/hostname', false));
-if (count($hostname) > 1) $hostname = $hostname[1];
-else $hostname = '?';
+# Checking devices
+while True:
+    bright(f"[CHECK] Checking that devices are present...")
+    result = rhio(ip, "rhalCheck")
+    if "All devices are present" not in result:
+        error(result)
 
-msg('STARTUP', 'Robot is: ' . $hostname);
+        if not yes_no("Devices are missing, try again ?", "y"):
+            break
+    else:
+        success("[CHECK] All devices are present")
+        break
 
-while (true) {
-  msg('CHECK', 'Checking that all devices are present');
-  $r = cmd('rhalCheck');
-  if (strpos($r, 'All devices are present') === false) {
-    if (question("\e[31mERROR", 'There was errors in the check, continue anyway?')) {
-      break;
-    }
-  } else {
-    break;
-  }
-}
+# Checking that team is is properly set
+is_drop_in: bool = yes_no("[DROP-IN] Is it a drop-in game ?", "n")
+if is_drop_in:
+    options = ", ".join([f"{key}: {value}" for key, value in zip(drop_in_ids.keys(), drop_in_ids.values())])
+    dropin_team: str = question_answers(f"[DROP-IN-ID] What team are we ({options}) ?", list(drop_in_ids.keys()))
+    dropin_id: int = drop_in_ids[dropin_team]
+    rhio(ip, f"/referee/teamId={dropin_id}")
+else:
+    team_id: int = int(rhio_get_value(ip, "/referee/teamId"))
+    if team_id != expected_team_id:
+        warning(f"[TEAM-ID] Team id is {team_id} while expected {expected_team_id}")
+        if yes_no(f"Change the team ID back to {expected_team_id} ?"):
+            rhio(ip, f"/referee/teamId={expected_team_id}")
 
-$isDropin = false;
-if (question('DROPIN', 'Is it a drop-in game?')) {
-  $isDropin = true;
-  $teamLetter = prompt('DROPIN-ID', 'What team are we (a: 31, b: 32) ?', ['a', 'b']);
-  if ($teamLetter == 'a') {
-    $teamId = 31;
-  } else {
-    $teamId = 32;
-  }
+if is_drop_in and drop_in_field is not None:
+    field: str = drop_in_field
+else:
+    field: str = question_answers(f"[FIELD] What field are we playing on ?", list(fields.keys()))
 
-  cmd('/referee/teamId=' . $teamId);
-} else {
-  $defaultTeamId = 11;
-  $r = cmd('referee/teamId');
-  $readTeamId = intval(substr($r, strpos($r, '=') + 1));
-  if ($readTeamId != $defaultTeamId) {
-    $msg = "Current team id unexpected (" . $readTeamId . "). Set it to " . $defaultTeamId . "?";
-    if (question('TEAMID', $msg)) {
-      cmd('/referee/teamId=' . $defaultTeamId);
-    }
-  }
-}
+if yes_no("[WIFI] Do you want to run the WiFi script ?"):
+    # XXX: To check
+    os.system("./wifi")
 
-if ($isDropin) {
-  $field = 'e';
-  msg('FIELD', 'Auto-assigning field to E since it is a drop-in');
-} else {
-  $field = prompt('FIELD', 'What is the current field ?', array_keys($fields));
-}
+# Checking for the Game Controller to be seen by the robot
+while True:
+    result = rhio(ip, "infoPlaying")
+    last_update = re.match(r"(.+)Referee last update: (.+).", result, re.DOTALL + re.MULTILINE)
 
-if (strtolower($field) == 'e') {
-  echo "Setting vision values for natural light\n";
+    if last_update and float(last_update[2]) > 5:
+        error(f"[REFEREE] Update from the referee is outdated ({float(last_update[2])} s)")
+        if not yes_no("[REFEREE] Try again ?", "y"):
+            break
+    else:
+        success("[REFEREE] Referee is present")
+        break
 
-  cmd('/Vision/source/Shutter/absValue=0.3');
+bright("[INIT] Press ENTER to run init")
+input()
+rhio(ip, "init")
 
-  cmd('/Vision/roiRandomizer/maxROI=16');
-  cmd('/Vision/ballByII/maxRois=16');
+bright("[WALK] Press ENTER to run walk")
+input()
+rhio(ip, "walk")
+rhio(ip, "/moves/arms/armsState=2")
 
-  cmd('/Vision/green/maxU=143');
-  cmd('/Vision/green/maxV=127');
-  cmd('/Vision/green/maxY=169');
-  cmd('/Vision/green/minU=96');
-  cmd('/Vision/green/minV=101');
-  cmd('/Vision/green/minY=34');
+while True:
+    bright("[TARE] Hold me in the air for the tare and press ENTER")
+    input()
+    bright("[TARE] Taring...")
+    result = rhio(ip, "tare")
+    if "Error" in result:
+        error(result)
+        if not yes_no("[TARE] Error while taring, try again ?", "y"):
+            break
+    else:
+        success("[TARE] Tare successful")
+        break
 
-  cmd('/localisation/field/RobotController/angleExploration=0.1');
-  cmd('/localisation/field/RobotController/posExploration=0.005');
+while True:
+    try:
+        vision_last_update: int = float(rhio_get_value(ip, "/Vision/lastUpdate"))
+        if vision_last_update > 200:
+            error(f"[VISION] Last update from the vision is old ({vision_last_update} ms)")
+            if not yes_no("[VISION] Try again ?", "y"):
+                break
+        else:
+            success("[VISION] Vision seems good")
+            break
+    except ValueError:
+        error(f"[VISION] Can't retrieve last update from vision")
+        if not yes_no("[VISION] Try again ?", "y"):
+            break
 
-  cmd('/moves/head/maxSpeed=240');
-}
+field = "r"
+# Setting the grass orientation
+side: str = question_answers("[SIDE] What side are we attacking ? ", ["l", "r"])
+(grass_orientation,) = fields[field]
 
-while (true) {
-  if (question('WIFI', 'Do you want to run the wifi script?')) {
-    passthru("./wifi " . strtoupper($field) . " $host");
-  }
-
-  msg('CHECK', 'Checking that there is info from the referee');
-  $r = cmd('infoPlaying');
-  preg_match('#Referee last update: (.+)\.$#mUsi', $r, $match);
-  if ($match && (float)($match[1]) > 5) {
-    if (question("\e[31mERROR", 'No info from the referee, continue anyway?')) {
-      break;
-    }
-  } else {
-    break;
-  }
-}
-
-// msg('FILTER', 'Setting referee filter to ignore packets coming from ip != 192.168.1.1');
-// cmd('/referee/ipFilter=192.168.1.1');
-
-msg('INIT', 'Press enter to run init');
-readline();
-cmd('init');
-
-msg('INIT', 'Press enter to run the walk');
-readline();
-cmd('walk');
-cmd('/moves/arms/armsState=2');
-
-do {
-  msg('TARE', 'Hold me in the air for the tare and press enter');
-  readline();
-  $result = cmd('tare');
-  $error = (strstr(strtolower($result), 'error') !== false);
-} while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
-
-// while (true) {
-//   do {
-//     msg('GYROTARE', 'Put me on the floor now and press enter');
-//     readline();
-//     $result = cmd('rhalGyroTare');
-//     $error = (strstr(strtolower($result), 'error') !== false);
-//   } while ($error && !question("\e[31mERROR", 'Tare returned error, continue anyway ?'));
+if side == grass_orientation:
+    bright("[GRASS] We play with grass")
+    rhio(ip, "/moves/rl_kick_controller/withGrass=1")
+else:
+    bright("[GRASS] We play against the grass")
+    rhio(ip, "/moves/rl_kick_controller/withGrass=0")
 
 
-//   cmd('rhalSaveConf rhal.json');
-
-//   msg('CHECK', 'Checking the pressure');
-//   if (isHandled()) {
-//     if (question("\e[31mERROR", 'Decision said I am handled when I should be on the floor, continue anyway?')) {
-//       break;
-//     }
-//   } else {
-//     break;
-//   }
-// }
-
-while (true) {
-  msg('CHECK', 'Checking vision status');
-  if (!isVisionOk()) {
-    if (question("\e[31mERROR", 'Vision is not working properly, continue anyway?')) {
-      break;
-    }
-  } else {
-    break;
-  }
-}
-
-$fieldData = "
+field_view_r: str = """
                                                  
- ┌─ D ──────────── A ───┬──────────────────────┐ 
- │                      │                      │ 
- │                      │                      │ 
- ├──┐              A    │                      ┤ 
- │  │                   │                      │ 
- │  │                  .│.                     │ 
- │ D│      +       B (  │  )  opponent field   │ 
- │  │                  .│.                     │ 
- │  │                   │                      │ 
- ├──┘                   │                      ┤ 
- │                      │                      │ 
- │                      │                      │ 
- └──────── C ───── B ───┴──────────────────────┘ 
+ ╔═ D ════════════ A ═══╦══════════════════════╗ 
+ ║                      ║                      ║ 
+ ║                      ║                      ║ 
+ ╟──┐              A    ║                      ╢ 
+ ║  │                   ║                      ║ 
+ ║  │                 .-╬-.                    ║ 
+ ║ D│   +          B (  ╬  )     opponents     ║ 
+ ║  │                 .-╬-.                    ║ 
+ ║  │   C               ║                      ║ 
+ ╟──┘                   ║                      ╢ 
+ ║                      ║                      ║ 
+ ║                      ║                      ║ 
+ ╚═════ C ════════ B ═══╩══════════════════════╝ 
                                                  
-";
+"""
 
-$positions = array(
-  'A' => [
-    -0.75, 3.1, -90,  // Start pos
-    -0.75, 1.5,       // Init pos
-    2.5, 1.0, 0,     // Patrol1
-    -1.50, 1.0, 180,  // Patrol2
-    1.50
-  ],
-  'B' => [
-    -0.75, -3.1, 90,
-    -1.5, 0.0,
-    2.5, -1.0, 0,
-    -1.5, -1.0, 180,
-    1.0
-  ],
-  'C' => [
-    -3, -3.1, 90,
-    -1.5, -1.5,
-    -2.5,  1.5, 90,
-    -2.5, -1.5, -90,
-    2.00
-  ],
-  'D' => [
-    -3.5, 3.1, -90,
-    -4.0, 0,
-    0, 0, 0,
-    0, 0, 0,
-    2.00
-  ],
-);
+field_view_l: str = """
+                                                 
+ ╔══════════════════════╦═══ B ═══════ C ══════╗ 
+ ║                      ║                      ║ 
+ ║                      ║                      ║ 
+ ╟                      ║                   ┌──╢ 
+ ║                      ║              C    │  ║ 
+ ║                    .-╬-.                 │  ║ 
+ ║      opponents    (  ╬  ) B         +    │D ║ 
+ ║                    .-╬-.                 │  ║ 
+ ║                      ║    A              │  ║ 
+ ╟                      ║                   └──╢ 
+ ║                      ║                      ║ 
+ ║                      ║                      ║ 
+ ╚══════════════════════╩═══ A ════════════ D ═╝ 
+                                                 
+"""
 
-if (isset($roles[$hostname])) {
-  $fieldData = "\e[42;30;1m$fieldData\e[m";
-  $position = $roles[$hostname];
-  $fieldData = str_replace("$position", "\e[37m$position\e[42;30;1m", $fieldData);
-  echo $fieldData;
-  msg('ROLE', "Automatically assigning $hostname to role $position");
-} else {
-  $fieldData = "\e[42;37;1m$fieldData\e[m";
-  echo $fieldData;
-  $position = strtoupper(prompt('ROLE', 'Unknown robot (' . $hostname . '), what is my role ?', ['a', 'b', 'c', 'd']));
-}
+field_view:str = field_view_r if side == 'r' else field_view_l
 
-if ($position == 'D') {
-  cmd('/moves/robocup/goalKeeper=1');
-} else {
-  cmd('/moves/robocup/goalKeeper=0');
-}
+# Setting the background to be green
+field_view = Back.GREEN + Fore.WHITE + field_view + Style.RESET_ALL
 
-if ($position == 'B') {
-  cmd('/moves/robocup/freeKicker=1');
-} else {
-  cmd('/moves/robocup/freeKicker=0');
-}
+if hostname in roles:
+    role: str = roles[hostname]
+else:
+    print(field_view)
+    role: str = question_answers("[ROLE] What is this robot role ?", list(positions.keys()))
 
-$config = "";
-$c = $positions[$position];
-$config .= '/moves/robocup/autoStartX=' . $c[0] . "\n";
-$config .= '/moves/robocup/autoStartY=' . $c[1] . "\n";
-$config .= '/moves/robocup/autoStartAzimuth=' . $c[2] . "\n";
-$config .= '/moves/robocup/autoTargetX=' . $c[3] . "\n";
-$config .= '/moves/robocup/autoTargetY=' . $c[4] . "\n";
-// Patrol
-$config .= '/moves/search/P1X=' . $c[5] . "\n";
-$config .= '/moves/search/P1Y=' . $c[6] . "\n";
-$config .= '/moves/search/P1Azimuth=' . $c[7] . "\n";
-$config .= '/moves/search/P2X=' . $c[8] . "\n";
-$config .= '/moves/search/P2Y=' . $c[9] . "\n";
-$config .= '/moves/search/P2Azimuth=' . $c[10] . "\n";
-// Begin Y target
-$config .= '/moves/search/beginY=1.50' . "\n";
-$config .= '/moves/search/beginY=-1.50' . "\n"; // Duplicated line with opposite signs
-$config .= '/teamplay/teamRadius=' . $c[11] . "\n";
-$config .= '/moves/robocup/freeKickX=-0.5' . "\n";
-$config .= '/moves/robocup/freeKickY=0' . "\n";
-$config .= '/moves/placer/directMode=true' . "\n";
-$config .= '/teamplay/aggressivity=0.75' . "\n";
-$config .= "exit\n";
-$tmp = tempnam(sys_get_temp_dir(), 'startup');
-file_put_contents($tmp, $config);
-`rhio $host < $tmp`;
-unlink($tmp);
 
-//Fix it later
-$side = '';
-while (!$side) {
-  $side = prompt('SIDE', 'Are we attacking left or right ?', ['l', 'r']);
-}
-$compassOffset = $fields[$field][$side == 'l' ? 0 : 1];
-// echo ("Setting compass offset to $compassOffset");
-// cmd('/localisation/field/CompassObservation/offset=' . $compassOffset);
-// cmd('/Vision/visualCompass/fieldNumber=' . $fields[$field][3]);
+field_view = field_view.replace(role, Fore.BLACK +Style.BRIGHT + role + Style.NORMAL + Fore.WHITE)
 
-$grassDirection = $fields[$field][2];
-if ($grassDirection == $side) {
-  msg('GRASS', "We are playing with the grass, loading strategy");
-  cmd('/moves/mc_kick_controler/strategyFile=kickStrategy_with_grass.json');
-  cmd('/strategy/grassOffset=180');
-} else {
-  msg('GRASS', "We are playing against the grass, loading strategy");
-  cmd('/moves/mc_kick_controler/strategyFile=kickStrategy_counter_grass.json');
-  cmd('/strategy/grassOffset=0');
-}
-cmd('reloadStrategy');
+# Goal keeper / free kicker
+is_goal_keeper: int = 1 if role == "D" else 0
+is_free_kicker: int = 1 if role == "A" else 0
 
-$fieldInverted = ($side == 'l') ? 'true' : 'false';
-cmd('/teamplay/isFieldInverted=' . $fieldInverted);
+rhio(ip, f"/moves/robocup/goalKeeper={is_goal_keeper}")
 
-/*
-if (question("THROW-IN", "Should I perform throw-ins")) {
-  cmd('decision/throwInEnable=true');
-}
-else {
-  cmd('decision/throwInEnable=false');
-}
-*/
-msg('DISK', "Checking robot space");
-echo `ssh rhoban@$host df -h /dev/sda2`;
+# Positions on the field
+initial_position, patrol1, patrol2 = positions[role]
+configuration: str = ""
 
-if (question("LOG", "Should the robot log during the game?")) {
-  cmd('/Vision/autologGames=true');
-}
+# Setting initial position on the field
+configuration += f"/moves/robocup/autoStartX={initial_position[0]}\n"
+configuration += f"/moves/robocup/autoStartY={initial_position[1]}\n"
+configuration += f"/moves/robocup/autoStartAzimuth={initial_position[2]}\n"
 
-msg('GO', 'Press enter to run robocup');
-readline();
-cmd('robocup');
+# Setting patrols target
+configuration += f"/moves/search/P1X={patrol1[0]}\n"
+configuration += f"/moves/search/P1Y={patrol1[1]}\n"
+configuration += f"/moves/search/P1Azimuth={patrol1[2]}\n"
+configuration += f"/moves/search/P2X={patrol2[0]}\n"
+configuration += f"/moves/search/P2Y={patrol2[1]}\n"
+configuration += f"/moves/search/P2Azimuth={patrol2[2]}\n"
 
-msg("\e[32mYODA", 'May the force be with you');
+# XXX: To investigate, not sure why this is here
+configuration += f"/moves/search/beginY=1.50\n"
+configuration += f"/moves/search/beginY=-1.50\n"
+configuration += "exit\n"
 
-msg("\e[32mREMINDER", 'Your robot is here:');
-echo "$fieldData\n";
-echo "\n";
+rhio_commands(ip, configuration)
+
+# Logging the game
+if yes_no("[LOG] Should we log ?"):
+    rhio(ip, "/Vision/autologGames=true")
+else:
+    rhio(ip, "/Vision/autologGames=false")
+
+bright("[REMINDER] Place the robot accordingly to this view:")
+print(field_view)
+
+success("[YODA] May the force be with you")
+rhio(ip, "robocup")
