@@ -4,6 +4,17 @@ import os
 import argparse
 import subprocess
 
+def yes_no(question:str):
+  answers = {"yes": True, "no": False}
+  possibilities = ",".join(answers.keys())
+  while True:
+    print("\n")
+    answer = input(f"{question} ({possibilities}): ")
+    if answer in answers:
+      return answers[answer]
+    else:
+      print(f"Possible answers are: {possibilities}")
+
 CURRENT_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # parameters
@@ -22,6 +33,13 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
   args.exported_binaries += BINARIES
+
+  cmake_cache = open('build/CMakeCache.txt', 'r')
+  cmake_cache_lines = cmake_cache.read().split("\n")
+  cmake_cache.close()
+  if len(list(filter(lambda l: l.startswith("CMAKE_BUILD_TYPE:STRING=Release"), cmake_cache_lines))) != 1:
+    if not yes_no("WARNING: It appear that you didn't build in RELEASE mode, deploy anyway? "):
+      exit(1)
 
   if not os.path.exists(args.deploy_dir):
     os.mkdir(args.deploy_dir)
