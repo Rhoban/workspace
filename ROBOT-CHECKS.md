@@ -38,7 +38,8 @@
 
 ## IMU check
 
-- Run the 3D pyBullet viewer and check that the robot is not abnormally tilted.
+- Run the 3D pyBullet viewer and check that the robot is not abnormally tilted and that the ball is seen at the
+  proper position
 
 ## Foot pressure check
 
