@@ -34,7 +34,7 @@
 
 # Kick check
 
-- Run the left and right foot kick for each possible kicks (`classic`, `lateral` and `small`).
+- Run the left and right foot kick for each possible kicks (`classic` and `small`).
 
 ## IMU check
 
