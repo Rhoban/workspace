@@ -142,9 +142,11 @@ side: str = question_answers("[SIDE] What side are we attacking ? ", ["l", "r"])
 if side == grass_orientation:
     bright("[GRASS] We play with grass")
     rhio(ip, "/moves/rl_kick_controller/withGrass=1")
+    rhio(ip, "/strategy/grassOffset=180")
 else:
     bright("[GRASS] We play against the grass")
     rhio(ip, "/moves/rl_kick_controller/withGrass=0")
+    rhio(ip, "/strategy/grassOffset=0")
 
 
 field_view_r: str = """
