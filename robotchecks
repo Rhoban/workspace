@@ -9,146 +9,130 @@ import signal
 
 # Retrieving ip and hostname
 
-ip: str = "127.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
-# ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
+ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
 hostname: str = rhio_get_value(ip, "/server/hostname")
 
 bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
-# Checking devices
-while True:
-    bright(f"[CHECK] Checking that devices are present...")
-    result = rhio(ip, "rhalCheck")
-    if "All devices are present" not in result:
-        error(result)
+def check_devices():
+    step_title("CHECK PRESENCE OF DEVICES")
+    # Checking devices
+    while True:
+        bright(f"[CHECK] Checking that devices are present...")
+        result = rhio(ip, "rhalCheck")
+        if "All devices are present" not in result:
+            error(result)
 
-        if not yes_no("Devices are missing, try again ?", "y"):
+            if not yes_no("Devices are missing, try again ?", "y"):
+                break
+        else:
+            success("[CHECK] All devices are present")
             break
-    else:
-        success("[CHECK] All devices are present")
-        break
+    
+def zero_leg_backslash():
+    step_title("ZERO AND LEGS BACKLASH")
 
-step_title("ZERO AND LEGS BACKLASH")
+    bright("[INIT] Press ENTER to run init")
+    input()
+    print(rhio(ip, "init"))
+    step_msg_check("Check for misalignments and important backlashes")
+    press_enter()
 
-bright("[INIT] Press ENTER to run init")
-input()
-print(rhio(ip, "init"))
-step_msg_check("Check for misalignments and important backlashes")
-press_enter()
+def piano_wires():
+    step_title("PIANO WIRES")
 
-step_title("PIANO WIRES")
+    step_msg_check("Check that piano wires are not bent, head should not hit the ground when the robot fall")
+    press_enter()
 
-step_msg_check("Check that piano wires are not bent, head should not hit the ground when the robot fall")
-press_enter()
+def camera_focus_horizon():
+    step_title("CAMERA FOCUS AND HORIZON CHECK")
+    step_msg_check("Check that the camera focus is not blurry")
+    step_msg_check("Check that the (blue) horizon line is properly positionned.\nYou can have a look at a goal post, the horizon line should be at the same height that the robot if it was there.")
+    bright("[CAMERAHORIZONVIEW] Press enter to view Horizon Camera")
+    input()
+    print(rhio(ip, "view /Vision/TaggedImg"))
 
-step_title("CAMERA FOCUS CHECK")
-step_msg_check("Check that the camera focus is not blurry")
-step_msg_check("Check that the (blue) horizon line is properly positionned.\nYou can have a look at a goal post, the horizon line should be at the same height that the robot if it was there.")
-bright("[CAMERAHORIZONVIEW] Press enter to view Horizon Camera")
-input()
-print(rhio(ip, "view /Vision/TaggedImg"))
+def perception_yolo():
+    step_title("PERCEPTION YOLO CHECK")
+    step_msg_check("Check that the objects are well detected.")
+    bright("[CAMERAYOLOVIEW] Press enter to view Yolo Camera")
+    input()
+    print(rhio(ip, "view /Vision/yolo/out"))
 
-step_title("PERCEPTION CHECK")
-step_msg_check("Check that the objects are well detected.")
-bright("[CAMERAYOLOVIEW] Press enter to view Yolo Camera")
-input()
-print(rhio(ip, "view /Vision/yolo/out"))
+def ball_position():
+    step_title("BALL POSITION CHECK")
 
-step_title("BALL POSITION CHECK")
+    bright("Putting robot in 'walk' mode")
 
-bright("Putting robot in 'walk' mode")
+    bright("[WALK] Press ENTER to run walk")
+    input()
+    print(rhio(ip, "walk"))
 
-bright("[WALK] Press ENTER to run walk")
-input()
-print(rhio(ip, "walk"))
+    print(rhio(ip, "/moves/head/disabled=0"))
 
-print(rhio(ip, "/moves/head/disabled=0"))
+    step_msg_check("Put the ball in front of the robot")
+    bright("Press enter when the ball is placed...")
+    input()
+    print(rhio(ip, "localisation/ballX") + Style.BRIGHT + Fore.YELLOW + ' should be ~0.2' + Style.RESET_ALL)
+    print(rhio(ip, "localisation/ballY") + Style.BRIGHT + Fore.YELLOW + ' should be 0' + Style.RESET_ALL)
 
-step_msg_check("Put the ball in front of the robot")
-bright("Press enter when the ball is placed...")
-input()
-print(rhio(ip, "localisation/ballX") + Style.BRIGHT + Fore.YELLOW + ' should be ~0.2' + Style.RESET_ALL)
-print(rhio(ip, "localisation/ballY") + Style.BRIGHT + Fore.YELLOW + ' should be 0' + Style.RESET_ALL)
+    while True:
+        if yes_no("Do you want to try again ?", "n"):
+            print(rhio(ip, "localisation/ballX") + Style.BRIGHT + Fore.YELLOW + ' should be ~0.2' + Style.RESET_ALL)
+            print(rhio(ip, "localisation/ballY") + Style.BRIGHT + Fore.YELLOW + ' should be 0' + Style.RESET_ALL)
+        else: 
+            break
 
-while True:
-    if yes_no("Do you want to try again ?", "n"):
-        print(rhio(ip, "localisation/ballX") + Style.BRIGHT + Fore.YELLOW + ' should be ~0.2' + Style.RESET_ALL)
-        print(rhio(ip, "localisation/ballY") + Style.BRIGHT + Fore.YELLOW + ' should be 0' + Style.RESET_ALL)
-    else: 
-        break
+def standup():
+    step_title("STANDUP CHECK")
+    step_msg_check("Put the robot on the FRONT side")
+    bright("[STANDUP] Press enter to try standing up")
+    input()
+    print(rhio(ip, "standup"))
 
-step_title("STANDUP CHECK")
-step_msg_check("Put the robot on the FRONT side")
-bright("[STANDUP] Press enter to try standing up")
-input()
-print(rhio(ip, "standup"))
-
-while (rhio_get_value(ip, "/moves/standup/over")=="false"):
-    time.sleep(0.2)
-rhio(ip, "stop")
-time.sleep(0.2)
-rhio(ip, "walk")
-while True:
-    if yes_no("Do you want to try again ?", "n"):
-        print(rhio(ip, "standup"))
-        while (rhio_get_value(ip, "/moves/standup/over")=="false"):
-            time.sleep(0.2)
-        rhio(ip, "stop")
+    while (rhio_get_value(ip, "/moves/standup/over")=="false"):
         time.sleep(0.2)
-        rhio(ip, "walk")
-    else: 
-        break
-
-step_msg_check("Put the robot on the BACK side")
-bright("[STANDUP] Press enter to try standing up")
-input()
-print(rhio(ip, "standup"))
-
-while (rhio_get_value(ip, "/moves/standup/over")=="false"):
+    rhio(ip, "stop")
     time.sleep(0.2)
-rhio(ip, "stop")
-time.sleep(0.2)
-rhio(ip, "walk")
-while True:
-    if yes_no("Do you want to try again ?", "n"):
-        print(rhio(ip, "standup"))
-        while (rhio_get_value(ip, "/moves/standup/over")=="false"):
+    rhio(ip, "walk")
+    while True:
+        if yes_no("Do you want to try again ?", "n"):
+            print(rhio(ip, "standup"))
+            while (rhio_get_value(ip, "/moves/standup/over")=="false"):
+                time.sleep(0.2)
+            rhio(ip, "stop")
             time.sleep(0.2)
-        rhio(ip, "stop")
+            rhio(ip, "walk")
+        else: 
+            break
+
+    step_msg_check("Put the robot on the BACK side")
+    bright("[STANDUP] Press enter to try standing up")
+    input()
+    print(rhio(ip, "standup"))
+
+    while (rhio_get_value(ip, "/moves/standup/over")=="false"):
         time.sleep(0.2)
-        rhio(ip, "walk")
-    else: 
-        break
+    rhio(ip, "stop")
+    time.sleep(0.2)
+    rhio(ip, "walk")
+    while True:
+        if yes_no("Do you want to try again ?", "n"):
+            print(rhio(ip, "standup"))
+            while (rhio_get_value(ip, "/moves/standup/over")=="false"):
+                time.sleep(0.2)
+            rhio(ip, "stop")
+            time.sleep(0.2)
+            rhio(ip, "walk")
+        else: 
+            break
 
-step_title("KICK CHECK")
+def kick_ball():
+    step_title("KICK CHECK")
 
-step_msg_check("Put a ball in front of the RIGHT kick")
-rhio(ip, "/moves/kick/kickName=classic")
-bright("[KICK] Press enter to try RIGHT CLASSIC kick")
-input()
-rhio(ip, "kick")
-while True:
-    if yes_no("Do you want to try again ?", "n"):
-        rhio(ip, "kick")
-    else: 
-        break
-
-step_msg_check("Put a ball in front of the RIGHT kick")
-rhio(ip, "/moves/kick/kickName=small")
-bright("[KICK] Press enter to try RIGHT SMALL kick")
-input()
-rhio(ip, "kick")
-while True:
-    if yes_no("Do you want to try again ?", "n"):
-        rhio(ip, "kick")
-    else: 
-        break
-
-if yes_no("Do you want to check LEFT foot ?", "n"):
+    step_msg_check("Put a ball in front of the RIGHT kick")
     rhio(ip, "/moves/kick/kickName=classic")
-    rhio(ip, "/moves/kick/left=true")
-    step_msg_check("Put a ball in front of the LEFT kick")
-    bright("[KICK] Press enter to try LEFT CLASSIC kick")
+    bright("[KICK] Press enter to try RIGHT CLASSIC kick")
     input()
     rhio(ip, "kick")
     while True:
@@ -157,8 +141,9 @@ if yes_no("Do you want to check LEFT foot ?", "n"):
         else: 
             break
 
+    step_msg_check("Put a ball in front of the RIGHT kick")
     rhio(ip, "/moves/kick/kickName=small")
-    bright("[KICK] Press enter to try LEFT SMALL kick")
+    bright("[KICK] Press enter to try RIGHT SMALL kick")
     input()
     rhio(ip, "kick")
     while True:
@@ -167,42 +152,67 @@ if yes_no("Do you want to check LEFT foot ?", "n"):
         else: 
             break
 
-step_title("IMU CHECK")
+    if yes_no("Do you want to check LEFT foot ?", "n"):
+        rhio(ip, "/moves/kick/kickName=classic")
+        rhio(ip, "/moves/kick/left=true")
+        step_msg_check("Put a ball in front of the LEFT kick")
+        bright("[KICK] Press enter to try LEFT CLASSIC kick")
+        input()
+        rhio(ip, "kick")
+        while True:
+            if yes_no("Do you want to try again ?", "n"):
+                rhio(ip, "kick")
+            else: 
+                break
 
-os.chdir("{0}/src/rhoban/sigmaban_model/".format(os.getcwd()))
-print("Current working directory: {0}".format(os.getcwd()))
+        rhio(ip, "/moves/kick/kickName=small")
+        bright("[KICK] Press enter to try LEFT SMALL kick")
+        input()
+        rhio(ip, "kick")
+        while True:
+            if yes_no("Do you want to try again ?", "n"):
+                rhio(ip, "kick")
+            else: 
+                break
 
-step_msg_check("Put the robot on the ground")
+def imu():
+    step_title("IMU CHECK")
 
-f = open(os.devnull, 'w')
-with subprocess.Popen(["python3", "client.py", ip], stdout=f, stderr=f) as proc:
-   print("PyBullet Launched")
-   print("Press Esc to quit Pybullet")
+    os.chdir("{0}/src/rhoban/sigmaban_model/".format(os.getcwd()))
+    print("Current working directory: {0}".format(os.getcwd()))
 
-step_title("FOOT PRESSURE CHECK")
+    step_msg_check("Put the robot on the ground")
 
-bright("Putting robot in 'tare' mode")
+    f = open(os.devnull, 'w')
+    with subprocess.Popen(["python3", "client.py", ip], stdout=f, stderr=f) as proc:
+        print("PyBullet Launched")
+        print("Press Esc to quit Pybullet")
 
-while True:
-    bright("[TARE] Hold me in the air for the tare and press ENTER")
-    input()
-    bright("[TARE] Taring...")
-    result = rhio(ip, "tare")
-    if "Error" in result:
-        error(result)
-        if not yes_no("[TARE] Error while taring, try again ?", "y"):
+def foot_pressure():
+    step_title("FOOT PRESSURE CHECK")
+
+    bright("Putting robot in 'tare' mode")
+
+    while True:
+        bright("[TARE] Hold me in the air for the tare and press ENTER")
+        input()
+        bright("[TARE] Taring...")
+        result = rhio(ip, "tare")
+        if "Error" in result:
+            error(result)
+            if not yes_no("[TARE] Error while taring, try again ?", "y"):
+                break
+        else:
+            success("[TARE] Tare successful")
             break
-    else:
-        success("[TARE] Tare successful")
-        break
 
-step_msg_check("Press the RIGHT foot jauges and check that each one is moving positively")
-with subprocess.Popen(["rhio", hostname, "plot", "/lowlevel/right_pressure/pressure_0", "/lowlevel/right_pressure/pressure_1", "/lowlevel/right_pressure/pressure_2", "/lowlevel/right_pressure/pressure_3"]) as proc:
-    print("LEFT pressure check Launched")
+    step_msg_check("Press the RIGHT foot jauges and check that each one is moving positively")
+    with subprocess.Popen(["rhio", hostname, "plot", "/lowlevel/right_pressure/pressure_0", "/lowlevel/right_pressure/pressure_1", "/lowlevel/right_pressure/pressure_2", "/lowlevel/right_pressure/pressure_3"]) as proc:
+        print("LEFT pressure check Launched")
 
-step_msg_check("Press the LEFT foot jauges and check that each one is moving positively")
-with subprocess.Popen(["rhio", hostname, "plot", "/lowlevel/left_pressure/pressure_0", "/lowlevel/left_pressure/pressure_1", "/lowlevel/left_pressure/pressure_2", "/lowlevel/left_pressure/pressure_3"]) as proc:
-    print("RIGHT pressure check Launched")  
+    step_msg_check("Press the LEFT foot jauges and check that each one is moving positively")
+    with subprocess.Popen(["rhio", hostname, "plot", "/lowlevel/left_pressure/pressure_0", "/lowlevel/left_pressure/pressure_1", "/lowlevel/left_pressure/pressure_2", "/lowlevel/left_pressure/pressure_3"]) as proc:
+        print("RIGHT pressure check Launched")  
 
 
 print("Check Finished")
