@@ -84,6 +84,9 @@ if yes_no("[WIFI] Do you want to run the WiFi script ?"):
     network_name: str = f"field_{field}"
     os.system(f"./wifi {ip} {network_name}")
 
+bright("[WIFI] Disabling power save")
+os.system(f"ssh rhoban@{ip} sudo iw dev wlan0 set power_save off")
+
 # Checking for the Game Controller to be seen by the robot
 while True:
     result = rhio(ip, "infoPlaying")
