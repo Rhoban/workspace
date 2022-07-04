@@ -16,7 +16,7 @@ bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
 
 def check_all(func):
-    for i in range(1, len(func)):
+    for i in range(1, len(func)+1):
         result = func[i]()
 
 
@@ -178,6 +178,7 @@ def kick_ball():
 
     step_msg_check("Put a ball in front of the RIGHT kick")
     rhio(ip, "/moves/kick/kickName=classic")
+    rhio(ip, "/moves/kick/left=false")
     bright("[KICK] Press enter to try RIGHT CLASSIC kick")
     input()
     rhio(ip, "kick")
