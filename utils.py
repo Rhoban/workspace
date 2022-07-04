@@ -42,6 +42,31 @@ def bright(message: str):
     """
     print(Style.BRIGHT + message + Style.RESET_ALL)
 
+def step_title(message: str):
+    """
+    Displays a message in a bright and cyan fashion
+
+    :param str message: the message
+    """
+    print("")
+    print(Style.BRIGHT + Fore.CYAN + message + Style.RESET_ALL)
+
+def step_msg_check(message: str):
+    """
+    Displays a message in a bright and cyan fashion
+
+    :param str message: the message
+    """
+    print("")
+    print("-> " + Style.BRIGHT + Fore.YELLOW + message + Style.RESET_ALL)
+
+def press_enter():
+    """
+    Displays "Press enter when done..." in a bright fashion
+    """
+    print("")
+    print(Style.BRIGHT + "Press enter when done..." + Style.RESET_ALL)
+    input()
 
 def question_answers(question: str, answers: list, default: str = "") -> str:
     """
