@@ -19,7 +19,7 @@ fields = {"r": ["r"]}
 positions: dict = {
     "A": [
         [-0.75, 3.1, -90],  # Start pos
-        [2.5, 1.0, 0],  # Patrol1
+        [2.5, 1.0, 0],      # Patrol1
         [-1.50, 1.0, 180],  # Patrol2
     ],
     "B": [
@@ -33,7 +33,7 @@ positions: dict = {
         [-2.5, -1.5, -90],
     ],
     "D": [
-        [-3.5, 3.1, -90],
+        [-3, 3.1, -90],
         [0, 0, 0],
         [0, 0, 0],
     ],
@@ -137,7 +137,6 @@ while True:
         if not yes_no("[VISION] Try again ?", "y"):
             break
 
-field = "r"
 # Setting the grass orientation
 side: str = question_answers("[SIDE] What side are we attacking ? ", ["l", "r"])
 (grass_orientation,) = fields[field]
@@ -154,7 +153,7 @@ else:
 
 field_view_r: str = """
                                                    
-   ╔═ D ════════════ A ═══╦══════════════════════╗ 
+   ╔═════ D ════════ A ═══╦══════════════════════╗ 
    ║                      ║                      ║ 
    ║                      ║                      ║ 
    ╟──┐              A    ║                      ╢ 
@@ -184,7 +183,7 @@ field_view_l: str = """
    ╟                      ║                   └──╢ 
    ║                      ║                      ║ 
    ║                      ║                      ║ 
-   ╚══════════════════════╩═══ A ════════════ D ═╝ 
+   ╚══════════════════════╩═══ A ═══════ D ══════╝ 
                                                    
 """
 
