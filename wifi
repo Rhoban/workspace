@@ -6,6 +6,19 @@ from utils import *
 configs = glob.glob("env/wifi_networks/*.yaml")
 config_names = [".".join(config.split("/")[-1].split(".")[:-1]) for config in configs]
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
+hostname: str = rhio_get_value(ip, "/server/hostname")
+
+robot_ips: dict = {
+    "olive": "41",
+    "nova": "42",
+    "arya": "43",
+    "tom": "44",
+    "rush": "45"
+}
+
+if hostname not in robot_ips:
+    error(f"Unknown robot {hostname}")
+    exit()
 
 if len(sys.argv) < 3:
     while True:
@@ -25,6 +38,17 @@ else:
 
 bright(f"[WIFI] Deploying WiFi configuration {config} to {ip}")
 
-os.system(f"scp env/wifi_networks/{config}.yaml rhoban@{ip}:/tmp/wifi.yaml")
+# Reading configuration file
+f = open(f"env/wifi_networks/{config}.yaml", "r")
+config = f.read()
+f.close()
+config = config.replace("{IP}", robot_ips[hostname])
+
+# Writing it back with proper IP
+f = open("/tmp/wifi.yaml", "w")
+f.write(config)
+f.close()
+
+os.system(f"scp /tmp/wifi.yaml rhoban@{ip}:/tmp/wifi.yaml")
 os.system(f"ssh rhoban@{ip} sudo cp /tmp/wifi.yaml /etc/netplan/00-installer-config-wifi.yaml")
 os.system(f"ssh rhoban@{ip} sudo netplan apply")
