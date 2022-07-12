@@ -13,7 +13,7 @@ drop_in_field = None
 
 # Fields
 # - l/r: grass orientation
-fields = {"r": ["r"]}
+fields = {"r": ["r"], "g": ["r"]}
 
 # Positions
 positions: dict = {
@@ -147,8 +147,11 @@ if side == grass_orientation:
     rhio(ip, "/strategy/grassOffset=180")
 else:
     bright("[GRASS] We play against the grass")
-    rhio(ip, "/moves/rl_kick_controller/withGrass=0")
-    rhio(ip, "/strategy/grassOffset=0")
+    # XXX: We use the with-grass strategy since grass doesn't affect that much ball in Bangkok 2022
+    rhio(ip, "/moves/rl_kick_controller/withGrass=1")
+    rhio(ip, "/strategy/grassOffset=180")
+    # rhio(ip, "/moves/rl_kick_controller/withGrass=0")
+    # rhio(ip, "/strategy/grassOffset=0")
 
 
 field_view_r: str = """
