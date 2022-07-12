@@ -13,7 +13,7 @@ drop_in_field = None
 
 # Fields
 # - l/r: grass orientation
-fields = {"r": ["r"], "g": ["r"]}
+fields = {"r": ["r"], "g": ["r"], "b": ["r"], "c": ["r"], "d": ["r"]}
 
 # Positions
 positions: dict = {
