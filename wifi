@@ -6,8 +6,7 @@ from utils import *
 configs = glob.glob("env/wifi_networks/*.yaml")
 config_names = [".".join(config.split("/")[-1].split(".")[:-1]) for config in configs]
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
-hostname: str = "arya"
-# hostname: str = rhio_get_value(ip, "/server/hostname")
+hostname: str = rhio_get_value(ip, "/server/hostname")
 
 robot_ips: dict = {
     "olive": "41",
