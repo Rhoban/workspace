@@ -7,6 +7,9 @@ from utils import *
 # Expected team ID for games
 expected_team_id: int = 11
 
+# Game controller ip (for filtering)
+game_controller_ip: str = "192.168.0.2"
+
 # Expected team ID for drop-in games
 drop_in_ids: dict = {"a": 31, "b": 32}
 drop_in_field = None
@@ -40,11 +43,14 @@ positions: dict = {
 }
 
 # Default roles
-roles: dict = {"olive": "D", "nova": "C", "arya": "B", "tom": "A", "rush": "C"}
+roles: dict = {"olive": "B", "nova": "D", "arya": "A", "tom": "C", "rush": "A"}
 
 # Retrieving ip and hostname
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
 hostname: str = rhio_get_value(ip, "/server/hostname")
+
+# Filtering game controller packets only
+rhio(ip, f"/referee/ipFilter={game_controller_ip}")
 
 bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
@@ -86,6 +92,9 @@ if yes_no("[WIFI] Do you want to run the WiFi script ?"):
 
 bright("[WIFI] Disabling power save")
 os.system(f"ssh rhoban@{ip} sudo iw dev wlan0 set power_save off")
+
+# Pinging the game controller
+os.system(f"ssh rhoban@{ip} ping {game_controller_ip} -c 4")
 
 # Checking for the Game Controller to be seen by the robot
 while True:
