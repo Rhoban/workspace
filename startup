@@ -4,7 +4,7 @@ import os
 import re
 from utils import *
 
-bright(f"Killing all KidSize running on your computer ...")
+bright(f"[GREGWAR PROOF] Killing all KidSize running on your computer ...")
 os.system(f"killall KidSize")
 
 # Expected team ID for games
