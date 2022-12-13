@@ -9,8 +9,7 @@ CURRENT_FILE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 # parameters
 BINARIES = ["KidSize", "rhio", "rhal"]
-BLACK_LIST = ["libpthread.", "libstdc", "libm.", "libgcc", "libc.", "libdl-", "libdl.", "librt", "libopenvino"]
-BLACK_LIST_UBUNTU_20_04 = ["libpthread.", "libdl-", "libdl.", "librt"]
+BLACK_LIST = ["libpthread.", "libdl-", "libdl.", "librt.", "libopenvino"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="deploy-code", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -19,7 +18,6 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--bin_dir", help="Binary directory", default=CURRENT_FILE_DIR + "/build/bin")
     parser.add_argument("-e", "--exported_binaries", nargs="+", help="Binaries to be export", default=[])
     parser.add_argument("-t", "--target_dir", help="Target directory", default="/home/rhoban/binaries")
-    parser.add_argument("-u", "--ubuntu_20_04", help="Ubuntu 20.04 deploy", action="store_true")
     args = parser.parse_args()
 
     args.exported_binaries += BINARIES
@@ -58,7 +56,7 @@ if __name__ == "__main__":
                 shared_lib_name = shared_lib_path.split("/")[-1]
                 ignore = False
 
-                black_list_used = BLACK_LIST if not args.ubuntu_20_04 else BLACK_LIST_UBUNTU_20_04
+                black_list_used = BLACK_LIST
                 for prefix in black_list_used:
                     if shared_lib_name.startswith(prefix):
                         ignore = True
