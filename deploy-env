@@ -40,7 +40,7 @@ else
     K=0
     if [ "$ENVS" == "" ]
     then
-	ssh rhoban@$remote mkdir  backup_env
+	ssh rhoban@$remote mkdir backup_env
     fi;
     
     for E in $ENVS; do
@@ -49,9 +49,7 @@ else
             E_SIZE=( $(ssh rhoban@$remote du -s $E) )
             E_SIZE=${E_SIZE[0]}
             if [ $E_SIZE -gt $CONFIRMATION_SIZE ]; then
-                HUMAN_SIZE=( $(ssh rhoban@$remote du -sh $E) )
-                HUMAN_SIZE=${HUMAN_SIZE[0]}
-                echo -e "${FORMAT_RED}WARNING: $E contains $HUMAN_SIZE of data, not removing it${FORMAT_NONE}"
+                echo -e "${FORMAT_RED}WARNING: $E contains $[$E_SIZE/1000]Mo of data, not removing it${FORMAT_NONE}"
                 continue
             fi
             echo "* Removing old environment $E with size ${E_SIZE}"
