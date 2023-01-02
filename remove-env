@@ -1,0 +1,37 @@
+#!/bin/bash
+
+MAX_OLD_ENVS=$(awk -F'=' '/^MAX_OLD_ENVS/ {print $2}' deploy-env)
+
+remote="10.0.0.1"
+if [ $# -gt 0 ]
+then
+    remote=$1
+fi 
+
+DIR="env"
+if [ ! -d $DIR ]; then
+    echo "! Environments is not installed"
+else
+    cd env
+
+    # Cleaning old environents
+    ROBOT=`ssh rhoban@$remote hostname`
+    ENVS=`ssh rhoban@$remote ls -Ahdc ./backup_env/* | sort -r`
+    K=0
+    if [ "$ENVS" == "" ]
+    then
+	      ssh rhoban@$remote mkdir backup_env
+    fi
+    
+    for E in $ENVS; do
+        K=$[$K+1]
+        if [ $K -gt $MAX_OLD_ENVS ]; then
+            echo "* Removing old environment $E with size ${E_SIZE}"
+            ssh rhoban@$remote rm -rf $E
+        fi
+    done
+    
+    if [ $MAX_OLD_ENVS -ge $K ]; then
+        echo "No environment to remove"
+    fi
+fi
