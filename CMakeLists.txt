@@ -20,7 +20,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wpedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 
 # Enable common instruction set
-add_compile_options(-mavx -msse2)
+# add_compile_options(-mavx -msse2)
 
 include(CTest)
 add_subdirectory(src)
