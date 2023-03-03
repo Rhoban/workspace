@@ -6,7 +6,7 @@
     {
       "label": "Build",
       "type": "shell",
-      "command": "./workspace build kid_size",
+      "command": "wks build",
       "problemMatcher": {
         "base": "$gcc",
         "fileLocation": "absolute"
