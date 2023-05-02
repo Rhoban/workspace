@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd src/rhoban/sigmaban_model
+python viewer.py $*
+
