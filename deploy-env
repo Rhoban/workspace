@@ -1,7 +1,8 @@
 #!/bin/bash
 
-MAX_OLD_ENVS=5
-CONFIRMATION_SIZE=50000 #Confirmation required to suppress environments larger than this (unit: KB)
+SAVE_OLD_ENVS=false # Do we save the old environments ?
+MAX_OLD_ENVS=5 # Max number of old environments
+CONFIRMATION_SIZE=50000 # Confirmation required to suppress environments larger than this (unit: KB)
 FORMAT_RED="\e[31m"
 FORMAT_NONE="\e[m"
 
@@ -45,10 +46,10 @@ else
     
     for E in $ENVS; do
         K=$[$K+1]
-        if [ $K -gt $MAX_OLD_ENVS ]; then
+        if [ $K -lt $MAX_OLD_ENVS ]; then
             E_SIZE=( $(ssh rhoban@$remote du -s $E) )
             E_SIZE=${E_SIZE[0]}
-            if [ $E_SIZE -gt $CONFIRMATION_SIZE ]; then
+            if $SAVE_OLD_ENVS && [ $E_SIZE -gt $CONFIRMATION_SIZE ]; then
                 echo -e "${FORMAT_RED}WARNING: $E contains $[$E_SIZE/1000]Mo of data, not removing it${FORMAT_NONE}"
                 continue
             fi

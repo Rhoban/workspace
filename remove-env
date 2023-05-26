@@ -26,7 +26,7 @@ else
     for E in $ENVS; do
         K=$[$K+1]
         if [ $K -gt $MAX_OLD_ENVS ]; then
-            echo "* Removing old environment $E with size ${E_SIZE}"
+            echo "* Removing old environment $E"
             ssh rhoban@$remote rm -rf $E
         fi
     done
