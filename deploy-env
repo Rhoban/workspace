@@ -6,6 +6,8 @@ CONFIRMATION_SIZE=50000 # Confirmation required to suppress environments larger 
 FORMAT_RED="\e[31m"
 FORMAT_NONE="\e[m"
 
+URDF_VERSION="sigmaban_2023" # Repository of the URDF in sigmaban_model
+
 confirm() {
     # call with a prompt string or use a default
     read -r -p "${1:-Are you sure? [y/N]} " response
@@ -75,4 +77,7 @@ else
     ssh rhoban@$remote rm -rf env
     ssh rhoban@$remote mkdir env
     rsync -l -r ${TO_COPY[@]} rhoban@$remote:env/
+
+    # Copy of the URDF
+    rsync -a --delete-after ../sigmaban_model/$URDF_VERSION/ rhoban@$remote:env/common/sigmaban
 fi
