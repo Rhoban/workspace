@@ -5,21 +5,15 @@
 ### Recommended Operating System
 
 The recommended operating system to run this version of the software is `Ubuntu
-18.04 Bionic Beaver` using other OS might result on issues with some of the
+22.04 LTS Jammy Jellyfish` using other OS might result on issues with some of the
 packages required.
 
 ### Installing APT dependencies
 
 First of all, you will need to install required packages:
-
-    sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev \
-        php php-cli php-xml libv4l-dev gnuplot-qt \
-        python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev \
-        libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev \
-		    libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev \
-        qt5-default qtmultimedia5-dev libqt5webkit5 \
-        libopencv-dev liburdfdom-dev
-    
+```
+sudo apt-get install gcc cmake git libtinyxml-dev libncurses5-dev php php-cli php-xml libv4l-dev gnuplot-qt python3-pip python3-empy python3-setuptools python3-nose chrpath ffmpeg libudev-dev libsfml-dev libconsole-bridge-dev freeglut3-dev libx11-dev libxrandr-dev libfreetype6-dev libjsoncpp-dev libprotobuf-dev protobuf-compiler libgtest-dev libtclap-dev qt5-default qtmultimedia5-dev libqt5webkit5 libopencv-dev liburdfdom-dev ninja-build # required packages
+```
 ### Installing FlyCapture dependency
 
 To use *BlackFly* cameras from *FLIR*, you have to install their software. First
@@ -38,12 +32,65 @@ Maybe there will be issues with apt packages, in this case, run:
 
 And try again (you might need to repeat the last step 2 or 3 times)
 
+### Add threads to compile 
+
+```
+ln -s /usr/bin/python3 /usr/bin/python #maybe a bad idea
+echo MAKEFLAGS="-j8" >> ~/.bashrc # or .zshrc, -j8 because my pc has 8 threads
+source ~/.bashrc # re-source the bashrc after updating
+```
+
+La variable MAKEFLAGS permet de passer des arguments supplémentaires au compilateur GCC lors d’un make.
+Ici on dit au compilateur d’utiliser 8 threads (il est conseillé de prévoir 2Go de RAM par thread), adaptez la valeur en fonction de votre configuration.
+L’utilisation de plusieurs threads accélère grandement la compilation.
+
 ### Installing OpenVINO
 
 Install OpenVINO for Ubuntu:
-https://docs.openvino.ai/latest/openvino_docs_install_guides_installing_openvino_linux.html#doxid-openvino-docs-install-guides-installing-openvino-linux
+[https://docs.openvino.ai/latest/openvino_docs_install_guides_installing_openvino_linux.html#doxid-openvino-docs-install-guides-installing-openvino-linux](https://docs.openvino.ai/2023.0/openvino_docs_install_guides_installing_openvino_from_archive_linux.html)
 
-Don't forget to install dependencies, drivers, and add setupvars.sh to your bashrc.
+Don't forget to add setupvars.sh to your bashrc and you can comment the last line of code, so that you don't see the initialization message at each bash startup.
+
+If the website is not available for the OpenVino 2023.0 version : 
+1. Create the /opt/intel folder for OpenVINO by using the following command. If the folder already exists, skip this step.
+
+```
+sudo mkdir /opt/intel
+```
+
+2. Browse to Donwload or a temp folder:
+
+```
+cd <user_home>/Downloads
+```
+
+3. Download the [OpenVINO Runtime archive file](https://storage.openvinotoolkit.org/repositories/openvino/packages/2023.0/linux/) for your system, extract the files, rename the extracted folder and move it to the desired path:
+
+```
+curl -L https://storage.openvinotoolkit.org/repositories/openvino/packages/2023.0/linux/l_openvino_toolkit_ubuntu22_2023.0.0.10926.b4452d56304_x86_64.tgz --output openvino_2023.0.0.tgz
+tar -xf openvino_2023.0.0.tgz
+sudo mv l_openvino_toolkit_ubuntu22_2023.0.0.10926.b4452d56304_x86_64 /opt/intel/openvino_2023.0.0
+```
+
+4. Install required system dependencies on Linux. To do this, OpenVINO provides a script in the extracted installation directory. Run the following command:
+
+```
+cd /opt/intel/openvino_2023.0.0
+sudo -E ./install_dependencies/install_openvino_dependencies.sh
+```
+
+5. For simplicity, it is useful to create a symbolic link as below:
+
+```
+cd /opt/intel
+sudo ln -s openvino_2023.0.0 openvino_2023
+```
+
+6. Add OpenVino to your bashrc
+
+```
+echo source /opt/intel/openvino_2023/setupvars.sh >> ~/.bashrc # or .zshrc
+```
 
 
 ### Setting up your Github account with your public key
@@ -61,7 +108,18 @@ field, choose any name you want and validate the new key.
 
 First, install `wks`:
 
-    pip install wks
+```
+python -m pip install pip --upgrade # update pip
+sudo pip install wks # workspace manager
+```
+
+Then clone workspace :
+
+```
+# recommandé dans ~home, mais peut se faire n'importe où
+git clone https://github.com/Rhoban/workspace
+cd workspace
+```
 
 And then run:
 
@@ -78,10 +136,28 @@ Binaries are built in `build/bin`.
 
 Run this command to add all rhoban binaries to your `$PATH`:
 
-    echo export "PATH=\"\$PATH:$PWD/build/bin\"" >> ~/.bashrc
+```
+cd ~/workspace && 
+echo export "PATH=\"\$PATH:$PWD/build/bin\"" >> ~/.bashrc # or .zshrc
+```
     
 Don't forget to re-run the shell to have the change applied. Once you build the
 rhoban tools, you should be able to use them without specifying the full path.
+
+### Solve KidSize fake problem
+
+Même si KidSize peut être exécuté n’importe où, l’endroit où il est lancé est important.
+
+Les fichiers d’environnement `.json` situés dans `workspace/env` sont vitaux au fonctionnement de KidSize car ils contiennent les valeurs d’initialisation du programme.
+
+Par exemple, pour lancer un robot “fake”, il suffit d’aller dans le répertoire `~/workspace/env/fake` et de lancer `KidSize -n`  dans le terminal. (`-n` permet de lancer KidSize sans caméra)
+
+Dans mon cas, il a été nécessaire de créer un lien symbolique de `~/workspace/env/fake/calibration.json` vers `~/workspace/env/common/default_calibration.json` avec la commande suivante, depuis `workspace/env`:
+
+```
+# in workspace/env/fake
+ln -s ../common/default_calibration.json calibration.json
+```
 
 ## Workspace commands
 
