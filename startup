@@ -10,7 +10,7 @@ os.system(f"killall KidSize")
 # Expected team ID for games
 expected_team_id: int = 11
 
-# Game controller ip (for filtering)
+# Game controller ip (for filtering)
 game_controller_ip: str = "192.168.0.95"
 
 # Expected team ID for drop-in games
@@ -19,13 +19,13 @@ drop_in_field = None
 
 # Fields
 # - l/r: grass orientation
-fields = {"r": ["r"], "g": ["r"], "b": ["r"], "c": ["r"], "d": ["r"]}
+fields = {"r": ["r"], "a": ["r"], "b": ["r"], "c": ["r"], "d": ["r"], "e": ["r"]}
 
 # Positions
 positions: dict = {
     "A": [
         [-0.75, 3.1, -90],  # Start pos
-        [2.5, 1.0, 0],      # Patrol1
+        [2.5, 1.0, 0],  # Patrol1
         [-1.50, 1.0, 180],  # Patrol2
     ],
     "B": [
@@ -46,7 +46,7 @@ positions: dict = {
 }
 
 # Default roles
-roles: dict = {"olive": "B", "nova": "C", "arya": "D", "tom": "A", "rush": "B"}
+roles: dict = {"olive": "B", "nova": "C", "arya": "D", "tom": "A", "rush": "C"}
 
 # Retrieving ip and hostname
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
@@ -159,7 +159,7 @@ if side == grass_orientation:
     rhio(ip, "/strategy/grassOffset=180")
 else:
     bright("[GRASS] We play against the grass")
-    # XXX: We use the with-grass strategy since grass doesn't affect that much ball in Bangkok 2022
+    # XXX: We use the with-grass strategy since grass doesn't affect that much ball in Bangkok 2022
     rhio(ip, "/moves/rl_kick_controller/withGrass=1")
     rhio(ip, "/strategy/grassOffset=180")
     # rhio(ip, "/moves/rl_kick_controller/withGrass=0")
