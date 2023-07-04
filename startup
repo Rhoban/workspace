@@ -46,7 +46,7 @@ positions: dict = {
 }
 
 # Default roles
-roles: dict = {"olive": "B", "nova": "C", "arya": "D", "tom": "A", "rush": "C"}
+roles: dict = {"olive": "B", "nova": "C", "arya": "D", "tom": "A", "rush": "D"}
 
 # Retrieving ip and hostname
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
