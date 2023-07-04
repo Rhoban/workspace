@@ -4,14 +4,14 @@ import os
 import re
 from utils import *
 
-bright(f"[GREGWAR PROOF] Killing all KidSize running on your computer ...")
+bright(f"[SECURITY] Killing all KidSize running on your computer ...")
 os.system(f"killall KidSize")
 
 # Expected team ID for games
 expected_team_id: int = 11
 
 # Game controller ip (for filtering)
-game_controller_ip: str = "192.168.0.2"
+game_controller_ip: str = "192.168.0.95"
 
 # Expected team ID for drop-in games
 drop_in_ids: dict = {"a": 31, "b": 32}
