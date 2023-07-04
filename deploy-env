@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAVE_OLD_ENVS=false # Do we save the old environments ?
+SAVE_OLD_ENVS=true # Do we save the old environments ?
 MAX_OLD_ENVS=5 # Max number of old environments
 CONFIRMATION_SIZE=50000 # Confirmation required to suppress environments larger than this (unit: KB)
 FORMAT_RED="\e[31m"
