@@ -247,6 +247,12 @@ if yes_no("[LOG] Should we log ?"):
 else:
     rhio(ip, "/Vision/autologGames=false")
 
+rhio(ip, "setPlayersPlacer camping")
+rhio(ip, "/moves/walk/max_dx_forward=0.06")
+rhio(ip, "/moves/ts_kick_controller/enable_small=1")
+rhio(ip, "/moves/ts_kick_controller/enable_classic=0")
+rhio(ip, "/moves/ts_kick_controller/enable_diag=0")
+
 bright("[REMINDER] Place the robot accordingly to this view:")
 print(field_view)
 
