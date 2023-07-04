@@ -19,7 +19,7 @@ drop_in_field = None
 
 # Fields
 # - l/r: grass orientation
-fields = {"r": ["r"], "a": ["r"], "b": ["r"], "c": ["r"], "d": ["r"], "e": ["r"]}
+fields = {"r": ["r"], "a": ["l"], "b": ["l"], "c": ["l"], "d": ["l"], "e": ["l"]}
 
 # Positions
 positions: dict = {
@@ -155,15 +155,10 @@ side: str = question_answers("[SIDE] What side are we attacking ? ", ["l", "r"])
 
 if side == grass_orientation:
     bright("[GRASS] We play with grass")
-    rhio(ip, "/moves/rl_kick_controller/withGrass=1")
-    rhio(ip, "/strategy/grassOffset=180")
+    rhio(ip, "/moves/ts_kick_controller/with_grass=1")
 else:
     bright("[GRASS] We play against the grass")
-    # XXX: We use the with-grass strategy since grass doesn't affect that much ball in Bangkok 2022
-    rhio(ip, "/moves/rl_kick_controller/withGrass=1")
-    rhio(ip, "/strategy/grassOffset=180")
-    # rhio(ip, "/moves/rl_kick_controller/withGrass=0")
-    # rhio(ip, "/strategy/grassOffset=0")
+    rhio(ip, "/moves/ts_kick_controller/with_grass=0")
 
 
 field_view_r: str = """
