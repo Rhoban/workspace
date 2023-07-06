@@ -73,7 +73,29 @@
     "algorithm": "cpp",
     "unordered_set": "cpp",
     "valarray": "cpp",
-    "forward_list": "cpp"
+    "forward_list": "cpp",
+    "csignal": "cpp",
+    "any": "cpp",
+    "bit": "cpp",
+    "codecvt": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "string": "cpp",
+    "iterator": "cpp",
+    "memory_resource": "cpp",
+    "random": "cpp",
+    "regex": "cpp",
+    "hash_map": "cpp",
+    "future": "cpp",
+    "numbers": "cpp",
+    "semaphore": "cpp",
+    "shared_mutex": "cpp",
+    "stop_token": "cpp",
+    "cfenv": "cpp",
+    "variant": "cpp",
+    "*.ipp": "cpp"
   },
   "[cpp]": {
     "editor.formatOnSave": true,
@@ -83,5 +105,6 @@
   },
   // "editor.formatOnType": true,
   "editor.tabSize": 2,
-  "C_Cpp.errorSquiggles": "Enabled"
+  "C_Cpp.errorSquiggles": "Enabled",
+  "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }
