@@ -247,7 +247,7 @@ if yes_no("[LOG] Should we log ?"):
 else:
     rhio(ip, "/Vision/autologGames=false")
 
-if yes_no("[SPECIAL] Oyé l'ami faudrait t'il que ce match ressemble a rien pour le chalant qui mire ?"):
+if yes_no("[CAMPING] Enable camping mode ?"):
   rhio(ip, "setPlayersPlacer camping")
 
 bright("[REMINDER] Place the robot accordingly to this view:")
