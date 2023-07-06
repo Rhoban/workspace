@@ -249,10 +249,6 @@ else:
 
 if yes_no("[SPECIAL] Oyé l'ami faudrait t'il que ce match ressemble a rien pour le chalant qui mire ?"):
   rhio(ip, "setPlayersPlacer camping")
-  rhio(ip, "/moves/walk/max_dx_forward=0.06")
-  rhio(ip, "/moves/ts_kick_controller/enable_small=1")
-  rhio(ip, "/moves/ts_kick_controller/enable_classic=0")
-  rhio(ip, "/moves/ts_kick_controller/enable_diag=0")
 
 bright("[REMINDER] Place the robot accordingly to this view:")
 print(field_view)
