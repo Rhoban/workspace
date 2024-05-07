@@ -1,3 +1,5 @@
+The last available Installation instructions are accessible here : [https://gifted-painter-7fa.notion.site/Tuto-Install-workspace-056c790364bd41739dce6207cb5aec93](https://gifted-painter-7fa.notion.site/Tuto-Install-workspace-056c790364bd41739dce6207cb5aec93) 
+
 # Rhoban's workspace for Kid Size league
 
 ## Setup of the system
