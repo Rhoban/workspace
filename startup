@@ -46,14 +46,14 @@ positions: dict = {
 }
 
 # Default roles
-roles: dict = {"olive": "A", "nova": "B", "arya": "C", "tom": "C", "rush": "D"}
+roles: dict = {"olive": "A", "nova": "B", "arya": "C", "tom": "D", "rush": "B"}
 
 # Retrieving ip and hostname
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
 hostname: str = rhio_get_value(ip, "/server/hostname")
 
 # Filtering game controller packets only
-rhio(ip, f"/referee/ipFilter={game_controller_ip}")
+# rhio(ip, f"/referee/ipFilter={game_controller_ip}")
 
 bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
@@ -73,8 +73,15 @@ while True:
 # Checking that team is is properly set
 is_drop_in: bool = yes_no("[DROP-IN] Is it a drop-in game ?", "n")
 if is_drop_in:
-    options = ", ".join([f"{key}: {value}" for key, value in zip(drop_in_ids.keys(), drop_in_ids.values())])
-    dropin_team: str = question_answers(f"[DROP-IN-ID] What team are we ({options}) ?", list(drop_in_ids.keys()))
+    options = ", ".join(
+        [
+            f"{key}: {value}"
+            for key, value in zip(drop_in_ids.keys(), drop_in_ids.values())
+        ]
+    )
+    dropin_team: str = question_answers(
+        f"[DROP-IN-ID] What team are we ({options}) ?", list(drop_in_ids.keys())
+    )
     dropin_id: int = drop_in_ids[dropin_team]
     rhio(ip, f"/referee/teamId={dropin_id}")
 else:
@@ -87,7 +94,9 @@ else:
 if is_drop_in and drop_in_field is not None:
     field: str = drop_in_field
 else:
-    field: str = question_answers(f"[FIELD] What field are we playing on ?", list(fields.keys()))
+    field: str = question_answers(
+        f"[FIELD] What field are we playing on ?", list(fields.keys())
+    )
 
 if yes_no("[WIFI] Do you want to run the WiFi script ?"):
     network_name: str = f"field_{field}"
@@ -102,10 +111,14 @@ os.system(f"ssh rhoban@{ip} ping {game_controller_ip} -c 4")
 # Checking for the Game Controller to be seen by the robot
 while True:
     result = rhio(ip, "infoPlaying")
-    last_update = re.match(r"(.+)Referee last update: (.+).", result, re.DOTALL + re.MULTILINE)
+    last_update = re.match(
+        r"(.+)Referee last update: (.+).", result, re.DOTALL + re.MULTILINE
+    )
 
     if last_update and float(last_update[2]) > 5:
-        error(f"[REFEREE] Update from the referee is outdated ({float(last_update[2])} s)")
+        error(
+            f"[REFEREE] Update from the referee is outdated ({float(last_update[2])} s)"
+        )
         if not yes_no("[REFEREE] Try again ?", "y"):
             break
     else:
@@ -136,9 +149,11 @@ while True:
 
 while True:
     try:
-        vision_last_update: int = float(rhio_get_value(ip, "/Vision/lastUpdate"))
-        if vision_last_update > 200:
-            error(f"[VISION] Last update from the vision is old ({vision_last_update} ms)")
+        vision_last_update: float = float(rhio(ip, "lastVisionUpdate"))
+        if vision_last_update > 2.0:
+            error(
+                f"[VISION] Last update from the vision is old ({vision_last_update} s)"
+            )
             if not yes_no("[VISION] Try again ?", "y"):
                 break
         else:
@@ -206,10 +221,14 @@ if hostname in roles:
     role: str = roles[hostname]
 else:
     print(field_view)
-    role: str = question_answers("[ROLE] What is this robot role ?", list(positions.keys()))
+    role: str = question_answers(
+        "[ROLE] What is this robot role ?", list(positions.keys())
+    )
 
 
-field_view = field_view.replace(role, Fore.BLACK + Style.BRIGHT + role + Style.NORMAL + Fore.WHITE)
+field_view = field_view.replace(
+    role, Fore.BLACK + Style.BRIGHT + role + Style.NORMAL + Fore.WHITE
+)
 
 # Goal keeper / free kicker
 is_goal_keeper: int = 1 if role == "D" else 0
@@ -242,13 +261,13 @@ configuration += "exit\n"
 rhio_commands(ip, configuration)
 
 # Logging the game
-if yes_no("[LOG] Should we log ?"):
-    rhio(ip, "/Vision/autologGames=true")
-else:
-    rhio(ip, "/Vision/autologGames=false")
+# if yes_no("[LOG] Should we log ?"):
+#     rhio(ip, "/Vision/autologGames=true")
+# else:
+#     rhio(ip, "/Vision/autologGames=false")
 
 if yes_no("[CAMPING] Enable camping mode ?"):
-  rhio(ip, "setPlayersPlacer camping")
+    rhio(ip, "setPlayersPlacer camping")
 
 bright("[REMINDER] Place the robot accordingly to this view:")
 print(field_view)

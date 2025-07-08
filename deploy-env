@@ -6,7 +6,7 @@ CONFIRMATION_SIZE=50000 # Confirmation required to suppress environments larger 
 FORMAT_RED="\e[31m"
 FORMAT_NONE="\e[m"
 
-URDF_VERSION="sigmaban_2023" # Repository of the URDF in sigmaban_model
+URDF_VERSION="sigmaban_2025/urdf_low/" # Repository of the URDF in sigmaban_model
 
 confirm() {
     # call with a prompt string or use a default
