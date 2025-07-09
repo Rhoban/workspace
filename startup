@@ -269,6 +269,9 @@ rhio_commands(ip, configuration)
 if yes_no("[CAMPING] Enable camping mode ?"):
     rhio(ip, "setPlayersPlacer camping")
 
+if yes_no("[DRIBBLE] Dribble only ?"):
+    rhio(ip, "/moves/approach_rl/dribble=1")
+
 bright("[REMINDER] Place the robot accordingly to this view:")
 print(field_view)
 
