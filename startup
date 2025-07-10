@@ -273,7 +273,7 @@ if yes_no("[DRIBBLE] Dribble only ?"):
     rhio(ip, "/moves/approach_rl/dribble=1")
 
 # Disabling avoid opponents in TS Kick Controller for now
-rhio(ip, "/moves/ts_kick_controller/avoid_opponents=0")
+# rhio(ip, "/moves/ts_kick_controller/avoid_opponents=0")
 
 bright("[REMINDER] Place the robot accordingly to this view:")
 print(field_view)
