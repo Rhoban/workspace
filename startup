@@ -131,7 +131,7 @@ rhio(ip, "init")
 
 bright("[WALK] Press ENTER to run walk")
 input()
-rhio(ip, "walk")
+rhio(ip, "walk_rl")
 rhio(ip, "/moves/arms/armsState=2")
 
 while True:
