@@ -106,7 +106,7 @@ bright("[WIFI] Disabling power save")
 os.system(f"ssh rhoban@{ip} sudo iw dev wlan0 set power_save off")
 
 # Pinging the game controller
-os.system(f"ssh rhoban@{ip} ping {game_controller_ip} -c 4")
+os.system(f"ssh rhoban@{ip} ping {game_controller_ip} -c 1")
 
 # Checking for the Game Controller to be seen by the robot
 while True:
