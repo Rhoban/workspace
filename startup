@@ -11,7 +11,7 @@ os.system(f"killall KidSize")
 expected_team_id: int = 11
 
 # Game controller ip (for filtering)
-game_controller_ip: str = "192.168.0.1"
+game_controller_ip: str = "192.168.0.2"
 
 # Expected team ID for drop-in games
 drop_in_ids: dict = {"a": 31, "b": 32}
@@ -46,14 +46,14 @@ positions: dict = {
 }
 
 # Default roles
-roles: dict = {"olive": "A", "nova": "B", "arya": "C", "tom": "D", "rush": "B"}
+roles: dict = {"olive": "A", "nova": "C", "arya": "C", "tom": "D", "rush": "B"}
 
 # Retrieving ip and hostname
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
 hostname: str = rhio_get_value(ip, "/server/hostname")
 
 # Filtering game controller packets only
-# rhio(ip, f"/referee/ipFilter={game_controller_ip}")
+rhio(ip, f"/referee/ipFilter={game_controller_ip}")
 
 bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
@@ -261,19 +261,16 @@ configuration += "exit\n"
 rhio_commands(ip, configuration)
 
 # Logging the game
-# if yes_no("[LOG] Should we log ?"):
-#     rhio(ip, "/Vision/autologGames=true")
-# else:
-#     rhio(ip, "/Vision/autologGames=false")
+if yes_no("[LOG] Should we log ?"):
+    rhio(ip, "/moves/robocup/autoLog=1")
+else:
+    rhio(ip, "/moves/robocup/autoLog=0")
 
 if yes_no("[CAMPING] Enable camping mode ?"):
     rhio(ip, "setPlayersPlacer camping")
 
-if yes_no("[DRIBBLE] Dribble only ?"):
-    rhio(ip, "/moves/approach_rl/dribble=1")
-
-# Disabling avoid opponents in TS Kick Controller for now
-# rhio(ip, "/moves/ts_kick_controller/avoid_opponents=0")
+# if yes_no("[DRIBBLE] Dribble only ?"):
+#     rhio(ip, "/moves/approach_rl/dribble=1")
 
 bright("[REMINDER] Place the robot accordingly to this view:")
 print(field_view)
