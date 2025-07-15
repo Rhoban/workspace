@@ -11,7 +11,7 @@ os.system(f"killall KidSize")
 expected_team_id: int = 11
 
 # Game controller ip (for filtering)
-game_controller_ip: str = "192.168.0.1"
+game_controller_ip: str = "192.168.0.2"
 
 # Expected team ID for drop-in games
 drop_in_ids: dict = {"a": 31, "b": 32}
@@ -53,7 +53,7 @@ ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
 hostname: str = rhio_get_value(ip, "/server/hostname")
 
 # Filtering game controller packets only
-# rhio(ip, f"/referee/ipFilter={game_controller_ip}")
+rhio(ip, f"/referee/ipFilter={game_controller_ip}")
 
 bright(f"[STARTUP] Running a startup to {ip}, hostname is {hostname}")
 
