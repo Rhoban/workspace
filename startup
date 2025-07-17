@@ -14,7 +14,7 @@ expected_team_id: int = 11
 game_controller_ip: str = "192.168.0.2"
 
 # Expected team ID for drop-in games
-drop_in_ids: dict = {"a": 31, "b": 32}
+drop_in_ids: dict = {"a": 98, "b": 99}
 drop_in_field = None
 
 # Fields
@@ -84,6 +84,11 @@ if is_drop_in:
     )
     dropin_id: int = drop_in_ids[dropin_team]
     rhio(ip, f"/referee/teamId={dropin_id}")
+    rid: dict = {"1":1,"2":2,"3":3,"4":4,"5":5}
+    dropin_robot_id: str= question_answers(
+        f"[DROP-in-RID] Robot id ?",rid)
+    dropin_rid: int = rid[dropin_robot_id]
+    rhio(ip,f"/referee/id={dropin_rid}")
 else:
     team_id: int = int(rhio_get_value(ip, "/referee/teamId"))
     if team_id != expected_team_id:
