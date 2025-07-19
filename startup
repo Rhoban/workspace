@@ -5,7 +5,7 @@ import re
 from utils import *
 
 bright(f"[SECURITY] Killing all KidSize running on your computer ...")
-os.system(f"killall KidSize")
+# os.system(f"killall KidSize")
 
 # Expected team ID for games
 expected_team_id: int = 11
@@ -46,7 +46,7 @@ positions: dict = {
 }
 
 # Default roles
-roles: dict = {"olive": "B", "nova": "D", "arya": "A", "tom": "C", "rush": "C"}
+roles: dict = {"olive": "B", "nova": "C", "arya": "D", "tom": "A", "rush": "D"}
 
 # Retrieving ip and hostname
 ip: str = "10.0.0.1" if len(sys.argv) == 1 else sys.argv[1]
@@ -273,6 +273,12 @@ else:
 
 if yes_no("[CAMPING] Enable camping mode ?"):
     rhio(ip, "setPlayersPlacer camping")
+
+if yes_no("Avoid opponents ?", "n"):
+    rhio(ip, "/moves/placer/avoidOpponents=1")
+else:
+    rhio(ip, "/moves/placer/avoidOpponents=0")
+
 
 # if yes_no("[DRIBBLE] Dribble only ?"):
 #     rhio(ip, "/moves/approach_rl/dribble=1")
